@@ -614,14 +614,6 @@ main {
     margin-top: 0;
 }
 
-.founder-profile__image {
-    width: 100%;
-    min-height: 28rem;
-    object-fit: cover;
-    border-radius: 22px;
-    box-shadow: var(--shadow-soft);
-}
-
 .founder-profile__content {
     padding: 2rem;
     background: rgba(255, 251, 245, 0.82);
@@ -631,13 +623,25 @@ main {
     max-width: 62rem;
 }
 
-.founder-profile__image--inline {
-    margin-bottom: 1.4rem;
-    max-width: 19rem;
+.founder-profile__grid {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 2.4rem;
+    align-items: start;
 }
 
-.founder-profile__content h2 {
-    font-size: clamp(2.2rem, 4vw, 3.6rem);
+.founder-profile__image {
+    width: 100%;
+    aspect-ratio: 3 / 4;
+    object-fit: cover;
+    object-position: center top;
+    border-radius: 18px;
+    box-shadow: var(--shadow-soft);
+    display: block;
+}
+
+.founder-profile__bio h2 {
+    font-size: clamp(2rem, 3.6vw, 3.2rem);
     margin-top: 0.35rem;
 }
 
@@ -840,13 +844,13 @@ main {
         padding: 1.2rem;
     }
 
-    .founder-profile__image {
-        min-height: 20rem;
+    .founder-profile__grid {
+        grid-template-columns: 1fr;
+        gap: 1.4rem;
     }
 
-    .founder-profile__image--inline {
-        max-width: 100%;
-        margin-bottom: 1rem;
+    .founder-profile__portrait {
+        max-width: 11rem;
     }
 
     .site-footer__inner {
