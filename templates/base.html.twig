@@ -5,9 +5,18 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Ontario Indigenous AI &amp; Technology Council{% endblock %}</title>
   <meta name="description" content="{% block description %}OIATC is building Indigenous digital sovereignty in Ontario through governance, training, research, and platform stewardship.{% endblock %}">
+  <meta property="og:title" content="{% block og_title %}Ontario Indigenous AI &amp; Technology Council{% endblock %}">
+  <meta property="og:description" content="{% block og_description %}Indigenous digital sovereignty in Ontario through governance, training, research, and platform stewardship.{% endblock %}">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oiatc.ca{{ path }}">
+  <meta property="og:image" content="{% block og_image %}/images/og-default.png{% endblock %}">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="stylesheet" href="/css/site.css">
 </head>
 <body class="route-{{ path == '/' ? 'home' : path|trim('/')|replace({'/': '-'}) }}">
+  <a class="skip-link" href="#main-content">Skip to content</a>
   <div class="site-shell">
     <header class="site-header">
       <div class="site-header__inner">
@@ -38,7 +47,7 @@
       </div>
     </header>
 
-    <main>
+    <main id="main-content">
       {% block content %}{% endblock %}
     </main>
 
