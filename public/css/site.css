@@ -239,8 +239,7 @@ main {
 .page-header h1,
 .founder-profile h2,
 .founder-card h2,
-.section-title h2,
-.founder-band h2 {
+.section-title h2 {
     margin: 0;
     font-family: var(--font-display);
     letter-spacing: -0.045em;
@@ -268,7 +267,6 @@ main {
 .founder-profile p,
 .founder-card__copy,
 .stance-card p,
-.founder-band p,
 .site-footer__brand p {
     line-height: 1.75;
     font-size: 1.02rem;
@@ -491,8 +489,7 @@ main {
 .statement-grid,
 .grid-3,
 .grid-2,
-.contact-grid,
-.split-cta {
+.contact-grid {
     display: grid;
     gap: 1rem;
 }
@@ -579,44 +576,19 @@ main {
     padding: 1.2rem 0 0;
 }
 
-.founder-band {
-    display: grid;
-    grid-template-columns: minmax(0, 1.15fr) minmax(18rem, 0.85fr);
-    gap: 1.5rem;
-    padding: 2rem;
-    border-radius: calc(var(--radius) + 8px);
-    background:
-        linear-gradient(118deg, rgba(8, 25, 15, 0.98), rgba(15, 43, 31, 0.95) 42%, rgba(24, 122, 108, 0.7) 100%);
-    color: var(--cream);
-    box-shadow: var(--shadow);
-}
-
-.founder-band .eyebrow {
-    color: rgba(247, 240, 228, 0.72);
-}
-
-.founder-band h2 {
-    font-size: clamp(2.1rem, 3.5vw, 3.5rem);
-    margin-top: 0.45rem;
-}
-
-.founder-band__content p,
-.founder-band__note p {
-    color: rgba(247, 240, 228, 0.88);
-}
-
-.founder-band__note {
-    align-self: end;
-    padding: 1.2rem 0 0 1.4rem;
-    border-left: 1px solid rgba(247, 240, 228, 0.18);
-}
-
-.split-cta {
-    grid-template-columns: 1.1fr 0.9fr;
+.cta-band {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1rem;
 }
 
 .section--final-cta .cta-row {
     margin-top: 0;
+}
+
+.section--band {
+    text-align: center;
 }
 
 .founder-profile__content {
@@ -797,9 +769,7 @@ main {
 }
 
 @media (max-width: 1024px) {
-    .hero__grid,
-    .founder-band,
-    .split-cta {
+    .hero__grid {
         grid-template-columns: 1fr;
     }
 
@@ -809,12 +779,6 @@ main {
 
     .hero__content {
         padding-top: 2rem;
-    }
-
-    .founder-band__note {
-        border-left: 0;
-        border-top: 1px solid rgba(247, 240, 228, 0.18);
-        padding: 1.2rem 0 0;
     }
 
     .section--statement {
@@ -916,12 +880,10 @@ main {
     .charter-section,
     .funding-table,
     .statement,
-    .founder-profile__content,
-    .founder-band {
+    .founder-profile__content {
         border-radius: 20px;
     }
 
-    .founder-band,
     .founder-profile__content,
     .card,
     .pillar,
