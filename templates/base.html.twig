@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}Ontario Indigenous AI &amp; Technology Council{% endblock %}</title>
+  <meta name="description" content="{% block description %}OIATC is building Indigenous digital sovereignty in Ontario through governance, training, research, and platform stewardship.{% endblock %}">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/">
+          <span class="brand__eyebrow">Ontario Indigenous AI &amp; Technology Council</span>
+          <span class="brand__name">OIATC</span>
+        </a>
+        <nav class="site-nav" aria-label="Primary">
+          <a href="/" {% if path == '/' %}aria-current="page"{% endif %}>Home</a>
+          <a href="/about" {% if path == '/about' %}aria-current="page"{% endif %}>About OIATC</a>
+          <a href="/waaseyaa" {% if path == '/waaseyaa' %}aria-current="page"{% endif %}>Waaseyaa</a>
+          <a href="/minoo" {% if path == '/minoo' %}aria-current="page"{% endif %}>Minoo</a>
+          <a href="/grants" {% if path == '/grants' %}aria-current="page"{% endif %}>Grants &amp; Funding</a>
+          <a href="/founding-charter" {% if path == '/founding-charter' %}aria-current="page"{% endif %}>Founding Charter</a>
+          <a href="/contact" {% if path == '/contact' %}aria-current="page"{% endif %}>Contact / Partner</a>
+        </nav>
+      </div>
+    </header>
+
+    <main>
+      {% block content %}{% endblock %}
+    </main>
+
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <div>
+          <strong>OIATC</strong><br>
+          Indigenous digital sovereignty in Ontario.
+        </div>
+        <div>
+          <a href="/founding-charter">Founding Charter</a><br>
+          <a href="/grants">Grants &amp; Funding</a><br>
+          <a href="/contact">Contact / Partner</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+</body>
+</html>
