@@ -487,8 +487,7 @@ main {
 .grid-3,
 .grid-2,
 .contact-grid,
-.split-cta,
-.founder-profile {
+.split-cta {
     display: grid;
     gap: 1rem;
 }
@@ -499,8 +498,7 @@ main {
 }
 
 .grid-2,
-.contact-grid,
-.founder-profile {
+.contact-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
@@ -616,26 +614,26 @@ main {
     margin-top: 0;
 }
 
-.founder-profile {
-    align-items: stretch;
-}
-
-.founder-profile__image-wrap {
-    min-height: 100%;
-}
-
 .founder-profile__image {
     width: 100%;
-    height: 100%;
     min-height: 28rem;
     object-fit: cover;
-    border-radius: var(--radius);
-    box-shadow: var(--shadow);
+    border-radius: 22px;
+    box-shadow: var(--shadow-soft);
 }
 
 .founder-profile__content {
     padding: 2rem;
     background: rgba(255, 251, 245, 0.82);
+}
+
+.founder-profile__content--full {
+    max-width: 62rem;
+}
+
+.founder-profile__image--inline {
+    margin-bottom: 1.4rem;
+    max-width: 19rem;
 }
 
 .founder-profile__content h2 {
@@ -760,8 +758,7 @@ main {
     .grid-3,
     .grid-2,
     .contact-grid,
-    .statement-grid,
-    .founder-profile {
+    .statement-grid {
         grid-template-columns: 1fr;
     }
 
@@ -845,6 +842,11 @@ main {
 
     .founder-profile__image {
         min-height: 20rem;
+    }
+
+    .founder-profile__image--inline {
+        max-width: 100%;
+        margin-bottom: 1rem;
     }
 
     .site-footer__inner {
