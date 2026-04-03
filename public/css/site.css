@@ -839,8 +839,29 @@ main {
         min-height: auto;
     }
 
+    .hero h1 {
+        font-size: clamp(2.6rem, 5.5vw, 4.5rem);
+    }
+
     .hero__content {
-        padding-top: 2rem;
+        padding-top: 1.6rem;
+    }
+
+    .hero__lead {
+        margin-top: 1rem;
+        font-size: 1.1rem;
+    }
+
+    .hero__copy {
+        font-size: 0.96rem;
+    }
+
+    .hero__actions {
+        margin-top: 1.2rem;
+    }
+
+    .hero__signals {
+        margin-top: 1rem;
     }
 
     .section--statement {
