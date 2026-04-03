@@ -111,7 +111,7 @@ final class PublicPagesTest extends TestCase
         $contactResponse = $controller->contact([], [], null, Request::create('/contact'));
         $contactXpath = $this->createXPath($contactResponse->content);
 
-        $this->assertSame(4, (int) $contactXpath->evaluate("count(//a[starts-with(@href, 'mailto:')])"));
+        $this->assertSame(5, (int) $contactXpath->evaluate("count(//a[starts-with(@href, 'mailto:')])"));
     }
 
     #[Test]
