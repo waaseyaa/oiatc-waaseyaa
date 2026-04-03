@@ -126,6 +126,19 @@ Fonts loaded via Google Fonts in `templates/base.html.twig`.
 
 When changing the palette, update `:root` variables AND the Storm Theme block.
 
+### OG image
+
+`public/images/og-default.png` — 1200×630 social card rendered from `scripts/og-template.html` via Playwright.
+
+To regenerate after palette changes:
+```bash
+npm install playwright
+npx playwright install chromium
+node scripts/generate-og.js
+```
+
+Colors in `og-template.html` are hardcoded (not CSS variables). When updating the palette, sync `og-template.html` manually.
+
 ### Scroll reveal
 
 Elements with `.reveal` start invisible and fade up via `IntersectionObserver` (threshold 0.1). Stagger with `.reveal--d1 / --d2 / --d3`. Respects `prefers-reduced-motion`. Wired in `templates/base.html.twig`.
