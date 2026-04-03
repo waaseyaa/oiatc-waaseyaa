@@ -1,4 +1,5 @@
 /vendor/
+.playwright-mcp/
 /storage/framework/
 /files/*
 !/files/.gitkeep
