@@ -7,22 +7,29 @@
   <meta name="description" content="{% block description %}OIATC is building Indigenous digital sovereignty in Ontario through governance, training, research, and platform stewardship.{% endblock %}">
   <link rel="stylesheet" href="/css/site.css">
 </head>
-<body>
+<body class="route-{{ path == '/' ? 'home' : path|trim('/')|replace({'/': '-'}) }}">
   <div class="site-shell">
     <header class="site-header">
       <div class="site-header__inner">
         <a class="brand" href="/">
-          <span class="brand__eyebrow">Ontario Indigenous AI &amp; Technology Council</span>
-          <span class="brand__name">OIATC</span>
+          <span class="brand__mark">OIATC</span>
+          <span class="brand__meta">
+            <span class="brand__eyebrow">Ontario Indigenous AI &amp; Technology Council</span>
+            <span class="brand__name">Indigenous digital sovereignty in Ontario</span>
+          </span>
         </a>
         <nav class="site-nav" aria-label="Primary">
-          <a href="/" {% if path == '/' %}aria-current="page"{% endif %}>Home</a>
-          <a href="/about" {% if path == '/about' %}aria-current="page"{% endif %}>About OIATC</a>
-          <a href="/waaseyaa" {% if path == '/waaseyaa' %}aria-current="page"{% endif %}>Waaseyaa</a>
-          <a href="/minoo" {% if path == '/minoo' %}aria-current="page"{% endif %}>Minoo</a>
-          <a href="/grants" {% if path == '/grants' %}aria-current="page"{% endif %}>Grants &amp; Funding</a>
-          <a href="/founding-charter" {% if path == '/founding-charter' %}aria-current="page"{% endif %}>Founding Charter</a>
-          <a href="/contact" {% if path == '/contact' %}aria-current="page"{% endif %}>Contact / Partner</a>
+          <div class="site-nav__group">
+            <a href="/" {% if path == '/' %}aria-current="page"{% endif %}>Home</a>
+            <a href="/about" {% if path == '/about' %}aria-current="page"{% endif %}>About</a>
+            <a href="/waaseyaa" {% if path == '/waaseyaa' %}aria-current="page"{% endif %}>Waaseyaa</a>
+            <a href="/minoo" {% if path == '/minoo' %}aria-current="page"{% endif %}>Minoo</a>
+          </div>
+          <div class="site-nav__group site-nav__group--secondary">
+            <a href="/grants" {% if path == '/grants' %}aria-current="page"{% endif %}>Grants</a>
+            <a href="/founding-charter" {% if path == '/founding-charter' %}aria-current="page"{% endif %}>Charter</a>
+            <a class="site-nav__action" href="/contact" {% if path == '/contact' %}aria-current="page"{% endif %}>Contact</a>
+          </div>
         </nav>
       </div>
     </header>
@@ -33,13 +40,14 @@
 
     <footer class="site-footer">
       <div class="site-footer__inner">
-        <div>
-          <strong>OIATC</strong><br>
-          Indigenous digital sovereignty in Ontario.
+        <div class="site-footer__brand">
+          <strong>Ontario Indigenous AI &amp; Technology Council</strong>
+          <p>Governance, platform stewardship, training, and research rooted in Indigenous law, protocol, and continuity.</p>
         </div>
-        <div>
-          <a href="/founding-charter">Founding Charter</a><br>
-          <a href="/grants">Grants &amp; Funding</a><br>
+        <div class="site-footer__links">
+          <a href="/about">About OIATC</a>
+          <a href="/founding-charter">Founding Charter</a>
+          <a href="/grants">Grants &amp; Funding</a>
           <a href="/contact">Contact / Partner</a>
         </div>
       </div>

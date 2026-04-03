@@ -66,6 +66,8 @@ final class PublicPagesTest extends TestCase
 
         $this->assertSame(200, $response->statusCode);
         $this->assertStringContainsString('Indigenous digital sovereignty in Ontario', $response->content);
+        $this->assertStringContainsString('Russell Jones', $response->content);
+        $this->assertStringContainsString('Sagamok Anishnawbek', $response->content);
         $this->assertStringContainsString('Waaseyaa', $response->content);
         $this->assertStringContainsString('Minoo', $response->content);
         $this->assertGreaterThanOrEqual(1, (int) $xpath->evaluate("count(//a[@href='/grants'])"));
@@ -100,6 +102,11 @@ final class PublicPagesTest extends TestCase
             $this->assertSame(200, $response->statusCode, sprintf('%s should return 200.', $path));
             $this->assertStringContainsString($heading, $response->content);
         }
+
+        $aboutResponse = $controller->about([], [], null, Request::create('/about'));
+        $this->assertStringContainsString('Founder', $aboutResponse->content);
+        $this->assertStringContainsString('Russell Jones', $aboutResponse->content);
+        $this->assertStringContainsString('Sagamok Anishnawbek', $aboutResponse->content);
 
         $contactResponse = $controller->contact([], [], null, Request::create('/contact'));
         $contactXpath = $this->createXPath($contactResponse->content);
