@@ -36,6 +36,17 @@ final class SiteServiceProvider extends ServiceProvider
                     ->build(),
             );
         }
+
+        // 404 catch-all (must be last)
+        $router->addRoute(
+            'page.not_found',
+            RouteBuilder::create('/{path}')
+                ->controller('App\\Controller\\PageController::notFound')
+                ->render()
+                ->methods('GET')
+                ->requirement('path', '.+')
+                ->build(),
+        );
     }
 
     public function commands(
