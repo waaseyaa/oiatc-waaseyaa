@@ -562,6 +562,10 @@ main {
     grid-template-columns: repeat(2, minmax(0, 1fr));
 }
 
+.contact-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
 .statement {
     padding: 1.6rem 1.8rem;
     background: rgba(255, 251, 245, 0.74);
