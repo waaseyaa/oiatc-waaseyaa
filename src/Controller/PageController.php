@@ -49,6 +49,11 @@ final class PageController
         return $this->render('contact.html.twig', '/contact');
     }
 
+    public function notFound(array $params, array $query, $account, HttpRequest $request): SsrResponse
+    {
+        return new SsrResponse($this->twig->render('404.html.twig', ['path' => $request->getPathInfo()]), 404);
+    }
+
     private function render(string $template, string $path): SsrResponse
     {
         return new SsrResponse($this->twig->render($template, ['path' => $path]));
