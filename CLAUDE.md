@@ -92,7 +92,45 @@ final class SendWelcomeEmail extends Job
 $queue->dispatch(new SendWelcomeEmail($userId));
 ```
 
-## Orchestration Table
+## Frontend Design System
+
+All frontend lives in `public/css/site.css` and `templates/`. No build step — plain CSS + Twig.
+
+### Design tokens (`site.css :root`)
+
+**Storm palette** (current):
+
+| Token | Value | Role |
+|-------|-------|------|
+| `--bg` | `#141c28` | Page background |
+| `--bg-deep` | `#0e1420` | Deeper background |
+| `--paper` | `rgba(22,30,46,.95)` | Card/surface backgrounds |
+| `--text` | `#dce8f4` | Body text |
+| `--muted` | `#8298b8` | Secondary text |
+| `--copper` | `#e8a020` | Primary accent (amber) |
+| `--copper-deep` | `#c07c10` | Accent hover |
+| `--forest` | `#1c3048` | Dark surface / statement bg |
+| `--lake` | `#3890b8` | Secondary accent (steel blue) |
+| `--cream` | `#dce8f4` | Light text on dark surfaces |
+| `--font-display` | `"Syne"` | Headings (geometric sans) |
+| `--font-body` | `"Outfit"` | Body copy |
+
+Fonts loaded via Google Fonts in `templates/base.html.twig`.
+
+### CSS structure
+
+`site.css` is organised in three blocks:
+1. **Base** (lines 1–1020) — reset, layout, components, responsive. Do not edit without care — all components are here.
+2. **MVP Polish** — appended block: grain texture, reveal animations, pillar accents, dark statement section, typography refinements.
+3. **Storm Theme** — hardcoded colour overrides for dark-bg elements that don't use CSS variables (founder card, hero backdrop, nav, footer, etc.).
+
+When changing the palette, update `:root` variables AND the Storm Theme block.
+
+### Scroll reveal
+
+Elements with `.reveal` start invisible and fade up via `IntersectionObserver` (threshold 0.1). Stagger with `.reveal--d1 / --d2 / --d3`. Respects `prefers-reduced-motion`. Wired in `templates/base.html.twig`.
+
+### Orchestration Table
 
 <!-- Map file patterns to skills and specs as you add them -->
 | File Pattern | Skill | Spec |
