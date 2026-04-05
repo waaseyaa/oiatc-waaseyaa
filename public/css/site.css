@@ -1018,6 +1018,16 @@ main {
     .hero__content {
         order: 1;
     }
+
+    .partner-card {
+        grid-template-columns: 1fr;
+        text-align: center;
+    }
+
+    .partner-card__logo {
+        margin: 0 auto;
+        max-width: 140px;
+    }
 }
 
 /* ═══════════════════════════════════════════════
@@ -1257,6 +1267,45 @@ body::after {
         transform: none;
         transition: none;
     }
+}
+
+/* ── Partner card ── */
+.partner-card {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: 2rem;
+    align-items: center;
+}
+
+.partner-card__logo {
+    width: 100%;
+    max-width: 180px;
+    height: auto;
+}
+
+.partner-card__body h3 {
+    margin: 0 0 0.4rem;
+    font-family: var(--font-display);
+    font-size: 1.55rem;
+}
+
+.partner-card__body h3 a {
+    color: var(--copper);
+    text-decoration: none;
+}
+
+.partner-card__body h3 a:hover {
+    color: var(--copper-deep);
+}
+
+.partner-card__meta {
+    color: var(--muted);
+    font-size: 0.95rem;
+    margin: 0 0 1rem;
+}
+
+.partner-card__body p {
+    color: var(--muted);
 }
 
 /* ═══════════════════════════════════════════════
