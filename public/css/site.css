@@ -426,10 +426,10 @@ main {
 .founder-card__meta,
 .founder-profile__meta {
     margin: 0.55rem 0 0.9rem;
-    color: var(--forest);
+    color: var(--lake);
     letter-spacing: 0.06em;
     text-transform: uppercase;
-    font-size: 0.82rem;
+    font-size: 0.85rem;
 }
 
 .founder-card__copy {
@@ -481,14 +481,14 @@ main {
 }
 
 .button-secondary {
-    border: 1px solid rgba(72, 53, 33, 0.16);
-    background: rgba(255, 251, 245, 0.66);
+    border: 1px solid var(--line-strong);
+    background: transparent;
     color: var(--text);
 }
 
 .button-secondary:hover {
-    background: rgba(255, 251, 245, 0.9);
-    border-color: rgba(72, 53, 33, 0.26);
+    background: rgba(180, 204, 240, 0.08);
+    border-color: var(--copper);
 }
 
 .text-link {
