@@ -1,10 +1,11 @@
 :root {
     --bg: #141c28;
     --bg-deep: #0e1420;
-    --paper: rgba(22, 30, 46, 0.95);
-    --paper-strong: #1a2840;
+    --paper: rgba(22, 30, 46, 0.85);
+    --paper-strong: rgba(28, 48, 72, 0.6);
+    --paper-deep: rgba(14, 20, 32, 0.9);
     --text: #dce8f4;
-    --muted: #8298b8;
+    --muted: #94aac8;
     --line: rgba(180, 204, 240, 0.1);
     --line-strong: rgba(180, 204, 240, 0.18);
     --copper: #e8a020;
@@ -598,6 +599,15 @@ main {
 
 .card--surface {
     background: rgba(255, 251, 245, 0.8);
+}
+
+.card--surface h3 {
+    color: #1a3a4a;
+}
+
+.card--surface p,
+.card--surface .eyebrow {
+    color: #3d4f5f;
 }
 
 .card--feature {
