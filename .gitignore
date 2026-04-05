@@ -6,3 +6,4 @@
 *.sqlite
 .env
 .phpunit.cache/
+.superpowers/
