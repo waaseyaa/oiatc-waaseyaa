@@ -572,7 +572,7 @@ main {
 
 .statement {
     padding: 1.6rem 1.8rem;
-    background: rgba(255, 251, 245, 0.74);
+    background: var(--paper-strong);
 }
 
 .statement h3 {
@@ -587,7 +587,7 @@ main {
 }
 
 .section--surface .pillar {
-    background: linear-gradient(180deg, rgba(252, 248, 242, 0.9), rgba(240, 233, 220, 0.85));
+    background: var(--paper);
 }
 
 .pillar,
@@ -600,16 +600,16 @@ main {
 }
 
 .card--surface {
-    background: rgba(255, 251, 245, 0.8);
+    background: var(--paper);
 }
 
 .card--surface h3 {
-    color: #1a3a4a;
+    color: var(--text);
 }
 
 .card--surface p,
 .card--surface .eyebrow {
-    color: #3d4f5f;
+    color: var(--muted);
 }
 
 .card--feature {
@@ -668,7 +668,7 @@ main {
 
 .founder-profile__content {
     padding: 2rem;
-    background: rgba(255, 251, 245, 0.82);
+    background: var(--paper);
 }
 
 .founder-profile__content--full {
@@ -708,7 +708,7 @@ main {
 
 .funding-table {
     overflow: hidden;
-    background: rgba(255, 251, 245, 0.86);
+    background: var(--paper-deep);
 }
 
 .funding-table table {
@@ -738,7 +738,7 @@ main {
 .site-footer {
     margin-top: auto;
     border-top: 1px solid var(--line);
-    background: rgba(255, 251, 245, 0.66);
+    background: var(--paper-deep);
 }
 
 .site-footer__inner {
@@ -1215,7 +1215,7 @@ body::after {
 .section--band {
     border-top: 1px solid var(--line);
     border-bottom: 1px solid var(--line);
-    background: rgba(255, 251, 245, 0.5);
+    background: var(--paper-strong);
     padding: 1.6rem 0;
 }
 
