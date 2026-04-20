@@ -49,6 +49,21 @@ bin/waaseyaa                        # CLI
 - `config/entity-types.php` — Custom entity types
 - `config/services.php` — Service overrides
 
+## Deployment
+
+Deploys are orchestrated from `waaseyaa-infra`. On every deploy, initialize
+or update the database before starting the app:
+
+```bash
+docker compose run --rm oiatc-app waaseyaa db:init
+docker compose up -d
+```
+
+`db:init` is idempotent: it creates the sqlite file and runs pending migrations
+on a fresh volume, and is a no-op once the schema is current. Safe to invoke
+on every deploy. Use `db:init --dry-run` to preview without touching the
+filesystem or database.
+
 ## License
 
 GPL-2.0-or-later
