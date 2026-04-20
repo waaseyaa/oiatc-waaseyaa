@@ -1,144 +1,223 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}OIATC | Indigenous Digital Sovereignty in Ontario{% endblock %}
-
-{% block content %}
-  <section class="hero hero--home">
-    <div class="hero__backdrop" aria-hidden="true"></div>
-    <div class="hero__grid">
-      <div class="hero__content">
-        <div class="hero__eyebrow eyebrow">Founding declaration</div>
-        <h1>Indigenous digital sovereignty in Ontario.</h1>
-        <p class="hero__lead">
-          OIATC is being formed as an institutional backbone for Nations, communities, and organizations that need to
-          govern artificial intelligence and digital systems on their own terms.
-        </p>
-        <p class="hero__copy">
-          The Council ties governance, platform stewardship, training, and research together so Indigenous law,
-          protocol, consent, and cultural safety remain the architecture rather than the afterthought.
-        </p>
-        <div class="hero__actions">
-          <a class="button" href="/contact">Partner with the founding work</a>
-          <a class="button-secondary" href="/founding-charter">Read the founding charter</a>
-        </div>
-        <ul class="hero__signals">
-          <li>Governance before products</li>
-          <li>Ontario-wide mandate</li>
-          <li>Platforms tied to protocol and continuity</li>
-        </ul>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ontario Indigenous AI &amp; Technology Council</title>
+  <meta name="description" content="A council of two working to improve the digital systems that deliver services to First Nations. Governance framework, the Waaseyaa technical framework, and the Minoo community platform.">
+  <link rel="canonical" href="https://oiatc.ca/">
+  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://oiatc.ca/">
+  <meta property="og:title" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:description" content="A council of two working to improve the digital systems that deliver services to First Nations.">
+  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta name="twitter:description" content="A council of two working to improve the digital systems that deliver services to First Nations.">
+  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="/css/site.css">
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "Organization",
+        "@id": "https://oiatc.ca/#organization",
+        "name": "Ontario Indigenous AI & Technology Council",
+        "alternateName": "OIATC",
+        "url": "https://oiatc.ca/",
+        "email": "jonesrussell42@gmail.com",
+        "logo": "https://oiatc.ca/apple-touch-icon.png",
+        "areaServed": { "@type": "AdministrativeArea", "name": "Ontario, Canada" },
+        "member": [
+          { "@id": "https://oiatc.ca/#russell-jones" },
+          {
+            "@type": "Organization",
+            "name": "Web Networks",
+            "url": "https://web.net",
+            "foundingDate": "1987"
+          }
+        ]
+      },
+      {
+        "@type": "Person",
+        "@id": "https://oiatc.ca/#russell-jones",
+        "name": "Russell Jones",
+        "jobTitle": "Founder, OIATC",
+        "affiliation": { "@id": "https://oiatc.ca/#organization" },
+        "email": "jonesrussell42@gmail.com",
+        "sameAs": [
+          "https://northops.ca",
+          "https://waaseyaa.org",
+          "https://minoo.live",
+          "https://github.com/jonesrussell"
+        ]
+      }
+    ]
+  }
+  </script>
+</head>
+<body class="route-home">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+  <div class="site-shell">
+    <header class="site-header">
+      <div class="site-header__inner">
+        <a class="brand" href="/">
+          <span class="brand__mark">OIATC</span>
+          <span class="brand__meta">
+            <span class="brand__eyebrow">Ontario Indigenous AI &amp; Technology Council</span>
+            <span class="brand__name">A council of two</span>
+          </span>
+        </a>
+        <nav class="site-nav" id="site-nav" aria-label="Primary">
+          <div class="site-nav__group site-nav__group--secondary">
+            <a class="site-nav__action" href="mailto:jonesrussell42@gmail.com">Email</a>
+          </div>
+        </nav>
       </div>
+    </header>
 
-      <aside class="hero__aside">
-        <article class="founder-card">
-          <img src="/images/founding/russell-jones.jpg" alt="Russell Jones" class="founder-card__image">
-          <div class="founder-card__body">
-            <div class="eyebrow">Founding leadership</div>
-            <h2>Russell Jones</h2>
-            <p class="founder-card__meta">Founder / Platform Steward</p>
-            <p class="founder-card__copy">
-              Ojibwe from Sagamok Anishnawbek, building OIATC to give Indigenous Nations in Ontario a principled institutional path into AI governance and digital infrastructure.
+    <main id="main-content">
+      <section class="page-header">
+        <div class="eyebrow">Council</div>
+        <h1>Ontario Indigenous AI &amp; Technology Council</h1>
+        <p>A council of two, working to improve the digital systems that deliver services to First Nations.</p>
+      </section>
+
+      <section class="section">
+        <div class="section-title reveal">
+          <div class="eyebrow">Why we exist</div>
+          <h2>The systems meant to serve First Nations are rarely chosen by them.</h2>
+        </div>
+        <p class="section-copy">
+          First Nations are routinely handed digital systems, case management tools, data platforms, AI, that were chosen by vendors or administrators without the communities those systems are meant to serve. The result is software that doesn't fit, data that flows to the wrong places, and services that suffer for it.
+        </p>
+        <p class="section-copy">
+          OIATC exists to change that. We are authoring a governance framework for Indigenous-led digital decisions and stewarding the platforms and practices that put it into use.
+        </p>
+      </section>
+
+      <section class="section">
+        <div class="section-title reveal">
+          <div class="eyebrow">The council</div>
+          <h2>Two members today.</h2>
+        </div>
+
+        <article class="card partner-card reveal">
+          <div class="partner-card__body">
+            <h3>Russell Jones</h3>
+            <p class="partner-card__meta">Ojibwe from Sagamok Anishnawbek &middot; Full-stack developer</p>
+            <p>
+              In 2023 Russell was contracted to implement a case management system at a First Nations Child and Family Advocacy Unit, saw within weeks that it would not fit the community, and made the case for a Canadian-built alternative already in use at neighbouring Nations. The recommendation was shelved and the contract ended. OIATC is how that lesson becomes a practice.
             </p>
-            <a class="text-link" href="/about">Read the founder context</a>
           </div>
         </article>
 
-        <article class="stance-card">
-          <div class="eyebrow">Institutional stance</div>
-          <p>
-            The Council exists to protect Indigenous law, protocol, consent, data sovereignty, and cultural safety as digital systems become public infrastructure.
-          </p>
+        <article class="card partner-card reveal reveal--d1">
+          <div class="partner-card__logo-wrap">
+            <img src="/images/partners/web-networks-logo.svg" alt="Web Networks logo" class="partner-card__logo">
+          </div>
+          <div class="partner-card__body">
+            <h3><a href="https://web.net" target="_blank" rel="noopener">Web Networks</a></h3>
+            <p class="partner-card__meta">Founded 1987 &middot; One of Canada's first ISPs &middot; Non-profit worker co-op &middot; All infrastructure on Canadian soil</p>
+            <p>
+              A non-profit worker co-op whose clients have included the Legislative Assembly of Nunavut and Nunavut Public Library Services. Web Networks provides OIATC's hosting foundation and sits on the council as its second member.
+            </p>
+          </div>
         </article>
-      </aside>
-    </div>
-  </section>
+      </section>
 
-  <section class="section section--statement">
-    <div class="section-title reveal">
-      <div class="eyebrow">Why OIATC exists</div>
-      <h2>An institutional backbone for Indigenous digital futures.</h2>
-      <p class="section-copy">
-        OIATC is not conceived as a service vendor. It is a governance and stewardship body shaped to help Indigenous Peoples in Ontario design, evaluate,
-        govern, and deploy AI and digital systems according to their own laws, responsibilities, and relational obligations.
-      </p>
-    </div>
-    <div class="statement-grid">
-      <article class="statement reveal reveal--d1">
-        <h3>Protect sovereignty</h3>
-        <p>Keep Indigenous law, consent, control, and data stewardship at the center of AI adoption.</p>
-      </article>
-      <article class="statement reveal reveal--d2">
-        <h3>Build capacity</h3>
-        <p>Create durable pathways for operators, stewards, researchers, and technologists rather than one-off training events.</p>
-      </article>
-      <article class="statement reveal reveal--d3">
-        <h3>Steward platforms</h3>
-        <p>Govern working systems that encode protocol, relationship, continuity, and accountability.</p>
-      </article>
-    </div>
-  </section>
+      <section class="section section--surface">
+        <div class="section-title reveal">
+          <div class="eyebrow">What we're building</div>
+          <h2>One governance framework. Two platforms.</h2>
+        </div>
+        <div class="grid-3">
+          <article class="pillar reveal reveal--d1">
+            <span class="label">Governance</span>
+            <h3>Governance framework</h3>
+            <p>A framework for how First Nations can evaluate, govern, and steward the digital systems that run community services. Protocol before product. Consent before architecture.</p>
+          </article>
+          <article class="pillar reveal reveal--d2">
+            <span class="label">Platform</span>
+            <h3>Waaseyaa</h3>
+            <p><a href="https://waaseyaa.org" target="_blank" rel="noopener">waaseyaa.org</a>. A modular system where governance and access control are structural, not bolted on.</p>
+          </article>
+          <article class="pillar reveal reveal--d3">
+            <span class="label">Community</span>
+            <h3>Minoo</h3>
+            <p><a href="https://minoo.live" target="_blank" rel="noopener">minoo.live</a>. The first platform built on Waaseyaa, for Indigenous languages, teachings, and community continuity.</p>
+          </article>
+        </div>
+      </section>
 
-  <section class="section section--surface">
-    <div class="section-title reveal">
-      <div class="eyebrow">What we steward</div>
-      <h2>Institution, governance platform, community platform.</h2>
-    </div>
-    <div class="grid-3">
-      <article class="pillar reveal reveal--d1">
-        <span class="label">Council</span>
-        <h3>OIATC</h3>
-        <p>The Council provides the public institutional frame: governance, standards, policy posture, training direction, and relationships to Nations.</p>
-      </article>
-      <article class="pillar reveal reveal--d2">
-        <span class="label">Platform</span>
-        <h3>Waaseyaa</h3>
-        <p>Waaseyaa carries governance, relationships, protocols, legal structures, and technical pathways that keep architecture aligned with Indigenous priorities.</p>
-      </article>
-      <article class="pillar reveal reveal--d3">
-        <span class="label">Community</span>
-        <h3>Minoo</h3>
-        <p>Minoo supports community space, oral histories, and cultural continuity so digital infrastructure remains relational rather than extractive.</p>
-      </article>
-    </div>
-  </section>
+      <section class="section">
+        <div class="section-title reveal">
+          <div class="eyebrow">Where we are</div>
+          <h2>Early. We are not pretending otherwise.</h2>
+        </div>
+        <p class="section-copy">
+          OIATC is early. The council has two members today. The framework is in active drafting. The platforms are in active build.
+        </p>
+        <p class="section-copy">We are looking for:</p>
+        <ul class="looking-for">
+          <li>A Knowledge Keeper or Elder willing to sit on the council</li>
+          <li>A Nation interested in being a first partner</li>
+          <li>A legal or policy advisor with experience in Indigenous data governance</li>
+        </ul>
+      </section>
 
-  <section class="section section--lanes">
-    <div class="section-title reveal">
-      <div class="eyebrow">What we do</div>
-      <h2>Governance, training, research, and stewardship.</h2>
-    </div>
-    <div class="grid-3">
-      <article class="lane reveal reveal--d1">
-        <h3>AI governance &amp; sovereignty</h3>
-        <p>Frameworks, model evaluation, protocol-aligned decision tools, and advocacy rooted in Indigenous law and accountability.</p>
-      </article>
-      <article class="lane reveal reveal--d2">
-        <h3>Digital skills &amp; workforce development</h3>
-        <p>Community-based pathways into AI literacy, data stewardship, digital operations, and operator training.</p>
-      </article>
-      <article class="lane reveal reveal--d3">
-        <h3>Research &amp; policy</h3>
-        <p>Public guidance, living governance knowledge, and cross-jurisdictional collaboration for Indigenous digital rights.</p>
-      </article>
-    </div>
-  </section>
+      <section class="section section--final-cta">
+        <div class="section-title reveal">
+          <div class="eyebrow">Contact</div>
+          <h2>jonesrussell42@gmail.com</h2>
+        </div>
+        <div class="cta-row reveal reveal--d1">
+          <a class="button" href="mailto:jonesrussell42@gmail.com">Email Russell</a>
+        </div>
+      </section>
+    </main>
 
-  <section class="section section--band">
-    <div class="cta-band">
-      <a class="button-secondary" href="/grants">Grants &amp; funding priorities</a>
-      <a class="button-secondary" href="/founding-charter">Read the founding charter</a>
-    </div>
-  </section>
-
-  <section class="section section--final-cta">
-    <div class="section-title reveal">
-      <div class="eyebrow">Join / partner</div>
-      <h2>Work with the founding buildout.</h2>
-      <p class="section-copy">
-        OIATC is seeking relationships with Nations, funders, technical collaborators, and founding-circle advisors who understand that governance must come first.
-      </p>
-    </div>
-    <div class="cta-row reveal reveal--d1">
-      <a class="button" href="/contact">Contact / Partner</a>
-    </div>
-  </section>
-{% endblock %}
+    <footer class="site-footer">
+      <div class="site-footer__inner">
+        <div class="site-footer__brand">
+          <strong>Ontario Indigenous AI &amp; Technology Council</strong>
+          <p>A council of two, working to improve the digital systems that deliver services to First Nations.</p>
+        </div>
+        <div class="site-footer__links">
+          <a href="https://waaseyaa.org" target="_blank" rel="noopener">Waaseyaa</a>
+          <a href="https://minoo.live" target="_blank" rel="noopener">Minoo</a>
+          <a href="https://web.net" target="_blank" rel="noopener">Web Networks</a>
+          <a href="mailto:jonesrussell42@gmail.com">Email</a>
+        </div>
+      </div>
+    </footer>
+  </div>
+  <script>
+    (function () {
+      var els = document.querySelectorAll('.reveal');
+      if (!els.length || !window.IntersectionObserver) {
+        els.forEach(function (el) { el.classList.add('is-revealed'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>
