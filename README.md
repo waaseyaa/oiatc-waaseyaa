@@ -55,7 +55,7 @@ Deploys are orchestrated from `waaseyaa-infra`. On every deploy, initialize
 or update the database before starting the app:
 
 ```bash
-docker compose run --rm oiatc-app waaseyaa db:init
+docker compose run --rm oiatc-app bin/waaseyaa db:init
 docker compose up -d
 ```
 
