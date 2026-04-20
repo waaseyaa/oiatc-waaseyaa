@@ -17,12 +17,14 @@
   <meta name="twitter:title" content="Ontario Indigenous AI &amp; Technology Council">
   <meta name="twitter:description" content="A council of two working to improve the digital systems that deliver services to First Nations.">
   <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="/favicon.ico" sizes="32x32">
   <link rel="apple-touch-icon" href="/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=Outfit:wght@300;400;500;600&display=swap">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
   <link rel="stylesheet" href="/css/site.css">
   <script type="application/ld+json">
   {
@@ -65,144 +67,185 @@
   }
   </script>
 </head>
-<body class="route-home">
+<body data-theme="light" data-grain="off" data-density="comfortable" class="route-home">
   <a class="skip-link" href="#main-content">Skip to content</a>
-  <div class="site-shell">
-    <header class="site-header">
-      <div class="site-header__inner">
-        <a class="brand" href="/">
-          <span class="brand__mark">OIATC</span>
-          <span class="brand__meta">
-            <span class="brand__eyebrow">Ontario Indigenous AI &amp; Technology Council</span>
-            <span class="brand__name">A council of two</span>
-          </span>
-        </a>
-        <nav class="site-nav" id="site-nav" aria-label="Primary">
-          <div class="site-nav__group site-nav__group--secondary">
-            <a class="site-nav__action" href="mailto:jonesrussell42@gmail.com">Email</a>
-          </div>
-        </nav>
+
+  <header class="top">
+    <div class="top__inner">
+      <a class="brand" href="/">
+        <span class="brand__mark">OIATC</span>
+        <span class="brand__title">Ontario Indigenous AI &amp; Technology Council</span>
+      </a>
+      <div class="top__meta">
+        <a href="/design-system">Design system</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle theme" data-theme-toggle>Dark</button>
       </div>
-    </header>
+    </div>
+  </header>
 
-    <main id="main-content">
-      <section class="page-header">
-        <div class="eyebrow">Council</div>
-        <h1>Ontario Indigenous AI &amp; Technology Council</h1>
-        <p>A council of two, working to improve the digital systems that deliver services to First Nations.</p>
-      </section>
-
-      <section class="section">
-        <div class="section-title reveal">
-          <div class="eyebrow">Why we exist</div>
-          <h2>The systems meant to serve First Nations are rarely chosen by them.</h2>
+  <main id="main-content">
+    <section class="masthead">
+      <div class="shell">
+        <div>
+          <div class="eyebrow">Council</div>
+          <h1 class="display">A council of two,<br>improving the systems<br>that serve First Nations.</h1>
         </div>
-        <p class="section-copy">
-          First Nations are routinely handed digital systems, case management tools, data platforms, AI, that were chosen by vendors or administrators without the communities those systems are meant to serve. The result is software that doesn't fit, data that flows to the wrong places, and services that suffer for it.
-        </p>
-        <p class="section-copy">
-          OIATC exists to change that. We are authoring a governance framework for Indigenous-led digital decisions and stewarding the platforms and practices that put it into use.
-        </p>
-      </section>
-
-      <section class="section">
-        <div class="section-title reveal">
-          <div class="eyebrow">The council</div>
-          <h2>Two members today.</h2>
+        <div>
+          <p class="lede">Ontario Indigenous AI &amp; Technology Council authors governance for Indigenous-led digital decisions and stewards the platforms that put it into use.</p>
+          <ul class="signals">
+            <li>Governance before product</li>
+            <li>Ontario mandate</li>
+            <li>Platforms tied to protocol</li>
+          </ul>
         </div>
+      </div>
+    </section>
 
-        <article class="card partner-card reveal">
-          <div class="partner-card__body">
-            <h3>Russell Jones</h3>
-            <p class="partner-card__meta">Ojibwe from Sagamok Anishnawbek &middot; Full-stack developer</p>
-            <p>
-              In 2023 Russell was contracted to implement a case management system at a First Nations Child and Family Advocacy Unit, saw within weeks that it would not fit the community, and made the case for a Canadian-built alternative already in use at neighbouring Nations. The recommendation was shelved and the contract ended. OIATC is how that lesson becomes a practice.
-            </p>
+    <section class="sec" id="premise">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">01 · Premise</div></div>
+          <div>
+            <h2 class="sec__title">The systems meant to serve First Nations are rarely chosen by them.</h2>
           </div>
-        </article>
-
-        <article class="card partner-card reveal reveal--d1">
-          <div class="partner-card__logo-wrap">
-            <img src="/images/partners/web-networks-logo.svg" alt="Web Networks logo" class="partner-card__logo">
-          </div>
-          <div class="partner-card__body">
-            <h3><a href="https://web.net" target="_blank" rel="noopener">Web Networks</a></h3>
-            <p class="partner-card__meta">Founded 1987 &middot; One of Canada's first ISPs &middot; Non-profit worker co-op &middot; All infrastructure on Canadian soil</p>
-            <p>
-              A non-profit worker co-op whose clients have included the Legislative Assembly of Nunavut and Nunavut Public Library Services. Web Networks provides OIATC's hosting foundation and sits on the council as its second member.
-            </p>
-          </div>
-        </article>
-      </section>
-
-      <section class="section section--surface">
-        <div class="section-title reveal">
-          <div class="eyebrow">What we're building</div>
-          <h2>One governance framework. Two platforms.</h2>
         </div>
-        <div class="grid-3">
-          <article class="pillar reveal reveal--d1">
-            <span class="label">Governance</span>
+        <div class="reveal">
+          <p class="body body--wide">First Nations are routinely handed digital systems &mdash; case-management tools, data platforms, AI &mdash; chosen by vendors or administrators without the communities those systems are meant to serve. The result is software that doesn't fit, data that flows to the wrong places, and services that suffer for it.</p>
+          <p class="body body--wide">OIATC exists to change that. We are authoring a governance framework for Indigenous-led digital decisions and stewarding the platforms and practices that put it into use.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="pillars">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">02 · What we're building</div></div>
+          <div>
+            <h2 class="sec__title">One governance framework. Two platforms.</h2>
+            <p class="sec__intro">Three pieces, built in order. Governance first &mdash; the platforms exist to put it into use.</p>
+          </div>
+        </div>
+        <div class="grid-3 reveal">
+          <article class="pillar-demo">
+            <div class="pillar-demo__label">Governance</div>
             <h3>Governance framework</h3>
             <p>A framework for how First Nations can evaluate, govern, and steward the digital systems that run community services. Protocol before product. Consent before architecture.</p>
           </article>
-          <article class="pillar reveal reveal--d2">
-            <span class="label">Platform</span>
+          <article class="pillar-demo">
+            <div class="pillar-demo__label">Platform</div>
             <h3>Waaseyaa</h3>
-            <p><a href="https://waaseyaa.org" target="_blank" rel="noopener">waaseyaa.org</a>. A modular system where governance and access control are structural, not bolted on.</p>
+            <p><a class="link" href="https://waaseyaa.org" target="_blank" rel="noopener">waaseyaa.org</a>. A modular system where governance and access control are structural, not bolted on.</p>
           </article>
-          <article class="pillar reveal reveal--d3">
-            <span class="label">Community</span>
+          <article class="pillar-demo">
+            <div class="pillar-demo__label">Community</div>
             <h3>Minoo</h3>
-            <p><a href="https://minoo.live" target="_blank" rel="noopener">minoo.live</a>. The first platform built on Waaseyaa, for Indigenous languages, teachings, and community continuity.</p>
+            <p><a class="link" href="https://minoo.live" target="_blank" rel="noopener">minoo.live</a>. The first platform built on Waaseyaa &mdash; for Indigenous languages, teachings, and community continuity.</p>
           </article>
-        </div>
-      </section>
-
-      <section class="section">
-        <div class="section-title reveal">
-          <div class="eyebrow">Where we are</div>
-          <h2>Early. We are not pretending otherwise.</h2>
-        </div>
-        <p class="section-copy">
-          OIATC is early. The council has two members today. The framework is in active drafting. The platforms are in active build.
-        </p>
-        <p class="section-copy">We are looking for:</p>
-        <ul class="looking-for">
-          <li>A Knowledge Keeper or Elder willing to sit on the council</li>
-          <li>A Nation interested in being a first partner</li>
-          <li>A legal or policy advisor with experience in Indigenous data governance</li>
-        </ul>
-      </section>
-
-      <section class="section section--final-cta">
-        <div class="section-title reveal">
-          <div class="eyebrow">Contact</div>
-          <h2>jonesrussell42@gmail.com</h2>
-        </div>
-        <div class="cta-row reveal reveal--d1">
-          <a class="button" href="mailto:jonesrussell42@gmail.com">Email Russell</a>
-        </div>
-      </section>
-    </main>
-
-    <footer class="site-footer">
-      <div class="site-footer__inner">
-        <div class="site-footer__brand">
-          <strong>Ontario Indigenous AI &amp; Technology Council</strong>
-          <p>A council of two, working to improve the digital systems that deliver services to First Nations.</p>
-        </div>
-        <div class="site-footer__links">
-          <a href="https://waaseyaa.org" target="_blank" rel="noopener">Waaseyaa</a>
-          <a href="https://minoo.live" target="_blank" rel="noopener">Minoo</a>
-          <a href="https://web.net" target="_blank" rel="noopener">Web Networks</a>
-          <a href="mailto:jonesrussell42@gmail.com">Email</a>
         </div>
       </div>
-    </footer>
-  </div>
+    </section>
+
+    <section class="sec sec--statement" id="candour">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">03 · Where we are</div></div>
+          <div>
+            <h2 class="sec__title">Early. We are not pretending otherwise.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">OIATC is early. The council has two members today. The framework is in active drafting. The platforms are in active build.</p>
+          <p class="body body--wide" style="margin-top: var(--gap-5);">We are looking for:</p>
+          <ul class="signals" style="margin-top: var(--gap-4); flex-direction: column; gap: var(--gap-3);">
+            <li>A Knowledge Keeper or Elder willing to sit on the council</li>
+            <li>A Nation interested in being a first partner</li>
+            <li>A legal or policy advisor with experience in Indigenous data governance</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="council">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">04 · Council members</div></div>
+          <div>
+            <h2 class="sec__title">Two seats, held with care.</h2>
+            <p class="sec__intro">The council today is deliberately small. Growth is gated on fit &mdash; not urgency.</p>
+          </div>
+        </div>
+        <div class="grid-2 reveal">
+          <article class="card">
+            <div class="card__eyebrow">Council member</div>
+            <h3>Russell Jones</h3>
+            <p class="card__meta">Ojibwe from Sagamok Anishnawbek &middot; Founder &middot; Full-stack developer</p>
+            <p class="body">In 2023 Russell was contracted to implement a case-management system at a First Nations Child and Family Advocacy Unit, saw within weeks that it would not fit the community, and made the case for a Canadian-built alternative already in use at neighbouring Nations. The recommendation was shelved and the contract ended. OIATC is how that lesson becomes a practice.</p>
+          </article>
+          <article class="card">
+            <div class="card__eyebrow">Council member</div>
+            <h3><a class="link" href="https://web.net" target="_blank" rel="noopener">Web Networks</a></h3>
+            <p class="card__meta">Est. 1987 &middot; One of Canada's first ISPs &middot; Non-profit worker co-op &middot; Canadian soil</p>
+            <p class="body">A non-profit worker co-op whose clients have included the Legislative Assembly of Nunavut and Nunavut Public Library Services. Web Networks provides OIATC's hosting foundation and sits on the council as its second member.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="contact" aria-labelledby="contact-heading">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">05 · Contact</div></div>
+          <div>
+            <h2 class="sec__title" id="contact-heading">jonesrussell42@gmail.com</h2>
+            <p class="sec__intro">One seat is held by the founder. Writing to Russell is writing to OIATC.</p>
+          </div>
+        </div>
+        <div class="actions reveal">
+          <a class="btn btn--primary" href="mailto:jonesrussell42@gmail.com">Email Russell &rarr;</a>
+          <a class="btn btn--secondary" href="https://waaseyaa.org" target="_blank" rel="noopener">Read the framework</a>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="shell">
+      <span>Ontario Indigenous AI &amp; Technology Council</span>
+      <span>
+        <a href="https://waaseyaa.org" target="_blank" rel="noopener">Waaseyaa</a>
+        &nbsp;·&nbsp;
+        <a href="https://minoo.live" target="_blank" rel="noopener">Minoo</a>
+        &nbsp;·&nbsp;
+        <a href="https://web.net" target="_blank" rel="noopener">Web Networks</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:jonesrussell42@gmail.com">Email</a>
+      </span>
+    </div>
+  </footer>
+
   <script>
     (function () {
+      var body = document.body;
+      var btn = document.querySelector('[data-theme-toggle]');
+      var stored = null;
+      try { stored = localStorage.getItem('oiatc-theme'); } catch (e) {}
+      if (stored === 'dark' || stored === 'light') {
+        body.setAttribute('data-theme', stored);
+      }
+      function syncLabel() {
+        if (!btn) return;
+        btn.textContent = body.getAttribute('data-theme') === 'dark' ? 'Light' : 'Dark';
+      }
+      syncLabel();
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          body.setAttribute('data-theme', next);
+          try { localStorage.setItem('oiatc-theme', next); } catch (e) {}
+          syncLabel();
+        });
+      }
+
       var els = document.querySelectorAll('.reveal');
       if (!els.length || !window.IntersectionObserver) {
         els.forEach(function (el) { el.classList.add('is-revealed'); });

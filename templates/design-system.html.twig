@@ -1,0 +1,786 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Council Design System — OIATC</title>
+  <meta name="description" content="The Council Design System: tokens, type, space, motion, components, patterns, iconography, voice, and accessibility targets used across OIATC surfaces.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://oiatc.ca/design-system">
+  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/site.css">
+</head>
+<body data-theme="light" data-grain="off" data-density="comfortable" class="route-design-system">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="top">
+    <div class="top__inner">
+      <a class="brand" href="/">
+        <span class="brand__mark">OIATC</span>
+        <span class="brand__title">Ontario Indigenous AI &amp; Technology Council</span>
+      </a>
+      <div class="top__meta">
+        <a href="/">&larr; Home</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle theme" data-theme-toggle>Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="masthead">
+      <div class="shell">
+        <div>
+          <div class="eyebrow">Council design system</div>
+          <h1 class="display">A system for a council,<br>not a brand for a product.</h1>
+        </div>
+        <div>
+          <p class="lede">Ten sections. One point of view. The authority sits in the type and the grid &mdash; never the ornament.</p>
+          <ul class="signals">
+            <li>Paper in both modes</li>
+            <li>Ember, used sparingly</li>
+            <li>Motion you barely notice</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <nav class="toc" aria-label="Design system sections">
+      <div class="shell">
+        <a href="#principles">01 Principles</a>
+        <a href="#color">02 Color</a>
+        <a href="#type">03 Type</a>
+        <a href="#space">04 Space &amp; grid</a>
+        <a href="#motion">05 Motion</a>
+        <a href="#components">06 Components</a>
+        <a href="#patterns">07 Patterns</a>
+        <a href="#icons">08 Iconography</a>
+        <a href="#voice">09 Voice</a>
+        <a href="#a11y">10 Accessibility</a>
+      </div>
+    </nav>
+
+    {# 01 PRINCIPLES #}
+    <section class="sec" id="principles">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">01 · Principles</div></div>
+          <div>
+            <h2 class="sec__title">Six rules we intend to keep.</h2>
+            <p class="sec__intro">This system exists because OIATC's website will be read by Knowledge Keepers, council members, legal advisors, and Nations considering partnership. It must feel serious the way a good policy document feels serious &mdash; not because it is stiff, but because every line is deliberate.</p>
+          </div>
+        </div>
+        <div class="principles reveal">
+          <article>
+            <div class="eyebrow">01</div>
+            <h3>Protocol before product.</h3>
+            <p class="body">The type and the grid carry the authority. Never the ornament. When in doubt, remove.</p>
+          </article>
+          <article>
+            <div class="eyebrow">02</div>
+            <h3>Plain over pretty.</h3>
+            <p class="body">We are drafting a governance framework. Treat the site like a document &mdash; generous margins, clear hierarchy, one voice throughout.</p>
+          </article>
+          <article>
+            <div class="eyebrow">03</div>
+            <h3>Paper as metaphor.</h3>
+            <p class="body">Backgrounds read as paper in both modes. Dark mode is storm-paper, not neon. No glow, no haze, no particles.</p>
+          </article>
+          <article>
+            <div class="eyebrow">04</div>
+            <h3>Quiet accents.</h3>
+            <p class="body">Ember is used sparingly &mdash; for the active state, the focus ring, the pull-quote rule. Not for decoration.</p>
+          </article>
+          <article>
+            <div class="eyebrow">05</div>
+            <h3>Canadian English.</h3>
+            <p class="body">Behaviour, organisation, programme. Two spaces never, ems occasionally, serial comma yes.</p>
+          </article>
+          <article>
+            <div class="eyebrow">06</div>
+            <h3>Respect everyone's bandwidth.</h3>
+            <p class="body">No autoplay. No forced motion. No tracking. No cookie banner because no cookies.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    {# 02 COLOR #}
+    <section class="sec" id="color">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">02 · Color</div></div>
+          <div>
+            <h2 class="sec__title">Paper, ink, and one ember.</h2>
+            <p class="sec__intro">Colour is tuned in OKLCH so light and dark modes stay perceptually matched. Both modes read as paper &mdash; warm in light, storm-blue in dark. The accent never becomes the field.</p>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-8);">
+          <h4>Surface &mdash; neutrals</h4>
+          <div style="display:grid; grid-template-columns:repeat(6, 1fr); gap: var(--gap-4);">
+            <div class="swatch swatch--border" style="background: var(--paper);">
+              <span class="mono">Paper</span><span class="mono">--paper</span>
+            </div>
+            <div class="swatch swatch--border" style="background: var(--paper-2);">
+              <span class="mono">Paper 2</span><span class="mono">--paper-2</span>
+            </div>
+            <div class="swatch swatch--border" style="background: var(--paper-3);">
+              <span class="mono">Paper 3</span><span class="mono">--paper-3</span>
+            </div>
+            <div class="swatch swatch--border" style="background: var(--rule);">
+              <span class="mono">Rule</span><span class="mono">--rule</span>
+            </div>
+            <div class="swatch swatch--border" style="background: var(--rule-strong);">
+              <span class="mono">Rule strong</span><span class="mono">--rule-strong</span>
+            </div>
+            <div class="swatch" style="background: var(--statement-bg); color: var(--statement-fg);">
+              <span class="mono">Statement</span><span class="mono">--statement-bg</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-8);">
+          <h4>Text &mdash; ink</h4>
+          <div style="display:grid; grid-template-columns:repeat(3, 1fr); gap: var(--gap-4);">
+            <div class="swatch" style="background: var(--ink); color: var(--paper);">
+              <span class="mono">Ink &mdash; body</span><span class="mono">--ink</span>
+            </div>
+            <div class="swatch" style="background: var(--ink-2); color: var(--paper);">
+              <span class="mono">Ink 2 &mdash; secondary</span><span class="mono">--ink-2</span>
+            </div>
+            <div class="swatch" style="background: var(--ink-3); color: var(--paper);">
+              <span class="mono">Ink 3 &mdash; tertiary</span><span class="mono">--ink-3</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-8);">
+          <h4>Accent &mdash; ember</h4>
+          <div style="display:grid; grid-template-columns:repeat(4, 1fr); gap: var(--gap-4);">
+            <div class="swatch" style="background: var(--accent); color: #fff;">
+              <span class="mono">Accent</span><span class="mono">--accent</span>
+            </div>
+            <div class="swatch" style="background: var(--accent-deep); color: #fff;">
+              <span class="mono">Accent deep</span><span class="mono">--accent-deep</span>
+            </div>
+            <div class="swatch swatch--border" style="background: var(--accent-soft);">
+              <span class="mono">Accent soft</span><span class="mono">--accent-soft</span>
+            </div>
+            <div class="swatch swatch--border" style="background: var(--accent-wash);">
+              <span class="mono">Accent wash</span><span class="mono">--accent-wash</span>
+            </div>
+          </div>
+          <p class="body muted" style="margin-top: var(--gap-4); font-size: 13px; max-width: 60ch;">Ember appears only on: the active nav link underline, the focus ring, the eyebrow tick, and one primary call-to-action per page. It never fills a container.</p>
+        </div>
+
+        <div class="reveal">
+          <h4>Semantic roles</h4>
+          <div style="display:grid; grid-template-columns:repeat(2, 1fr); gap: var(--gap-6);">
+            <table class="mono" style="width:100%; border-collapse:collapse; font-size:12px;">
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Page background</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--paper)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Surface &mdash; card</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--paper-2)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Surface &mdash; inset</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--paper-3)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Divider</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--rule)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Divider &mdash; emphasis</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--rule-strong)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Statement surface</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--statement-bg)</td></tr>
+              </tbody>
+            </table>
+            <table class="mono" style="width:100%; border-collapse:collapse; font-size:12px;">
+              <tbody>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Text &mdash; body</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--ink)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Text &mdash; secondary</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--ink-2)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Text &mdash; tertiary / labels</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--ink-3)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Link / active</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--accent-deep)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Focus ring</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--accent)</td></tr>
+                <tr style="border-bottom: 1px solid var(--rule);"><td style="padding:10px 0; color: var(--ink-2);">Selection</td><td style="padding:10px 0; color: var(--ink); text-align:right;">var(--accent-wash)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# 03 TYPE #}
+    <section class="sec" id="type">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">03 · Typography</div></div>
+          <div>
+            <h2 class="sec__title">Source Serif for voice. Inter for clarity. JetBrains for metadata.</h2>
+            <p class="sec__intro">The serif carries the claims &mdash; headlines, ledes, pull quotes. The sans handles prose and UI. Mono holds numbers, section marks, and anything that should read as metadata rather than voice.</p>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-8);">
+          <h4>Scale</h4>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-serif); font-weight: 300; font-size: 68px; line-height: 1.02; letter-spacing: -0.018em;">Display &mdash; masthead</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Homepage only. Once per page.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-serif); font-weight: 300; font-size: 44px; line-height: 1.08; letter-spacing: -0.012em;">H1 &mdash; section title</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Once per section.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-serif); font-weight: 400; font-size: 28px; line-height: 1.15; letter-spacing: -0.006em;">H2 &mdash; subtitle</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Within long-form body.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-serif); font-weight: 400; font-size: 22px; line-height: 1.2;">H3 &mdash; card title</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Cards, pillars, partner entries.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-serif); font-weight: 300; font-style: italic; font-size: 22px; line-height: 1.5;">Lede &mdash; italic opening after H1.</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Opening sentence after H1.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-sans); font-weight: 400; font-size: 16px; line-height: 1.6;">Body &mdash; the default. Sixteen pixels. Inter at 400. Prose lives here; most of the site is this size.</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Prose.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div style="font-family: var(--font-sans); font-weight: 400; font-size: 14px; line-height: 1.55;">Body small &mdash; footnotes, metadata, secondary prose.</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Footnotes, metadata.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div class="mono" style="font-size: 11px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase;">Label &mdash; eyebrow</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Section numbers, categories, metadata labels.</div>
+            </div>
+          </div>
+          <div class="type-row">
+            <div>
+              <div class="mono" style="font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--ink-3);">Micro &mdash; the smallest type we will set</div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3); margin-top: 8px;">Captions on swatches and legends.</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <h4>Pairing</h4>
+          <p class="body muted" style="font-size: 13px; max-width: 60ch; margin-bottom: var(--gap-5);">Source Serif 4 &middot; Inter &middot; JetBrains Mono. Alternates tested: Fraunces &middot; IBM Plex &middot; Plex Mono; Newsreader &middot; Inter &middot; JetBrains. The current pairing is the canonical choice for OIATC.</p>
+          <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-5);">
+            <div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3);">Serif</div>
+              <div style="font-family: var(--font-serif); font-weight: 300; font-size: 28px; margin-top: var(--gap-2);">Source Serif 4</div>
+              <p class="body muted" style="font-size: 13px; margin-top: var(--gap-2);">Headlines, ledes, pull quotes.</p>
+            </div>
+            <div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3);">Sans</div>
+              <div style="font-family: var(--font-sans); font-weight: 500; font-size: 22px; margin-top: var(--gap-2);">Inter</div>
+              <p class="body muted" style="font-size: 13px; margin-top: var(--gap-2);">Body prose and UI chrome.</p>
+            </div>
+            <div>
+              <div class="mono" style="font-size: 11px; color: var(--ink-3);">Mono</div>
+              <div class="mono" style="font-size: 18px; margin-top: var(--gap-2);">JetBrains Mono</div>
+              <p class="body muted" style="font-size: 13px; margin-top: var(--gap-2);">Section marks, tokens, metadata.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# 04 SPACE & GRID #}
+    <section class="sec" id="space">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">04 · Space &amp; grid</div></div>
+          <div>
+            <h2 class="sec__title">A 4-point scale. A 12-column shell. Wide margins.</h2>
+            <p class="sec__intro">All spacing derives from a 4px base. Sections breathe at 120px top/bottom at comfortable density; compact shaves this to 96, airy pushes it to 160. The shell is 1280px max with 32px gutters.</p>
+          </div>
+        </div>
+        <div class="reveal" style="display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-7);">
+          <div>
+            <h4>Scale</h4>
+            <div style="border-top: 1px solid var(--rule);">
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-1</span><span style="font-size: 14px;">4</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">hairline inset</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-2</span><span style="font-size: 14px;">8</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">tight cluster</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-3</span><span style="font-size: 14px;">12</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">label &harr; value</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-4</span><span style="font-size: 14px;">16</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">card padding min</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-5</span><span style="font-size: 14px;">24</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">paragraph rhythm</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-6</span><span style="font-size: 14px;">32</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">shell padding</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-7</span><span style="font-size: 14px;">48</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">head &harr; body</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-8</span><span style="font-size: 14px;">64</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">between groups</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--gap-9</span><span style="font-size: 14px;">96</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">masthead air</span></div>
+              <div class="scale-row"><span class="mono" style="font-size: 11px; color: var(--ink-3);">--section-y</span><span style="font-size: 14px;">120</span><span class="mono" style="font-size: 11px; color: var(--ink-2); text-align: right;">section top/bottom</span></div>
+            </div>
+          </div>
+          <div>
+            <h4>Shell &amp; grid</h4>
+            <p class="body" style="font-size: 14px;">The shell is centred at <code class="inline">max-width: 1280px</code> with <code class="inline">padding: 0 32px</code>. Content sits on a 12-column grid but we rarely use more than 8 &mdash; most sections are 2-up or 3-up, with the head column (2) lightly decoupled from the body column (6).</p>
+            <div style="margin-top: var(--gap-5); display: grid; grid-template-columns: repeat(12, 1fr); gap: var(--gap-2);">
+              {% for i in 1..12 %}
+                <div style="height: 56px; background: var(--paper-3); border: 1px solid var(--rule);"></div>
+              {% endfor %}
+            </div>
+            <p class="body muted" style="font-size: 13px; margin-top: var(--gap-4);">Radii stay small. Institutional tone. Buttons, cards, and inputs default to 2&ndash;4px. Never pills, never circles on containers.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# 05 MOTION #}
+    <section class="sec" id="motion">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">05 · Motion</div></div>
+          <div>
+            <h2 class="sec__title">Motion should feel like a door that closes properly.</h2>
+            <p class="sec__intro">Considered, measured, and barely noticed. We fade and translate. We do not parallax, glow, pulse, or morph.</p>
+            <p class="sec__intro">Three durations (140 &middot; 220 &middot; 420), one easing. All motion respects <code class="inline">prefers-reduced-motion</code>.</p>
+          </div>
+        </div>
+        <div class="reveal" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-5);">
+          <div class="motion-card">
+            <div class="mono" style="font-size: 11px; color: var(--ink-3);">--dur-fast</div>
+            <div style="font-family: var(--font-serif); font-size: 30px; font-weight: 300; margin: var(--gap-2) 0;">140ms</div>
+            <div class="mono" style="font-size: 11px; color: var(--ink-2);">Hover tints, focus rings</div>
+          </div>
+          <div class="motion-card">
+            <div class="mono" style="font-size: 11px; color: var(--ink-3);">--dur</div>
+            <div style="font-family: var(--font-serif); font-size: 30px; font-weight: 300; margin: var(--gap-2) 0;">220ms</div>
+            <div class="mono" style="font-size: 11px; color: var(--ink-2);">State changes, buttons</div>
+          </div>
+          <div class="motion-card">
+            <div class="mono" style="font-size: 11px; color: var(--ink-3);">--dur-slow</div>
+            <div style="font-family: var(--font-serif); font-size: 30px; font-weight: 300; margin: var(--gap-2) 0;">420ms</div>
+            <div class="mono" style="font-size: 11px; color: var(--ink-2);">Reveal on scroll</div>
+          </div>
+        </div>
+        <p class="body muted" style="margin-top: var(--gap-5); font-size: 13px;">Easing: <code class="inline">cubic-bezier(0.2, 0.6, 0.2, 1)</code> &mdash; a gentle in-out that avoids any overshoot. The same curve applies to fade, translate, and color changes so the whole UI moves in sympathy.</p>
+      </div>
+    </section>
+
+    {# 06 COMPONENTS #}
+    <section class="sec" id="components">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">06 · Components</div></div>
+          <div>
+            <h2 class="sec__title">A tight kit. Each piece earns its place.</h2>
+            <p class="sec__intro">Buttons, cards, badges, fields, and links. Nothing else is introduced unless a pattern demands it. Each component lives on every surface without theming.</p>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-7);">
+          <h4>Buttons</h4>
+          <div class="actions">
+            <a class="btn btn--primary" href="#">Email Russell &rarr;</a>
+            <a class="btn btn--secondary" href="#">Read the framework</a>
+            <a class="btn btn--ghost" href="#">Cancel</a>
+          </div>
+          <p class="body muted" style="font-size: 13px; margin-top: var(--gap-4);">One primary per section. Ember fill, white text. Secondary is an outlined variant on <code class="inline">--rule-strong</code>. Ghost carries no border.</p>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-7);">
+          <h4>Links &amp; nav</h4>
+          <p class="body">Inline links use <a class="link" href="#">the link style</a>, with an ember underline that thickens on hover. Navigation links use the <a class="nav-link" href="#">nav link style</a>, lowercase and subtle &mdash; the active state earns the ember.</p>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-7);">
+          <h4>Fields</h4>
+          <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap-5); max-width: 680px;">
+            <label class="field">
+              <span class="field__label">Name</span>
+              <input class="field__input" type="text" placeholder="Your name">
+            </label>
+            <label class="field">
+              <span class="field__label">Email</span>
+              <input class="field__input" type="email" placeholder="you@example.ca">
+            </label>
+            <label class="field" style="grid-column: 1 / -1;">
+              <span class="field__label">Note</span>
+              <textarea class="field__input" rows="3" placeholder="What would you like to discuss with the council?"></textarea>
+            </label>
+          </div>
+        </div>
+
+        <div class="reveal" style="margin-bottom: var(--gap-7);">
+          <h4>Badges &amp; tags</h4>
+          <div style="display: flex; gap: var(--gap-3); flex-wrap: wrap;">
+            <span class="badge">Draft</span>
+            <span class="badge badge--accent">&sect; 1.1</span>
+            <span class="badge badge--outline">Governance</span>
+            <span class="badge badge--outline">Platform</span>
+            <span class="badge badge--outline">Community</span>
+          </div>
+        </div>
+
+        <div class="reveal">
+          <h4>Cards</h4>
+          <div class="grid-2">
+            <article class="card">
+              <div class="card__eyebrow">Council member</div>
+              <h3>Russell Jones</h3>
+              <p class="card__meta">Ojibwe from Sagamok Anishnawbek &middot; Full-stack developer</p>
+              <p class="body">Founder of OIATC. Began the work after a 2023 case-management contract at a First Nations Child and Family Advocacy Unit revealed the gap between systems sold and systems needed.</p>
+            </article>
+            <article class="card">
+              <div class="card__eyebrow">Council member</div>
+              <h3>Web Networks</h3>
+              <p class="card__meta">Est. 1987 &middot; Non-profit worker co-op &middot; Canadian soil</p>
+              <p class="body">One of Canada's first ISPs. Provides OIATC's hosting foundation and sits on the council as its second member.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# 07 PATTERNS #}
+    <section class="sec" id="patterns">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">07 · Patterns</div></div>
+          <div>
+            <h2 class="sec__title">Section templates, composed from the kit.</h2>
+            <p class="sec__intro">These are the only section templates oiatc.ca should need. Each composes existing components &mdash; no new primitives. A page that follows masthead &rarr; premise &rarr; pillars &rarr; candour &rarr; contact reads like a good short brief.</p>
+          </div>
+        </div>
+
+        {# P01 MASTHEAD #}
+        <div class="reveal pattern">
+          <div class="pattern__label"><span class="eyebrow">P · 01 · Masthead</span></div>
+          <div class="pattern__frame">
+            <div class="eyebrow">Council</div>
+            <h1 style="font-family: var(--font-serif); font-weight: 300; font-size: clamp(38px, 5vw, 64px); line-height: 1.04; letter-spacing: -0.016em; margin: var(--gap-5) 0; max-width: 22ch;">Ontario Indigenous AI &amp; Technology Council</h1>
+            <p style="font-family: var(--font-serif); font-style: italic; font-weight: 300; font-size: 20px; line-height: 1.5; color: var(--ink-2); max-width: 44ch;">A council of two, working to improve the digital systems that deliver services to First Nations.</p>
+          </div>
+        </div>
+
+        {# P02 PREMISE #}
+        <div class="reveal pattern">
+          <div class="pattern__label"><span class="eyebrow">P · 02 · Premise</span></div>
+          <div class="pattern__frame">
+            <div class="eyebrow">Premise</div>
+            <h2 style="font-family: var(--font-serif); font-weight: 300; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.1; letter-spacing: -0.01em; margin: var(--gap-5) 0;">The systems meant to serve First Nations are rarely chosen by them.</h2>
+            <p class="body body--wide">First Nations are routinely handed digital systems &mdash; case-management tools, data platforms, AI &mdash; chosen by vendors or administrators without the communities those systems are meant to serve. The result is software that doesn't fit, data that flows to the wrong places, and services that suffer for it.</p>
+          </div>
+        </div>
+
+        {# P03 PILLARS #}
+        <div class="reveal pattern">
+          <div class="pattern__label"><span class="eyebrow">P · 03 · Pillars (3-up)</span></div>
+          <div class="pattern__frame">
+            <div class="grid-3">
+              <div class="pillar-demo">
+                <div class="pillar-demo__label">Governance</div>
+                <h3>Governance framework</h3>
+                <p>A framework for how First Nations can evaluate, govern, and steward the digital systems that run community services.</p>
+              </div>
+              <div class="pillar-demo">
+                <div class="pillar-demo__label">Platform</div>
+                <h3>Waaseyaa</h3>
+                <p>A modular system where governance and access control are structural, not bolted on.</p>
+              </div>
+              <div class="pillar-demo">
+                <div class="pillar-demo__label">Community</div>
+                <h3>Minoo</h3>
+                <p>The first platform built on Waaseyaa &mdash; for Indigenous languages, teachings, and community continuity.</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {# P04 STATEMENT #}
+        <div class="reveal pattern">
+          <div class="pattern__label"><span class="eyebrow">P · 04 · Statement</span></div>
+          <div class="pattern__frame" style="background: var(--statement-bg); color: var(--statement-fg); border-color: transparent;">
+            <div class="eyebrow" style="color: color-mix(in oklab, var(--statement-fg) 70%, transparent);">Where we are</div>
+            <h2 style="font-family: var(--font-serif); font-weight: 300; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.1; margin: var(--gap-5) 0; color: var(--statement-fg);">Early. We are not pretending otherwise.</h2>
+            <p class="body body--wide" style="color: color-mix(in oklab, var(--statement-fg) 86%, transparent);">OIATC is early. The council has two members today. The framework is in active drafting. The platforms are in active build.</p>
+          </div>
+        </div>
+
+        {# P05 COUNCIL #}
+        <div class="reveal pattern">
+          <div class="pattern__label"><span class="eyebrow">P · 05 · Council (2-up)</span></div>
+          <div class="pattern__frame">
+            <div class="grid-2">
+              <article class="card">
+                <div class="card__eyebrow">Council member</div>
+                <h3>Russell Jones</h3>
+                <p class="card__meta">Ojibwe from Sagamok Anishnawbek &middot; Founder</p>
+                <p class="body">Began the work after a 2023 case-management contract revealed the gap between systems sold and systems needed.</p>
+              </article>
+              <article class="card">
+                <div class="card__eyebrow">Council member</div>
+                <h3>Web Networks</h3>
+                <p class="card__meta">Est. 1987 &middot; Non-profit worker co-op</p>
+                <p class="body">Provides OIATC's hosting foundation and sits on the council as its second member.</p>
+              </article>
+            </div>
+          </div>
+        </div>
+
+        {# P06 CONTACT #}
+        <div class="reveal pattern">
+          <div class="pattern__label"><span class="eyebrow">P · 06 · Contact</span></div>
+          <div class="pattern__frame" style="text-align: center; padding: var(--gap-8) var(--gap-6);">
+            <div class="eyebrow" style="justify-content: center;">Contact</div>
+            <h2 style="font-family: var(--font-serif); font-weight: 300; font-size: clamp(28px, 3.4vw, 44px); line-height: 1.1; margin: var(--gap-5) 0;">jonesrussell42@gmail.com</h2>
+            <a class="btn btn--primary" href="mailto:jonesrussell42@gmail.com">Email Russell &rarr;</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# 08 ICONOGRAPHY #}
+    <section class="sec" id="icons">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">08 · Iconography</div></div>
+          <div>
+            <h2 class="sec__title">Stroke. 1.5px. 24 grid. That's it.</h2>
+            <p class="sec__intro">A tiny set, drawn in one weight. Icons are used only where they serve navigation or wayfinding &mdash; never to decorate a paragraph.</p>
+            <p class="sec__intro">Never use emoji. Never invent pictographs of Indigenous concepts or symbols. When representing culture, use typography or a photograph commissioned with consent &mdash; not iconography.</p>
+          </div>
+        </div>
+        <div class="reveal" style="display: grid; grid-template-columns: repeat(6, 1fr); gap: var(--gap-5);">
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Arrow</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 6h16M4 12h16M4 18h10"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Document</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="1"/><path d="M3 9h18"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Card</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8"/><path d="M12 8v5l3 2"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Time</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8l8 5 8-5"/><rect x="3" y="6" width="18" height="12" rx="1"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Mail</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="10" r="3"/><path d="M12 14c-4 0-7 2-7 5v1h14v-1c0-3-3-5-7-5z"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Council</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3l8 4v6c0 5-4 7-8 8-4-1-8-3-8-8V7l8-4z"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Protocol</div>
+          </div>
+          <div class="icon-tile">
+            <div class="icon-tile__box">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="M16 16l5 5"/></svg>
+            </div>
+            <div class="mono icon-tile__label">Search</div>
+          </div>
+        </div>
+        <hr class="rule">
+        <p class="body muted" style="font-size: 13px; max-width: 60ch;">When a concept lacks an appropriate icon, use an em-dash, a mono label, or nothing. A missing icon is always better than a wrong one.</p>
+      </div>
+    </section>
+
+    {# 09 VOICE #}
+    <section class="sec" id="voice">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">09 · Voice</div></div>
+          <div>
+            <h2 class="sec__title">Declarative. Plain. Canadian.</h2>
+            <p class="sec__intro">We write the way a careful lawyer speaks at a table: clearly, once, without hedging. We do not use marketing verbs (empower, unlock, revolutionise). We do not use exclamation marks. We prefer full sentences over hype.</p>
+            <p class="sec__intro">Eyebrows use sentence case in mono caps (THE COUNCIL, WHY WE EXIST). Headlines use serif, Title Case-with-Sentence-Breaks. Body uses sentence case always.</p>
+          </div>
+        </div>
+        <div class="reveal" style="display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--gap-5);">
+          <div class="voice-pair">
+            <h5>Do</h5>
+            <p class="body">A council of two, working to improve the digital systems that deliver services to First Nations.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Don't</h5>
+            <p class="body muted">We're on a mission to revolutionize Indigenous tech!</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Do</h5>
+            <p class="body">OIATC is early. The council has two members today.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Don't</h5>
+            <p class="body muted">OIATC is an emerging leader in the Indigenous technology space.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Do</h5>
+            <p class="body">Protocol before product. Consent before architecture.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Don't</h5>
+            <p class="body muted">Innovative, human-centred solutions that empower communities.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Do</h5>
+            <p class="body">Email Russell.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Don't</h5>
+            <p class="body muted">Let's chat! &#128640;</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Do</h5>
+            <p class="body">Behaviour, organisation, programme.</p>
+          </div>
+          <div class="voice-pair">
+            <h5>Don't</h5>
+            <p class="body muted">Behavior, organization, program.</p>
+          </div>
+        </div>
+        <hr class="rule">
+        <div class="reveal" style="display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--gap-5);">
+          <div style="padding: var(--gap-5); border: 1px solid var(--rule); border-radius: var(--radius-md);">
+            <div class="mono" style="font-size: 11px; color: var(--ink-3);">Eyebrow</div>
+            <div class="mono" style="font-size: 11px; color: var(--ink-2); margin-top: var(--gap-3);">UPPERCASE &middot; MONO</div>
+            <p class="body muted" style="font-size: 13px; margin-top: var(--gap-3); margin-bottom: 0;">Category label above a section title.</p>
+          </div>
+          <div style="padding: var(--gap-5); border: 1px solid var(--rule); border-radius: var(--radius-md);">
+            <div class="mono" style="font-size: 11px; color: var(--ink-3);">Headline</div>
+            <div class="mono" style="font-size: 11px; color: var(--ink-2); margin-top: var(--gap-3);">Serif &middot; 300 &middot; Sentence case</div>
+            <p class="body muted" style="font-size: 13px; margin-top: var(--gap-3); margin-bottom: 0;">One claim. As short as we can stand.</p>
+          </div>
+          <div style="padding: var(--gap-5); border: 1px solid var(--rule); border-radius: var(--radius-md);">
+            <div class="mono" style="font-size: 11px; color: var(--ink-3);">CTA copy</div>
+            <div class="mono" style="font-size: 11px; color: var(--ink-2); margin-top: var(--gap-3);">Verb first &middot; no emoji</div>
+            <p class="body muted" style="font-size: 13px; margin-top: var(--gap-3); margin-bottom: 0;">&ldquo;Email Russell&rdquo; &middot; &ldquo;Read the framework&rdquo;</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    {# 10 A11Y #}
+    <section class="sec" id="a11y">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">10 · Accessibility</div></div>
+          <div>
+            <h2 class="sec__title">Plain sites are usually accessible sites &mdash; but we check.</h2>
+            <p class="sec__intro">Targets below are minimums. Where we can exceed them without harming the design, we do.</p>
+          </div>
+        </div>
+        <div class="reveal" style="border-top: 1px solid var(--rule);">
+          <div class="a11y-row"><span style="font-size: 14px;">Contrast &mdash; body text</span><span class="mono" style="font-size: 12px; color: var(--ink);">AA+ &middot; &ge; 7:1 where possible</span><span class="body muted" style="font-size: 13px;">Ink on Paper measures ~13:1 in light, ~14:1 in dark.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Contrast &mdash; secondary text</span><span class="mono" style="font-size: 12px; color: var(--ink);">AA &middot; &ge; 4.5:1</span><span class="body muted" style="font-size: 13px;">Ink-2 on Paper verified in both modes.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Contrast &mdash; UI (buttons, rules)</span><span class="mono" style="font-size: 12px; color: var(--ink);">AA &middot; &ge; 3:1</span><span class="body muted" style="font-size: 13px;">Rule-strong and button borders meet 3:1 against surfaces.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Focus ring</span><span class="mono" style="font-size: 12px; color: var(--ink);">2px outline &middot; ember &middot; 2px offset</span><span class="body muted" style="font-size: 13px;">Every focusable element. Never removed.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Reduced motion</span><span class="mono" style="font-size: 12px; color: var(--ink);">Respect prefers-reduced-motion</span><span class="body muted" style="font-size: 13px;">Reveal animations become instant; no transforms.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Hit targets</span><span class="mono" style="font-size: 12px; color: var(--ink);">&ge; 44 &times; 44 px</span><span class="body muted" style="font-size: 13px;">Buttons and nav links meet this at every density.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Language</span><span class="mono" style="font-size: 12px; color: var(--ink);">lang attribute set</span><span class="body muted" style="font-size: 13px;">Any Anishinaabemowin phrases receive their own lang attribute.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Skip link</span><span class="mono" style="font-size: 12px; color: var(--ink);">Keyboard-first</span><span class="body muted" style="font-size: 13px;">Skip to content is the first focusable element on every page.</span></div>
+          <div class="a11y-row"><span style="font-size: 14px;">Landmarks</span><span class="mono" style="font-size: 12px; color: var(--ink);">header &middot; nav &middot; main &middot; footer</span><span class="body muted" style="font-size: 13px;">Every page exposes the same four landmarks in the same order.</span></div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="shell">
+      <span>Ontario Indigenous AI &amp; Technology Council</span>
+      <span>
+        <a href="/">Home</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://waaseyaa.org" target="_blank" rel="noopener">Waaseyaa</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://minoo.live" target="_blank" rel="noopener">Minoo</a>
+        &nbsp;&middot;&nbsp;
+        <a href="mailto:jonesrussell42@gmail.com">Email</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var body = document.body;
+      var btn = document.querySelector('[data-theme-toggle]');
+      var stored = null;
+      try { stored = localStorage.getItem('oiatc-theme'); } catch (e) {}
+      if (stored === 'dark' || stored === 'light') {
+        body.setAttribute('data-theme', stored);
+      }
+      function syncLabel() {
+        if (!btn) return;
+        btn.textContent = body.getAttribute('data-theme') === 'dark' ? 'Light' : 'Dark';
+      }
+      syncLabel();
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          body.setAttribute('data-theme', next);
+          try { localStorage.setItem('oiatc-theme', next); } catch (e) {}
+          syncLabel();
+        });
+      }
+
+      var els = document.querySelectorAll('.reveal');
+      if (els.length && window.IntersectionObserver) {
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('is-revealed');
+              io.unobserve(entry.target);
+            }
+          });
+        }, { threshold: 0.1 });
+        els.forEach(function (el) { io.observe(el); });
+      } else {
+        els.forEach(function (el) { el.classList.add('is-revealed'); });
+      }
+
+      var tocLinks = document.querySelectorAll('.toc a');
+      var sections = Array.from(tocLinks).map(function (a) {
+        return document.querySelector(a.getAttribute('href'));
+      }).filter(Boolean);
+      if (sections.length && window.IntersectionObserver) {
+        var tio = new IntersectionObserver(function (entries) {
+          entries.forEach(function (entry) {
+            if (!entry.isIntersecting) return;
+            var id = entry.target.id;
+            tocLinks.forEach(function (a) {
+              a.classList.toggle('is-active', a.getAttribute('href') === '#' + id);
+            });
+          });
+        }, { rootMargin: '-40% 0px -50% 0px', threshold: 0 });
+        sections.forEach(function (s) { tio.observe(s); });
+      }
+    })();
+  </script>
+</body>
+</html>

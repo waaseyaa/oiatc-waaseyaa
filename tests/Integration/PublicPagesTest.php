@@ -4,125 +4,69 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
-use App\Controller\PageController;
-use App\Provider\SiteServiceProvider;
-use DOMDocument;
-use DOMXPath;
+use App\Controller\HomeController;
+use App\Provider\AppServiceProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\HttpFoundation\Request;
-use Twig\Environment;
-use Twig\Loader\FilesystemLoader;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Waaseyaa\Routing\WaaseyaaRouter;
 
 final class PublicPagesTest extends TestCase
 {
-    private function createController(): PageController
-    {
-        $twig = new Environment(new FilesystemLoader(dirname(__DIR__, 2) . '/templates'));
-
-        return new PageController($twig);
-    }
-
-    private function createXPath(string $html): DOMXPath
-    {
-        $previous = libxml_use_internal_errors(true);
-        $dom = new DOMDocument();
-        $dom->loadHTML($html);
-        $xpath = new DOMXPath($dom);
-        libxml_clear_errors();
-        libxml_use_internal_errors($previous);
-
-        return $xpath;
-    }
-
     #[Test]
-    public function site_service_provider_registers_all_public_routes(): void
+    public function app_service_provider_registers_home_and_design_system_and_legacy_redirects(): void
     {
         $router = new WaaseyaaRouter();
-        (new SiteServiceProvider())->routes($router);
+        (new AppServiceProvider())->routes($router);
 
-        $expectedRoutes = [
-            '/' => 'page.home',
-            '/about' => 'page.about',
-            '/waaseyaa' => 'page.waaseyaa',
-            '/minoo' => 'page.minoo',
-            '/grants' => 'page.grants',
-            '/founding-charter' => 'page.charter',
-            '/contact' => 'page.contact',
-        ];
+        $this->assertSame('home', $router->match('/')['_route'] ?? null);
+        $this->assertSame('design-system', $router->match('/design-system')['_route'] ?? null);
 
-        foreach ($expectedRoutes as $path => $routeName) {
-            $params = $router->match($path);
-            $this->assertSame($routeName, $params['_route'] ?? null, sprintf('Expected %s route for %s.', $routeName, $path));
+        foreach (['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'] as $legacy) {
+            $match = $router->match($legacy);
+            $this->assertNotNull($match, sprintf('Expected %s to resolve to a legacy redirect route.', $legacy));
+            $this->assertStringStartsWith('legacy.redirect', $match['_route'] ?? '');
         }
     }
 
     #[Test]
-    public function homepage_renders_sovereignty_and_platform_sections(): void
+    public function homepage_renders_council_identity_and_pillars(): void
     {
-        $response = $this->createController()->home([], [], null, Request::create('/'));
-        $xpath = $this->createXPath($response->content);
+        $response = (new HomeController())->index();
+        $html = (string) $response->getContent();
 
-        $this->assertSame(200, $response->statusCode);
-        $this->assertStringContainsString('Indigenous digital sovereignty in Ontario', $response->content);
-        $this->assertStringContainsString('Russell Jones', $response->content);
-        $this->assertStringContainsString('Sagamok Anishnawbek', $response->content);
-        $this->assertStringContainsString('Waaseyaa', $response->content);
-        $this->assertStringContainsString('Minoo', $response->content);
-        $this->assertGreaterThanOrEqual(1, (int) $xpath->evaluate("count(//a[@href='/grants'])"));
-        $this->assertGreaterThanOrEqual(1, (int) $xpath->evaluate("count(//a[@href='/founding-charter'])"));
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString('Ontario Indigenous AI', $html);
+        $this->assertStringContainsString('A council of two', $html);
+        $this->assertStringContainsString('Russell Jones', $html);
+        $this->assertStringContainsString('Sagamok Anishnawbek', $html);
+        $this->assertStringContainsString('Waaseyaa', $html);
+        $this->assertStringContainsString('Minoo', $html);
+        $this->assertStringContainsString('Web Networks', $html);
+        $this->assertStringContainsString('jonesrussell42@gmail.com', $html);
     }
 
     #[Test]
-    public function secondary_pages_render_key_headings_and_contact_links(): void
+    public function design_system_page_renders_all_ten_sections(): void
     {
-        $controller = $this->createController();
+        $response = (new HomeController())->designSystem();
+        $html = (string) $response->getContent();
 
-        $pageExpectations = [
-            ['/about', 'About OIATC'],
-            ['/waaseyaa', 'Waaseyaa'],
-            ['/minoo', 'Minoo'],
-            ['/grants', 'Grants & Funding'],
-            ['/founding-charter', 'Founding Charter'],
-            ['/contact', 'Contact / Partner'],
-        ];
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString('Council design system', $html);
 
-        foreach ($pageExpectations as [$path, $heading]) {
-            $method = match ($path) {
-                '/about' => 'about',
-                '/waaseyaa' => 'waaseyaa',
-                '/minoo' => 'minoo',
-                '/grants' => 'grants',
-                '/founding-charter' => 'charter',
-                '/contact' => 'contact',
-            };
-
-            $response = $controller->{$method}([], [], null, Request::create($path));
-            $this->assertSame(200, $response->statusCode, sprintf('%s should return 200.', $path));
-            $this->assertStringContainsString($heading, $response->content);
+        foreach (['principles', 'color', 'type', 'space', 'motion', 'components', 'patterns', 'icons', 'voice', 'a11y'] as $sectionId) {
+            $this->assertStringContainsString(sprintf('id="%s"', $sectionId), $html, sprintf('Design system should render #%s section.', $sectionId));
         }
-
-        $aboutResponse = $controller->about([], [], null, Request::create('/about'));
-        $this->assertStringContainsString('Founder', $aboutResponse->content);
-        $this->assertStringContainsString('Russell Jones', $aboutResponse->content);
-        $this->assertStringContainsString('Sagamok Anishnawbek', $aboutResponse->content);
-
-        $contactResponse = $controller->contact([], [], null, Request::create('/contact'));
-        $contactXpath = $this->createXPath($contactResponse->content);
-
-        $this->assertSame(5, (int) $contactXpath->evaluate("count(//a[starts-with(@href, 'mailto:')])"));
     }
 
     #[Test]
-    public function grants_page_includes_freshness_marker_and_sources(): void
+    public function legacy_paths_redirect_to_home_with_301(): void
     {
-        $response = $this->createController()->grants([], [], null, Request::create('/grants'));
-        $xpath = $this->createXPath($response->content);
+        $response = (new HomeController())->redirectToHome();
 
-        $this->assertSame(200, $response->statusCode);
-        $this->assertStringContainsString('Last reviewed', $response->content);
-        $this->assertStringContainsString('FedDev Ontario', $response->content);
-        $this->assertGreaterThanOrEqual(3, (int) $xpath->evaluate("count(//a[starts-with(@href, 'https://')])"));
+        $this->assertInstanceOf(RedirectResponse::class, $response);
+        $this->assertSame(301, $response->getStatusCode());
+        $this->assertSame('/', $response->getTargetUrl());
     }
 }
