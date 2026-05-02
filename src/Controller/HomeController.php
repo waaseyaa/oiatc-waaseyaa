@@ -19,6 +19,11 @@ final class HomeController
         return $this->renderTemplate('design-system.html.twig');
     }
 
+    public function counterDisinformationPosition(): Response
+    {
+        return $this->renderTemplate('positions/counter-disinformation.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);

@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Foreign disinformation is a sovereignty issue · OIATC</title>
+  <meta name="description" content="An Indigenous-led position on foreign disinformation in Canada: what the federal frame leaves out, the principles that should guide a response, and how OIATC is convening this work.">
+  <link rel="canonical" href="https://oiatc.ca/positions/counter-disinformation">
+  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://oiatc.ca/positions/counter-disinformation">
+  <meta property="og:title" content="Foreign disinformation is a sovereignty issue">
+  <meta property="og:description" content="An Indigenous-led position on foreign disinformation in Canada: what the federal frame leaves out, the principles that should guide a response, and how OIATC is convening this work.">
+  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Foreign disinformation is a sovereignty issue">
+  <meta name="twitter:description" content="An Indigenous-led position on foreign disinformation in Canada.">
+  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <style>
+    :root {
+      --bg: #f8f5ef;
+      --surface: #fffefb;
+      --ink: #0d1420;
+      --ink-soft: #2b3340;
+      --ink-mute: #5b6473;
+      --rule: #d9d2c2;
+      --rule-soft: #ebe6d8;
+      --accent: #6a3a1f;
+      --accent-soft: #b88a5a;
+      --highlight: #f1ebd6;
+      --serif: "Source Serif 4", Georgia, serif;
+      --sans: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --content: 720px;
+      --gap-1: 4px;
+      --gap-2: 8px;
+      --gap-3: 12px;
+      --gap-4: 20px;
+      --gap-5: 32px;
+      --gap-6: 56px;
+      --gap-7: 96px;
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.65;
+      font-feature-settings: "ss01", "ss02";
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 64px 48px 96px;
+    }
+
+    .top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 24px 48px;
+      max-width: 880px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink-mute);
+      letter-spacing: 0.02em;
+    }
+    .top__brand {
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .top__brand a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .top__meta { font-variant-numeric: tabular-nums; }
+
+    .cover {
+      padding: 80px 0 96px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .cover__eyebrow {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .cover__title {
+      font-size: clamp(36px, 5.5vw, 60px);
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 32px;
+      max-width: 18ch;
+    }
+    .cover__title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .cover__lede {
+      font-size: 20px;
+      line-height: 1.55;
+      max-width: 56ch;
+      color: var(--ink-soft);
+      margin: 0 0 48px;
+    }
+    .cover__meta {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap-5);
+      font-family: var(--sans);
+      font-size: 13px;
+      max-width: 600px;
+    }
+    .cover__meta dt {
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 6px;
+      font-size: 11px;
+    }
+    .cover__meta dd {
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .sec {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .sec:last-of-type { border-bottom: none; }
+
+    .sec__head {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: var(--gap-5);
+      margin-bottom: var(--gap-5);
+      align-items: baseline;
+    }
+    .sec__num {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      font-weight: 500;
+      padding-top: 8px;
+    }
+    .sec__title {
+      font-size: clamp(24px, 3.2vw, 34px);
+      line-height: 1.2;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin: 0;
+      max-width: 22ch;
+    }
+
+    .sec__body {
+      grid-column: 2;
+      max-width: var(--content);
+    }
+
+    .sec p { margin: 0 0 var(--gap-4); }
+    .sec p:last-child { margin-bottom: 0; }
+
+    .sec h3 {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin: var(--gap-5) 0 var(--gap-3);
+    }
+    .sec h3:first-child { margin-top: 0; }
+
+    .sec ul {
+      margin: 0 0 var(--gap-4);
+      padding-left: 1.4em;
+    }
+    .sec ul li {
+      margin-bottom: var(--gap-3);
+      padding-left: 4px;
+    }
+    .sec ul li::marker {
+      color: var(--accent-soft);
+    }
+
+    .lede {
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap-4);
+      margin-top: var(--gap-5);
+    }
+    .principle {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      padding: 24px;
+      border-radius: 4px;
+    }
+    .principle__num {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .principle h4 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+    .principle p {
+      font-size: 15px;
+      line-height: 1.55;
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    .statement {
+      background: var(--highlight);
+      padding: 32px 40px;
+      border-left: 3px solid var(--accent);
+      margin: var(--gap-5) 0;
+      max-width: var(--content);
+    }
+    .statement p {
+      font-size: 19px;
+      line-height: 1.5;
+      margin: 0;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    .gap-list {
+      counter-reset: gap;
+      list-style: none;
+      padding: 0;
+      margin: var(--gap-4) 0 0;
+    }
+    .gap-list li {
+      counter-increment: gap;
+      display: grid;
+      grid-template-columns: 40px 1fr;
+      gap: var(--gap-3);
+      padding: 16px 0;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .gap-list li::before {
+      content: counter(gap, decimal-leading-zero);
+      font-family: var(--mono);
+      font-size: 12px;
+      color: var(--accent);
+      padding-top: 4px;
+    }
+    .gap-list strong {
+      display: block;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 14px;
+      margin-bottom: 4px;
+      color: var(--ink);
+    }
+    .gap-list span {
+      font-size: 15px;
+      color: var(--ink-soft);
+      line-height: 1.55;
+    }
+
+    .contact {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      padding: 32px 40px;
+      border-radius: 4px;
+      margin-top: var(--gap-4);
+      max-width: var(--content);
+    }
+    .contact h3 {
+      margin-top: 0;
+    }
+    .contact p {
+      font-size: 16px;
+      color: var(--ink-soft);
+    }
+    .contact__lines {
+      font-family: var(--sans);
+      font-size: 14px;
+      margin-top: var(--gap-4);
+    }
+    .contact__lines div { margin-bottom: 6px; }
+    .contact__lines strong {
+      font-weight: 600;
+      color: var(--ink);
+      display: inline-block;
+      min-width: 90px;
+    }
+
+    .end {
+      padding: 64px 0 0;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink-mute);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--gap-3);
+    }
+    .end a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-soft);
+    }
+
+    a { color: var(--accent); }
+
+    @media (max-width: 720px) {
+      .top, .page { padding-left: 24px; padding-right: 24px; }
+      .sec__head { grid-template-columns: 1fr; gap: var(--gap-2); }
+      .sec__body { grid-column: 1; }
+      .sec__num { padding-top: 0; }
+      .principles { grid-template-columns: 1fr; }
+      .cover__meta { grid-template-columns: 1fr 1fr; gap: var(--gap-4); }
+      .statement { padding: 24px 28px; }
+      .contact { padding: 24px 28px; }
+    }
+
+    @media print {
+      :root { --bg: #ffffff; --surface: #ffffff; --highlight: #f6f1e3; }
+      body { font-size: 11pt; }
+      .top { display: none; }
+      .page { padding: 0; max-width: none; }
+      .sec { page-break-inside: avoid; padding: 28pt 0; border-bottom: none; }
+      .cover { padding: 0 0 28pt; }
+      .cover__title { font-size: 32pt; }
+      .principles, .gap-list, .contact { break-inside: avoid; }
+      a { color: var(--ink); border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top">
+    <span class="top__brand"><a href="/">OIATC</a></span>
+    <span class="top__meta">Position &middot; May 2026</span>
+  </header>
+
+  <div class="page">
+
+    <section class="cover">
+      <div class="cover__eyebrow">Position &middot; Counter-Disinformation</div>
+      <h1 class="cover__title">Foreign disinformation is a <em>sovereignty</em> issue.</h1>
+      <p class="cover__lede">Canada's Senate has called for the development and funding of a whole-of-society response to all disinformation, with Russian operations as the urgent case. Indigenous governments are named in that response, but the federal frame leaves Indigenous communities at the edges of the picture. This is the Indigenous-led perspective on the threat and what a sovereignty-grounded response actually looks like.</p>
+      <dl class="cover__meta">
+        <div>
+          <dt>From</dt>
+          <dd>OIATC<br>Ojibway Information &amp; Technology Council</dd>
+        </div>
+        <div>
+          <dt>In response to</dt>
+          <dd>May 2026 Senate report on Russian disinformation; aligned CSIS findings</dd>
+        </div>
+        <div>
+          <dt>Audience</dt>
+          <dd>First Nations, Indigenous organizations, federal partners, civil society</dd>
+        </div>
+      </dl>
+    </section>
+
+    <section class="sec" id="why">
+      <div class="sec__head">
+        <div class="sec__num">00 &middot; Why we are saying this</div>
+        <h2 class="sec__title">The Indigenous frame is missing from Canada's response.</h2>
+      </div>
+      <div class="sec__body">
+        <p class="lede">In May 2026 the Senate committee on national defence and security warned that foreign disinformation, with Russia as the urgent case, poses an escalating threat to Canada's national security, democratic institutions, and social cohesion. CSIS confirmed the same. The committee called for the development and funding of a whole-of-society response to all disinformation, and named Indigenous governments as part of it.</p>
+        <p>What the report did not do, and what no current federal program does, is set out what that response should look like from inside an Indigenous community. The federal frame is national security. The Indigenous frame is sovereignty over the information environment. Those are not the same picture, and the response that follows from each is not the same response.</p>
+        <div class="statement">
+          <p>The communities most exposed to manipulation are not stakeholders in someone else's strategy. They are the authors of their own.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="threat">
+      <div class="sec__head">
+        <div class="sec__num">01 &middot; What the federal frame leaves out</div>
+        <h2 class="sec__title">Three things the threat looks like in a community.</h2>
+      </div>
+      <div class="sec__body">
+        <p>The Senate report is accurate as far as it goes. Generative AI lowers the cost of producing convincing false content. Unregulated platforms remove friction from its spread. Pro-Kremlin messaging now reaches a majority of Canadians online. The narratives target support for Ukraine and NATO, attack political and military figures, and fuel polarization against minority communities.</p>
+        <p>What the report does not say, because it is not its job to say it, is how that pattern lands inside an Indigenous community. Three things change the shape of the threat:</p>
+
+        <ol class="gap-list">
+          <li>
+            <div>
+              <strong>Existing distrust of federal institutions is fertile ground.</strong>
+              <span>Narratives that argue Canadian institutions are corrupt or hostile do not need to be invented from scratch. There is real history they latch onto. A foreign operator can amplify legitimate Indigenous critique while steering it toward conclusions that serve a foreign agenda. The mechanism is hijacking, not invention.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Information channels are concentrated and intergenerational.</strong>
+              <span>Many community members rely on a smaller set of trusted local sources: Facebook groups, band pages, local radio, family networks. When false content enters those channels, it travels fast, and it acquires authority through repetition. The same trust that makes the community resilient in other ways is what makes a single false post move further than it should.</span>
+            </div>
+          </li>
+          <li>
+            <div>
+              <strong>Polarization narratives target minority communities directly.</strong>
+              <span>Indigenous people are inside the target set the Senate report describes. The harms run from erosion of solidarity with allied minority communities, through hardening of internal community divisions, to direct safety risk for spokespeople when personal-attack content escalates.</span>
+            </div>
+          </li>
+        </ol>
+      </div>
+    </section>
+
+    <section class="sec" id="principles">
+      <div class="sec__head">
+        <div class="sec__num">02 &middot; Principles</div>
+        <h2 class="sec__title">Three principles that guide a sovereignty-grounded response.</h2>
+      </div>
+      <div class="sec__body">
+        <p>A response built on these principles looks different from one built on a national-security frame. The principles are stated here so any community, partner, or funder considering this work knows what OIATC will and will not put its name behind.</p>
+
+        <div class="principles">
+          <article class="principle">
+            <div class="principle__num">01</div>
+            <h4>Sovereignty and culture come first.</h4>
+            <p>Materials are grounded in Indigenous languages, local history, and community values. Anishinaabemowin pre-bunks are not decoration. Translation is a sovereignty signal, and the act of doing it strengthens the very channels that need to hold under pressure.</p>
+          </article>
+          <article class="principle">
+            <div class="principle__num">02</div>
+            <h4>Trusted messengers carry the message.</h4>
+            <p>Elders, youth digital monitors, and recognized community communicators do the speaking. Imported voices, even credentialed ones, do not land. The work of a counter-disinformation response is mostly the work of strengthening trusted channels that already exist.</p>
+          </article>
+          <article class="principle">
+            <div class="principle__num">03</div>
+            <h4>Pre-bunk before rebut.</h4>
+            <p>Inoculate against narrative patterns before they spread. Repeating a false claim to debunk it often amplifies it. The default move is to explain the manipulation pattern in advance, not to chase the latest example after it lands.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="response">
+      <div class="sec__head">
+        <div class="sec__num">03 &middot; What an Indigenous-led response looks like</div>
+        <h2 class="sec__title">Five workstreams, sequenced for capacity.</h2>
+      </div>
+      <div class="sec__body">
+        <p>A complete response covers five workstreams. They are sequenced so a community can adopt one and grow into the rest, and so OIATC at the umbrella can run shared infrastructure across communities that join.</p>
+
+        <h3>The five workstreams</h3>
+        <ul>
+          <li><strong>Community resilience.</strong> Media-literacy workshops paired across generations, and a pre-bunk content library localized into Indigenous languages.</li>
+          <li><strong>Monitoring and rapid response.</strong> A small standing team that watches public content, with community-led oversight and an explicit veto on scope.</li>
+          <li><strong>Trusted local channels.</strong> Strengthening community radio, newsletters, band websites, and Elder-led video so accurate information has somewhere warm to travel.</li>
+          <li><strong>Partnerships and funding.</strong> Federal grant programs, university research labs, civil society fact-checkers; aggregated through OIATC so individual communities are not each grant-writing alone.</li>
+          <li><strong>Policy and advocacy.</strong> Pressing for Indigenous inclusion in federal and provincial strategies as a named partner with consultation rights, not as a stakeholder to be informed.</li>
+        </ul>
+
+        <h3>What is explicitly not on offer</h3>
+        <ul>
+          <li>A surveillance program. Monitoring is restricted to public content, with community oversight, and is transparent about what it watches for.</li>
+          <li>Naming participating communities publicly without their consent. Foreign operators retaliate against named opponents.</li>
+          <li>Acting as a federal subcontractor. OIATC's framework precedes any federal partnership conversation, not the other way around.</li>
+        </ul>
+      </div>
+    </section>
+
+    <section class="sec" id="convening">
+      <div class="sec__head">
+        <div class="sec__num">04 &middot; Convening</div>
+        <h2 class="sec__title">OIATC is the place where this gets coordinated.</h2>
+      </div>
+      <div class="sec__body">
+        <p>A single community cannot stand up a five-workstream response, and should not have to. OIATC at the umbrella runs the shared infrastructure: a content library, a Indigenous-language pre-bunk catalogue, evaluation methodology developed with university partners, and the relationships that move the federal conversation. Communities adopt the workstreams that fit them and contribute to the shared library when they produce something other communities can use.</p>
+
+        <p>The communities OIATC works with are not named on this page. The partner organizations OIATC is in conversation with are not named on this page. That is intentional. When a partnership reaches the point where naming it strengthens the work, it gets named. Until then, the people doing the work do not get put on a public list.</p>
+
+        <div class="contact">
+          <h3>Get in touch</h3>
+          <p>OIATC is interested in conversations with First Nations, Indigenous organizations, federal program officers, civil society fact-checkers, and university research groups working on the information environment. The first conversation is always shaped around what the partner needs, not around what OIATC is selling.</p>
+          <div class="contact__lines">
+            <div><strong>Email</strong> <a href="mailto:jonesrussell42@gmail.com">jonesrussell42@gmail.com</a></div>
+            <div><strong>Council</strong> <a href="/">oiatc.ca</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="end">
+      <div>OIATC &middot; Ojibway Information &amp; Technology Council</div>
+      <div><a href="/">oiatc.ca</a></div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

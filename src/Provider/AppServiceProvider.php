@@ -35,6 +35,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'positions.counter-disinformation',
+            RouteBuilder::create('/positions/counter-disinformation')
+                ->controller(fn () => $controller->counterDisinformationPosition())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         $legacyPaths = ['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
         foreach ($legacyPaths as $legacyPath) {
             $router->addRoute(
