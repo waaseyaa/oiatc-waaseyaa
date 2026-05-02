@@ -2,7 +2,15 @@
 
 Reference URL: https://oiatc.ca/positions/counter-disinformation
 
-## Facebook (personal — Russell Jones)
+Posted 2026-05-02:
+- Facebook (Russell Jones, personal) — manual, dumbed-down variant
+- Facebook (Fullstackdev42, page) — Buffer shareNow, institutional variant
+- LinkedIn (jonesrussell42) — Buffer shareNow
+- X (jonesrussell42) — Buffer shareNow
+
+First comments / first replies (the URL above) added manually on each platform.
+
+## Facebook — Fullstackdev42 page (Buffer)
 
 The Senate said foreign disinformation is a national security threat. CSIS said the same. Both are right. But neither describes what that pattern actually looks like inside an Indigenous community.
 
@@ -11,6 +19,21 @@ Inside a community, the threat is mostly about hijacking. Foreign operators don'
 I wrote OIATC's position on what an Indigenous-led response looks like, and what it explicitly is not. The federal frame is national security. The Indigenous frame is sovereignty over the information environment. The response that follows from each is not the same response.
 
 If this is your work or your community, I'd like to hear what you think.
+
+#disinformation
+
+**First comment:**
+https://oiatc.ca/positions/counter-disinformation
+
+## Facebook — Russell Jones personal (manual)
+
+Russia's been pushing propaganda in Canada and the Senate report on it came out last month. They're right that it's a problem. They missed what it looks like inside an Indigenous community.
+
+The propaganda doesn't usually invent lies. It takes real frustrations we already have with Canada and twists them. It amplifies things that are actually true, then steers the conclusion somewhere that helps Russia, not us.
+
+I wrote OIATC's take on what to do about it. The federal answer is national security. Our answer is protecting the information that matters to us: our languages, the people we already trust, our community channels.
+
+If this hits close to home, give it a read. I'd like to hear what you think.
 
 #disinformation
 
