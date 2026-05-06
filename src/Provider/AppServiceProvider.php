@@ -44,6 +44,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'explainers.robinson-huron-treaty',
+            RouteBuilder::create('/explainers/robinson-huron-treaty')
+                ->controller(fn () => $controller->robinsonHuronTreatyExplainer())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         $legacyPaths = ['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
         foreach ($legacyPaths as $legacyPath) {
             $router->addRoute(
