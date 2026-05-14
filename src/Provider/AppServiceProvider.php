@@ -53,6 +53,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'practice.ai-in-coursework',
+            RouteBuilder::create('/practice/ai-in-coursework')
+                ->controller(fn () => $controller->practiceAiInCoursework())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         $legacyPaths = ['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
         foreach ($legacyPaths as $legacyPath) {
             $router->addRoute(

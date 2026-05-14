@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Practice · AI in coursework · OIATC</title>
+  <meta name="description" content="A real case study of AI use in a Grade 11 Environmental Science course, with the audit logs that make every step legible.">
+  <meta name="robots" content="noindex,follow">
+  <link rel="canonical" href="https://oiatc.ca/practice/ai-in-coursework">
+  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://oiatc.ca/practice/ai-in-coursework">
+  <meta property="og:title" content="Practice · AI in coursework">
+  <meta property="og:description" content="A real case study of AI use in a Grade 11 Environmental Science course, with the audit logs that make every step legible.">
+  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Practice · AI in coursework">
+  <meta name="twitter:description" content="A real case study of AI use in a Grade 11 Environmental Science course.">
+  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
+  <link rel="stylesheet" href="/css/site.css">
+  <script defer src="https://analytics.minoo.live/script.js" data-website-id="e2035c02-599e-4cdb-b63d-34d335359149"></script>
+  <style>
+    /* Page-specific Council DS extensions used only on this case study. */
+
+    .case-stats {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 1px;
+      background: var(--rule);
+      border: 1px solid var(--rule);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      margin: var(--gap-5) 0;
+    }
+    .case-stats__cell {
+      background: var(--paper);
+      padding: var(--gap-4) var(--gap-5);
+    }
+    .case-stats__label {
+      font-family: var(--font-mono);
+      font-size: 10.5px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+      margin-bottom: var(--gap-3);
+      font-weight: 500;
+    }
+    .case-stats__value {
+      font-family: var(--font-serif);
+      font-weight: 400;
+      font-size: 32px;
+      line-height: 1;
+      letter-spacing: -0.01em;
+      color: var(--ink);
+    }
+    .case-stats__value small {
+      font-family: var(--font-sans);
+      font-size: 13px;
+      color: var(--ink-2);
+      font-weight: 500;
+      margin-left: 8px;
+      letter-spacing: 0;
+    }
+    @media (max-width: 900px) {
+      .case-stats { grid-template-columns: repeat(2, 1fr); }
+    }
+    @media (max-width: 560px) {
+      .case-stats { grid-template-columns: 1fr; }
+    }
+
+    .case-statement {
+      background: var(--statement-bg);
+      color: var(--statement-fg);
+      border-radius: var(--radius-md);
+      padding: var(--gap-6) var(--gap-7);
+      margin: var(--gap-5) 0;
+    }
+    .case-statement p {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 19px;
+      line-height: 1.5;
+      margin: 0;
+      max-width: 60ch;
+      color: var(--statement-fg);
+    }
+
+    .case-notes {
+      margin: var(--gap-5) 0;
+      display: grid;
+      gap: 0;
+      border-top: 1px solid var(--rule);
+    }
+    .case-notes__row {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(0, 3fr);
+      gap: var(--gap-5);
+      padding: var(--gap-4) 0;
+      border-bottom: 1px solid var(--rule);
+      align-items: baseline;
+    }
+    .case-notes__row dt {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--accent-deep);
+      font-weight: 500;
+    }
+    .case-notes__row dd {
+      margin: 0;
+      font-size: 15px;
+      line-height: 1.65;
+      color: var(--ink);
+    }
+    @media (max-width: 900px) {
+      .case-notes__row { grid-template-columns: 1fr; gap: var(--gap-2); }
+    }
+  </style>
+</head>
+<body data-theme="light" data-grain="off" data-density="comfortable" class="route-practice-ai-coursework">
+  <a class="skip-link" href="#main-content">Skip to content</a>
+
+  <header class="top">
+    <div class="top__inner">
+      <a class="brand" href="/">
+        <span class="brand__mark">OIATC</span>
+        <span class="brand__title">Ontario Indigenous AI &amp; Technology Council</span>
+      </a>
+      <div class="top__meta">
+        <a href="/">&larr; Home</a>
+        <button class="theme-toggle" type="button" aria-label="Toggle theme" data-theme-toggle>Dark</button>
+      </div>
+    </div>
+  </header>
+
+  <main id="main-content">
+    <section class="masthead">
+      <div class="shell">
+        <div>
+          <div class="eyebrow">Practice · Case study · 2026</div>
+          <h1 class="display">What responsible AI use<br>looks like in one real course.</h1>
+        </div>
+        <div>
+          <p class="lede">A Grade 11 Environmental Science course, seven assignments, one Indigenous student. AI used as a questioning, drafting, and fact-checking tool. Audit logs that make every step legible. The pattern is reproducible. The honesty is the point.</p>
+          <ul class="signals">
+            <li>Student keeps the thinking</li>
+            <li>Audit logs over disclosure</li>
+            <li>Sources before claims</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="why">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">01 · Why this matters</div></div>
+          <div>
+            <h2 class="sec__title">Indigenous communities are being handed AI before the governance is ready.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">Schools, programmes, and First Nation administrations across Canada are being offered AI tools with no shared understanding of what responsible use looks like in practice. The default risk is familiar: software handed to communities by people who do not have to live with the consequences.</p>
+          <p class="body body--wide">This case study is a concrete answer to "what does responsible look like." It uses a real student doing real coursework, with the AI audit logs and source files attached, so any educator or administrator can see what was done and adopt the parts that fit.</p>
+          <div class="case-statement">
+            <p>Protocol before product. Even in classrooms.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="work">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">02 · The work</div></div>
+          <div>
+            <h2 class="sec__title">One course. Seven assignments. Seven audit logs.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">The course was delivered through a partnership programme between a First Nation and a public school board. Across the unit, the student submitted five journals, one home energy audit, and a culminating environmental careers project. Each submission was paired with an AI Use Audit Log describing how AI contributed and what the student decided.</p>
+          <div class="case-stats">
+            <div class="case-stats__cell">
+              <div class="case-stats__label">Assignments submitted</div>
+              <div class="case-stats__value">7</div>
+            </div>
+            <div class="case-stats__cell">
+              <div class="case-stats__label">Audit logs attached</div>
+              <div class="case-stats__value">7</div>
+            </div>
+            <div class="case-stats__cell">
+              <div class="case-stats__label">Graded so far</div>
+              <div class="case-stats__value">2/7 <small>both 10/10</small></div>
+            </div>
+            <div class="case-stats__cell">
+              <div class="case-stats__label">Sources verified</div>
+              <div class="case-stats__value">20+ <small>before use</small></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="pattern">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">03 · The pattern</div></div>
+          <div>
+            <h2 class="sec__title">Helper page. Guiding questions. Draft from the student's own answers.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">Every assignment began the same way. The AI built a helper page summarising the unit's source material, pre-filled the rows where defaults were sensible, and flagged anything that was not from the slides as interpretation. The student picked the prompt or angle. The AI then asked one guiding question at a time, drafted a response using the student's actual answers, and waited for approval before moving to the next.</p>
+          <p class="body body--wide">The student decided the prompt, the personal examples, the corrections, the closing argument, and what made the cut. The AI carried the structure, the source material, and the formatting load.</p>
+          <div class="grid-3" style="margin-top: var(--gap-5);">
+            <article class="card">
+              <div class="card__eyebrow">Tool</div>
+              <h3>AI's job</h3>
+              <p class="body">Ask, organise, draft, fact-check, format. Carry the source material and the structure. Wait for approval at each step.</p>
+            </article>
+            <article class="card">
+              <div class="card__eyebrow">Author</div>
+              <h3>Student's job</h3>
+              <p class="body">Choose, correct, approve. Supply the firsthand experience, the opinions, the judgement calls.</p>
+            </article>
+            <article class="card">
+              <div class="card__eyebrow">Receipt</div>
+              <h3>Audit log's job</h3>
+              <p class="body">Record what each side did, what was learned, and which sources were verified. One log per assignment.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="audit-log">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">04 · The audit log</div></div>
+          <div>
+            <h2 class="sec__title">Procedure is not enough. The log captures what was learned.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">The standard "I used AI to help me write this" disclosure is procedural and weak. The audit logs in this work go further. Every entry records the student's input, the AI's contribution, the sources used, the verification step, and any remaining gaps. A separate "Knowledge Transfer" section captures the actual facts surfaced during the session, with the sources that verified them.</p>
+          <p class="body body--wide">This is the difference between disclosure and accountability. A reader can reconstruct what the student learned, where the facts came from, and which judgements were the student's own.</p>
+          <dl class="case-notes">
+            <div class="case-notes__row">
+              <dt>Corrections</dt>
+              <dd>One audit log documents the student rejecting an AI overclaim about a workplace hazard mid-walkthrough. The draft was revised on the spot and the correction is in the record.</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>Source separation</dt>
+              <dd>One unit briefing labelled every fact as either slide quote, slide fact, AI reading, or general knowledge. The final journal cited accordingly. When a unit had no posted slideshow, the journal did not invent "the slides say."</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>Verified facts</dt>
+              <dd>Salary ranges, government statistics, and provincial grid data were fact-checked against named authoritative sources, including Natural Resources Canada, IESO, CBC News, Hydro One, ZipRecruiter, and Glassdoor, before any of it reached the draft.</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>Knowledge transfer</dt>
+              <dd>Each log lists facts learned during the session, with the source for each. A reader who has never seen the original course materials can still trace where every claim originated.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="limits">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">05 · Honest limits</div></div>
+          <div>
+            <h2 class="sec__title">What AI could not do here.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">AI did not pick the student's prompt. It did not generate the firsthand mining-industry recollections that anchored several journals. It did not catch its own em dashes, semicolons, or overclaims without the student saying something. It did not decide what the student's opinion was on any of the contested questions in the course.</p>
+          <p class="body body--wide">None of that is a weakness of the pattern. It is the design. The AI is a tool with a defined job. The student is the author. The audit log is the receipt.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="replicate">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">06 · Replicable parts</div></div>
+          <div>
+            <h2 class="sec__title">What an administrator can adopt next week.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <dl class="case-notes">
+            <div class="case-notes__row">
+              <dt>Audit log template</dt>
+              <dd>Date, student input, AI assistance, sources used, approval, remaining gaps. Plus a knowledge transfer section.</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>Helper page per assignment</dt>
+              <dd>One HTML page that holds the unit notes, the prompts, the guiding questions, and a draft area. Students keep their work in one place.</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>One question at a time</dt>
+              <dd>The AI asks the next thing it needs. It does not generate complete answers up front. The student stays in control of the draft.</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>Fact-check before finalising</dt>
+              <dd>Any numeric or factual claim in the draft is verified against a named source before submission. Sources are listed in the audit log.</dd>
+            </div>
+            <div class="case-notes__row">
+              <dt>Source separation</dt>
+              <dd>Treat slide facts, AI interpretation, and general knowledge as three different things. Label each one in the briefing the AI gives the student.</dd>
+            </div>
+          </dl>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="oiatc">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">07 · Where this fits</div></div>
+          <div>
+            <h2 class="sec__title">Governance before product. Even in classrooms.</h2>
+          </div>
+        </div>
+        <div class="reveal">
+          <p class="body body--wide">OIATC's premise is that the systems meant to serve First Nations are rarely chosen by them. AI in education is a current edge of that problem. A Nation rolling out ChatGPT or a similar tool without a governance framework is doing what we have seen done with case management, data platforms, and grant systems. Adopting the tooling without the protocol that gives it shape.</p>
+          <p class="body body--wide">The pattern documented here is not the framework. It is a working example of what one piece of the framework can look like at the classroom level. Protocol can scale up from this. Product without protocol cannot.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-foot">
+    <div class="shell">
+      <span>Ontario Indigenous AI &amp; Technology Council</span>
+      <span>
+        <a href="https://waaseyaa.org" target="_blank" rel="noopener">Waaseyaa</a>
+        &nbsp;·&nbsp;
+        <a href="https://minoo.live" target="_blank" rel="noopener">Minoo</a>
+        &nbsp;·&nbsp;
+        <a href="https://web.net" target="_blank" rel="noopener">Web Networks</a>
+        &nbsp;·&nbsp;
+        <a href="mailto:jonesrussell42@gmail.com">Email</a>
+      </span>
+    </div>
+  </footer>
+
+  <script>
+    (function () {
+      var body = document.body;
+      var btn = document.querySelector('[data-theme-toggle]');
+      var stored = null;
+      try { stored = localStorage.getItem('oiatc-theme'); } catch (e) {}
+      if (stored === 'dark' || stored === 'light') {
+        body.setAttribute('data-theme', stored);
+      }
+      function syncLabel() {
+        if (!btn) return;
+        btn.textContent = body.getAttribute('data-theme') === 'dark' ? 'Light' : 'Dark';
+      }
+      syncLabel();
+      if (btn) {
+        btn.addEventListener('click', function () {
+          var next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          body.setAttribute('data-theme', next);
+          try { localStorage.setItem('oiatc-theme', next); } catch (e) {}
+          syncLabel();
+        });
+      }
+
+      var els = document.querySelectorAll('.reveal');
+      if (!els.length || !window.IntersectionObserver) {
+        els.forEach(function (el) { el.classList.add('is-revealed'); });
+        return;
+      }
+      var io = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('is-revealed');
+            io.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+      els.forEach(function (el) { io.observe(el); });
+    })();
+  </script>
+</body>
+</html>

@@ -29,6 +29,11 @@ final class HomeController
         return $this->renderTemplate('explainers/robinson-huron-treaty.html.twig');
     }
 
+    public function practiceAiInCoursework(): Response
+    {
+        return $this->renderTemplate('practice/ai-in-coursework.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);
