@@ -54,6 +54,15 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'explainers.robinson-huron-treaty.distribution-models',
+            RouteBuilder::create('/explainers/robinson-huron-treaty/distribution-models')
+                ->controller(fn () => $controller->robinsonHuronTreatyDistributionModels())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
             'practice.ai-in-coursework',
             RouteBuilder::create('/practice/ai-in-coursework')
                 ->controller(fn () => $controller->practiceAiInCoursework())

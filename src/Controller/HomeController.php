@@ -29,6 +29,11 @@ final class HomeController
         return $this->renderTemplate('explainers/robinson-huron-treaty.html.twig');
     }
 
+    public function robinsonHuronTreatyDistributionModels(): Response
+    {
+        return $this->renderTemplate('explainers/robinson-huron-treaty-distribution-models.html.twig');
+    }
+
     public function practiceAiInCoursework(): Response
     {
         return $this->renderTemplate('practice/ai-in-coursework.html.twig');
