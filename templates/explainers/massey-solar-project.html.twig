@@ -201,6 +201,119 @@
     .bottomline p { font-size: 18px; line-height: 1.6; }
     .bottomline p:last-child { margin-bottom: 0; }
 
+    /* Visually-hidden (screen-reader only) */
+    .sr-only {
+      position: absolute;
+      width: 1px; height: 1px;
+      padding: 0; margin: -1px;
+      overflow: hidden; clip: rect(0, 0, 0, 0);
+      white-space: nowrap; border: 0;
+    }
+
+    /* Progress stepper — proposal to power */
+    .pipeline-caption {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin: var(--gap-5) 0 var(--gap-4);
+    }
+    .pipeline {
+      list-style: none;
+      padding: 0;
+      margin: 0 0 var(--gap-5);
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+    }
+    .pipeline__step {
+      position: relative;
+      text-align: center;
+      padding: 0 4px;
+    }
+    .pipeline__step::before {
+      content: "";
+      position: absolute;
+      top: 16px;
+      left: -50%;
+      width: 100%;
+      height: 2px;
+      background: var(--rule);
+      z-index: 0;
+    }
+    .pipeline__step:first-child::before { display: none; }
+    .pipeline__step.is-done::before,
+    .pipeline__step.is-now::before { background: var(--accent-soft); }
+    .pipeline__marker {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--bg);
+      border: 2px solid var(--rule);
+      font-family: var(--sans);
+      font-size: 15px;
+      font-weight: 700;
+      color: var(--ink-mute);
+      line-height: 1;
+    }
+    .pipeline__label {
+      display: block;
+      margin-top: 10px;
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.3;
+    }
+    .pipeline__meta {
+      display: block;
+      margin-top: 3px;
+      font-family: var(--sans);
+      font-size: 10.5px;
+      color: var(--ink-mute);
+      line-height: 1.3;
+    }
+    .pipeline__step.is-done .pipeline__marker {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+    }
+    .pipeline__step.is-now .pipeline__marker {
+      background: var(--surface);
+      border-color: var(--accent);
+      color: var(--accent);
+      box-shadow: 0 0 0 4px rgba(106, 58, 31, 0.14);
+    }
+    .pipeline__step.is-now .pipeline__label { color: var(--accent); }
+    @media (max-width: 600px) {
+      .pipeline { grid-template-columns: 1fr; }
+      .pipeline__step {
+        text-align: left;
+        display: grid;
+        grid-template-columns: 34px 1fr;
+        column-gap: 14px;
+        align-items: center;
+        padding: 0 0 22px 0;
+      }
+      .pipeline__marker { grid-row: 1 / span 2; align-self: start; }
+      .pipeline__label { margin-top: 0; }
+      .pipeline__step::before {
+        top: 17px;
+        left: 16px;
+        width: 2px;
+        height: 100%;
+      }
+      .pipeline__step:first-child::before { display: block; }
+      .pipeline__step:last-child::before { display: none; }
+      .pipeline__step.is-now::before { background: var(--rule); }
+    }
+
     /* Numbered cards for the five moving parts */
     .parts {
       display: grid;
@@ -507,10 +620,52 @@
 
   <section>
     <h2>The bottom line</h2>
+    <p>There are two different kinds of decision here, and they have gone in two different directions — which is the whole reason this feels confusing. The <strong>political and financial</strong> decisions are done: the project has been chosen, contracted, and funded. The <strong>environmental</strong> decision is not: the review that has to happen before anyone can build hasn't started yet.</p>
+
+    <p class="pipeline-caption">Where the project sits on the path from proposal to power</p>
+
+    <ol class="pipeline">
+      <li class="pipeline__step is-done">
+        <span class="sr-only">Complete: </span>
+        <span class="pipeline__marker" aria-hidden="true">✓</span>
+        <span class="pipeline__label">Site secured</span>
+        <span class="pipeline__meta">Private land leased</span>
+      </li>
+      <li class="pipeline__step is-done">
+        <span class="sr-only">Complete: </span>
+        <span class="pipeline__marker" aria-hidden="true">✓</span>
+        <span class="pipeline__label">Township support</span>
+        <span class="pipeline__meta">Aug 2025 · reaffirmed Mar 2026</span>
+      </li>
+      <li class="pipeline__step is-done">
+        <span class="sr-only">Complete: </span>
+        <span class="pipeline__marker" aria-hidden="true">✓</span>
+        <span class="pipeline__label">Provincial contract</span>
+        <span class="pipeline__meta">IESO, 20-year · Apr 2026</span>
+      </li>
+      <li class="pipeline__step is-now">
+        <span class="sr-only">Current step, not yet started: </span>
+        <span class="pipeline__marker" aria-hidden="true">●</span>
+        <span class="pipeline__label">Environmental approval</span>
+        <span class="pipeline__meta">Not started — the gate</span>
+      </li>
+      <li class="pipeline__step is-future">
+        <span class="sr-only">Upcoming: </span>
+        <span class="pipeline__marker" aria-hidden="true"></span>
+        <span class="pipeline__label">Construction</span>
+        <span class="pipeline__meta">Proposed 2028</span>
+      </li>
+      <li class="pipeline__step is-future">
+        <span class="sr-only">Upcoming: </span>
+        <span class="pipeline__marker" aria-hidden="true"></span>
+        <span class="pipeline__label">Operation</span>
+        <span class="pipeline__meta">Proposed 2029</span>
+      </li>
+    </ol>
+
     <div class="bottomline">
-      <p>Municipal support for the Massey Solar Project is in place, and the Independent Electricity System Operator (IESO) has awarded the project a 20-year contract under the Long-Term 2 procurement. The land is privately owned and leased to the developer, and the township's Official Plan and zoning bylaw permit a Class 3 solar facility in this rural zone.</p>
-      <p>The project is <strong>not yet approved</strong>. Before it can be built, it has to clear Ontario's Renewable Energy Approval process under Regulation 359/09 — the provincial environmental review, which includes formal public and Indigenous consultation. Construction is currently proposed for 2028 and commercial operation for 2029. Until those next steps happen, none of the substantive environmental or consultation questions are settled.</p>
-      <p>The question of how meaningful the consultation will be — especially with <a href="https://www.sagamokanishnawbek.com/">Sagamok Anishnawbek</a>, whose territory the project sits in but which is not one of the two First Nation equity partners — is the most important thing to track from here forward.</p>
+      <p>The project is real, chosen, and funded — but it is <strong>not yet approved to build</strong>. The next step, Ontario's environmental review (the Renewable Energy Approval), is where the groundwater, wildlife, wetland, and consultation questions actually get studied and decided. As of May 2026 that review hasn't started; construction is proposed for 2028 and operation for 2029.</p>
+      <p>So the single most important thing to watch from here is that review's consultation — especially with <a href="https://www.sagamokanishnawbek.com/">Sagamok Anishnawbek</a>, whose territory the project sits in, but which is not one of the two First Nation equity partners.</p>
     </div>
   </section>
 
