@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
+use App\Analytics\AnalyticsRecorder;
+use App\Analytics\AnalyticsReport;
+use App\Analytics\AnalyticsSchema;
+use App\Controller\AnalyticsDashboardController;
+use App\Controller\CollectController;
 use App\Controller\HomeController;
+use Symfony\Component\HttpFoundation\Request;
+use Waaseyaa\Database\DatabaseInterface;
 use Waaseyaa\Foundation\ServiceProvider\ServiceProvider;
 use Waaseyaa\Routing\RouteBuilder;
 use Waaseyaa\Routing\WaaseyaaRouter;
@@ -12,6 +19,30 @@ use Waaseyaa\Routing\WaaseyaaRouter;
 final class AppServiceProvider extends ServiceProvider
 {
     public function register(): void {}
+
+    public function boot(): void
+    {
+        $database = $this->tryResolveDatabase();
+        if ($database !== null) {
+            (new AnalyticsSchema($database))->ensure();
+        }
+    }
+
+    /**
+     * Resolve the database, returning null when no binding is available
+     * (e.g. in unit tests that exercise routing without a kernel). This keeps
+     * the analytics wiring optional so it never takes down the content pages.
+     */
+    private function tryResolveDatabase(): ?DatabaseInterface
+    {
+        try {
+            $database = $this->resolve(DatabaseInterface::class);
+        } catch (\Throwable) {
+            return null;
+        }
+
+        return $database instanceof DatabaseInterface ? $database : null;
+    }
 
     public function routes(WaaseyaaRouter $router, ?\Waaseyaa\Entity\EntityTypeManager $entityTypeManager = null): void
     {
@@ -97,6 +128,33 @@ final class AppServiceProvider extends ServiceProvider
                 ->methods('GET')
                 ->build(),
         );
+
+        $database = $this->tryResolveDatabase();
+        if ($database !== null) {
+            $secret = getenv('WAASEYAA_ANALYTICS_SECRET')
+                ?: (getenv('WAASEYAA_JWT_SECRET') ?: 'oiatc-analytics');
+            $collect = new CollectController(new AnalyticsRecorder($database, $secret));
+            $analytics = new AnalyticsDashboardController(new AnalyticsReport($database));
+
+            $router->addRoute(
+                'analytics.collect',
+                RouteBuilder::create('/api/collect')
+                    ->controller(fn (Request $request) => $collect->collect($request))
+                    ->allowAll()
+                    ->methods('POST')
+                    ->build(),
+            );
+
+            $router->addRoute(
+                'admin.analytics',
+                // Public at the app layer; gated by Caddy basic auth on /admin/* (waaseyaa-infra).
+                RouteBuilder::create('/admin/analytics')
+                    ->controller(fn (Request $request) => $analytics->index($request))
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+        }
 
         $legacyPaths = ['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
         foreach ($legacyPaths as $legacyPath) {
