@@ -34,6 +34,21 @@ final class HomeController
         return $this->renderTemplate('explainers/robinson-huron-treaty-distribution-models.html.twig');
     }
 
+    public function masseySolarProjectExplainer(): Response
+    {
+        return $this->renderTemplate('explainers/massey-solar-project.html.twig');
+    }
+
+    public function masseySolarProjectWhatYouveHeard(): Response
+    {
+        return $this->renderTemplate('explainers/massey-solar-project-what-youve-heard.html.twig');
+    }
+
+    public function masseySolarProjectVoices(): Response
+    {
+        return $this->renderTemplate('explainers/massey-solar-project-voices.html.twig');
+    }
+
     public function practiceAiInCoursework(): Response
     {
         return $this->renderTemplate('practice/ai-in-coursework.html.twig');
