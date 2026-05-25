@@ -16,3 +16,9 @@ If I got something wrong or left something out, tell me and I will fix it. Share
 
 **First comment:**
 https://oiatc.ca/explainers/massey-solar-project
+
+## Facebook — Sables Spanish Rivers Township group (manual)
+
+One paragraph, no hashtags, link in body. Local angle for residents who have been following the council fight. Distinct from the main personal post above.
+
+If you have been trying to follow the Massey Solar Project through the council meetings and the back and forth online, I put together a plain-language guide that lays out the five separate decisions in play, who actually controls each one (the township, the IESO, the province, and the Crown), what has already been decided, and what is still ahead. It does not take a side on whether the project should be built. Every claim is sourced so you can check it yourself, and there is a section that goes through the things people have been saying about farmland, the water, the birds, and consultation, and what the public record actually shows. I am a Sagamok member and made this as a community resource, not on behalf of anyone. Read it here: https://oiatc.ca/explainers/massey-solar-project
