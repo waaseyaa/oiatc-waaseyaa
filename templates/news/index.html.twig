@@ -1,0 +1,35 @@
+{% extends 'news/_layout.html.twig' %}
+
+{% block title %}News · OIATC{% endblock %}
+{% block description %}Short, time-stamped updates from OIATC, each tied to an explainer.{% endblock %}
+{% block head_extra %}<link rel="alternate" type="application/rss+xml" title="OIATC News" href="https://oiatc.ca/news/rss.xml">{% endblock %}
+
+{% block content %}
+  <section class="cover">
+    <p class="cover__eyebrow">Ontario Indigenous AI &amp; Technology Council</p>
+    <h1>News</h1>
+    <p class="lede">Short, time-stamped updates, each tied to an explainer. Posts age; the explainers stay canonical.</p>
+  </section>
+
+  {% if explainers|length > 1 or active_explainer %}
+    <nav class="filter" aria-label="Filter by explainer">
+      <a href="/news"{% if not active_explainer %} class="is-active"{% endif %}>All ({{ total }})</a>
+      {% for e in explainers %}
+        <a href="/news?explainer={{ e.slug }}"{% if active_explainer == e.slug %} class="is-active"{% endif %}>{{ e.slug|replace({'-': ' '})|title }} ({{ e.count }})</a>
+      {% endfor %}
+    </nav>
+  {% endif %}
+
+  <ul class="post-list">
+    {% for post in posts %}
+      <li class="post-item">
+        <span class="post-date">{{ post.published_at|date('F j, Y') }}</span>
+        <h2 class="post-title"><a href="/news/{{ post.slug }}">{{ post.title }}</a></h2>
+        <p class="post-summary">{{ post.summary }}{% if post.body|length > 200 %}…{% endif %}</p>
+        <span class="post-tag">On: <a href="/explainers/{{ post.related_explainer }}">{{ post.related_explainer|replace({'-': ' '})|title }}</a></span>
+      </li>
+    {% else %}
+      <li class="empty">No posts yet.</li>
+    {% endfor %}
+  </ul>
+{% endblock %}

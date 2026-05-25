@@ -19,4 +19,11 @@ declare(strict_types=1);
  *   ];
  */
 
-return [];
+return [
+    new \Waaseyaa\Entity\EntityType(
+        id: 'news_post',
+        label: 'News post',
+        class: \App\Entity\NewsPost::class,
+        keys: ['id' => 'id', 'uuid' => 'uuid', 'label' => 'title'],
+    ),
+];

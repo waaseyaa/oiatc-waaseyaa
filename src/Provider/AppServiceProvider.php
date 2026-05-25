@@ -168,6 +168,47 @@ final class AppServiceProvider extends ServiceProvider
             );
         }
 
+        if ($entityTypeManager !== null) {
+            $news = new \App\Controller\NewsController($entityTypeManager->getRepository('news_post'));
+
+            $router->addRoute(
+                'news.index',
+                RouteBuilder::create('/news')
+                    ->controller(fn (Request $request) => $news->index($request))
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+
+            // Literal feed route registered before /news/{slug} so the param can't swallow it.
+            $router->addRoute(
+                'news.rss',
+                RouteBuilder::create('/news/rss.xml')
+                    ->controller(fn () => $news->rss())
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+
+            $router->addRoute(
+                'news.post',
+                RouteBuilder::create('/news/{slug}')
+                    ->controller(fn (Request $request, string $slug) => $news->show($slug))
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+
+            $router->addRoute(
+                'news.explainer-updates',
+                RouteBuilder::create('/api/explainer-updates')
+                    ->controller(fn (Request $request) => $news->explainerUpdates($request))
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+        }
+
         $legacyPaths = ['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
         foreach ($legacyPaths as $legacyPath) {
             $router->addRoute(

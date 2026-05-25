@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}News · OIATC{% endblock %}</title>
+  <meta name="description" content="{% block description %}Short, time-stamped updates tied to OIATC explainers.{% endblock %}">
+  {% block head_extra %}{% endblock %}
+  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:locale" content="en_CA">
+  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <script defer src="/js/oiatc-analytics.js?v=3"></script>
+  <style>
+    :root {
+      --bg: #f8f5ef; --surface: #fffefb; --ink: #0d1420; --ink-soft: #2b3340;
+      --ink-mute: #5b6473; --rule: #d9d2c2; --rule-soft: #ebe6d8; --accent: #6a3a1f;
+      --accent-soft: #b88a5a; --highlight: #f1ebd6;
+      --serif: "Source Serif 4", Georgia, serif; --sans: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace; --content: 720px;
+    }
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+    body {
+      margin: 0; background: var(--bg); color: var(--ink); font-family: var(--serif);
+      font-size: 18px; line-height: 1.65; font-feature-settings: "ss01", "ss02";
+      -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+    }
+    a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
+    a:hover { color: var(--ink); }
+    .top {
+      display: flex; align-items: baseline; justify-content: space-between;
+      padding: 18px 32px; max-width: 880px; margin: 0 auto;
+      border-bottom: 1px solid var(--rule); font-family: var(--sans); font-size: 12px;
+      color: var(--ink-mute); letter-spacing: 0.04em; gap: 16px; flex-wrap: wrap;
+    }
+    .top__brand { font-weight: 600; color: var(--ink); letter-spacing: 0.08em; text-transform: uppercase; }
+    .top__brand a { color: var(--ink); border-bottom: none; }
+    .top__brand a:hover { color: var(--accent); }
+    .page { max-width: var(--content); margin: 0 auto; padding: 40px 28px 72px; }
+    @media (min-width: 700px) { .page { padding: 56px 40px 96px; } }
+    .backnav {
+      font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.06em;
+      text-transform: uppercase; margin-bottom: 24px;
+    }
+    .backnav a { border-bottom: none; color: var(--accent); }
+    .backnav a:hover { color: var(--ink); }
+    .cover { padding: 0 0 32px; border-bottom: 1px solid var(--rule); margin-bottom: 8px; }
+    .cover__eyebrow {
+      font-family: var(--sans); font-size: 12px; font-weight: 600; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--accent); margin-bottom: 16px;
+    }
+    h1 { font-size: clamp(30px, 5vw, 42px); line-height: 1.1; font-weight: 400; letter-spacing: -0.01em; margin: 0 0 16px; }
+    .lede { font-size: 19px; line-height: 1.6; color: var(--ink-soft); margin: 0; }
+    p { margin: 0 0 18px; }
+
+    /* Explainer filter */
+    .filter { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0 8px; font-family: var(--sans); }
+    .filter a {
+      font-size: 12px; font-weight: 600; letter-spacing: 0.04em; padding: 6px 12px;
+      border: 1px solid var(--rule); border-radius: 100px; color: var(--ink-mute);
+    }
+    .filter a:hover { border-color: var(--accent-soft); color: var(--ink); }
+    .filter a.is-active { background: var(--accent); border-color: var(--accent); color: #fff; }
+
+    /* Post list */
+    .post-list { list-style: none; padding: 0; margin: 8px 0 0; }
+    .post-item { padding: 26px 0; border-bottom: 1px solid var(--rule-soft); }
+    .post-item:last-child { border-bottom: none; }
+    .post-date {
+      font-family: var(--mono); font-size: 12px; color: var(--accent);
+      letter-spacing: 0.04em; font-variant-numeric: tabular-nums;
+    }
+    .post-title { font-size: 24px; line-height: 1.25; font-weight: 500; margin: 6px 0 8px; }
+    .post-title a { color: var(--ink); border-bottom: none; }
+    .post-title a:hover { color: var(--accent); }
+    .post-summary { font-size: 16px; line-height: 1.6; color: var(--ink-soft); margin: 0 0 10px; }
+    .post-tag { font-family: var(--sans); font-size: 12px; color: var(--ink-mute); }
+    .empty { color: var(--ink-mute); font-style: italic; padding: 32px 0; }
+
+    /* Single post */
+    .post-body { font-size: 18px; line-height: 1.7; margin-top: 24px; }
+    .post-body p { margin: 0 0 18px; }
+    .explainer-cta {
+      display: block; margin-top: 32px; background: var(--surface); border: 1px solid var(--rule);
+      border-left: 4px solid var(--accent); border-radius: 4px; padding: 20px 24px;
+    }
+    .explainer-cta:hover { border-color: var(--accent-soft); border-left-color: var(--accent); color: var(--ink); }
+    .explainer-cta__k {
+      font-family: var(--sans); font-size: 11px; font-weight: 700; letter-spacing: 0.1em;
+      text-transform: uppercase; color: var(--accent);
+    }
+    .explainer-cta__t { font-family: var(--serif); font-size: 20px; font-weight: 500; color: var(--ink); margin-top: 6px; }
+
+    footer {
+      max-width: var(--content); margin: 0 auto; padding: 32px 28px 56px;
+      border-top: 1px solid var(--rule); font-family: var(--sans); font-size: 13px;
+      color: var(--ink-mute); line-height: 1.6;
+    }
+    @media (min-width: 700px) { footer { padding: 32px 40px 64px; } }
+    footer a { color: var(--accent); }
+  </style>
+</head>
+<body>
+
+<header class="top">
+  <span class="top__brand"><a href="/">OIATC</a> · News</span>
+  <span class="top__meta"><a href="/news/rss.xml">RSS</a></span>
+</header>
+
+<main class="page">
+  {% block content %}{% endblock %}
+</main>
+
+<footer>
+  <p>OIATC News · short updates tied to our <a href="/news">explainers</a>. Posts age; the explainers stay canonical.</p>
+  <p>Ontario Indigenous AI &amp; Technology Council · OIATC · <a href="https://oiatc.ca">oiatc.ca</a></p>
+</footer>
+
+</body>
+</html>
