@@ -1,124 +1,229 @@
 /*
- * oiatc-analytics.js — first-party analytics for oiatc.ca.
+ * oiatc-analytics.js — first-party analytics + page furniture for oiatc.ca.
  * Privacy-respecting: no cookies, no fingerprinting, no third parties.
- * Respects Do Not Track / Global Privacy Control and bails out entirely
- * when set. Sends a pageview on load and a single engagement beacon
- * (max scroll depth + dwell time) when the page is hidden or unloaded.
+ *
+ * Tracking beacons (pageview + engagement) respect Do Not Track / Global
+ * Privacy Control and are skipped entirely when set. The share control and
+ * the aggregate "read count" are NOT tracking (they don't identify the
+ * reader), so they still work under DNT.
  */
 (function () {
   'use strict';
 
-  if (
+  var COUNT_FLOOR = 10; // don't show a read count below this (avoids "read 2 times")
+  var ARTICLE_RE = /^\/(explainers|positions|practice)\//;
+
+  var dnt =
     navigator.doNotTrack === '1' ||
     window.doNotTrack === '1' ||
-    navigator.globalPrivacyControl === true
-  ) {
-    return;
-  }
+    navigator.globalPrivacyControl === true;
 
-  var viewId =
-    (crypto.randomUUID && crypto.randomUUID()) ||
-    (Date.now().toString(36) + Math.random().toString(36).slice(2));
+  // ---------------------------------------------------------------------------
+  // Tracking beacons (skipped under Do Not Track)
+  // ---------------------------------------------------------------------------
+  if (!dnt) {
+    var viewId =
+      (crypto.randomUUID && crypto.randomUUID()) ||
+      (Date.now().toString(36) + Math.random().toString(36).slice(2));
 
-  var startTime = Date.now();
-  var maxScroll = 0;
-  var sent = false;
-  var ticking = false;
+    var startTime = Date.now();
+    var maxScroll = 0;
+    var sent = false;
+    var ticking = false;
 
-  function send(payload) {
-    try {
-      fetch('/api/collect', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload),
-        keepalive: true,
-        credentials: 'omit',
-      });
-    } catch (e) {
-      // ignore
-    }
-  }
-
-  send({ t: 'pageview', p: location.pathname, r: document.referrer || '', v: viewId });
-
-  function computeScroll() {
-    ticking = false;
-    var doc = document.documentElement;
-    var body = document.body;
-    var scrollTop = window.pageYOffset || doc.scrollTop || (body && body.scrollTop) || 0;
-    var viewportHeight = window.innerHeight || doc.clientHeight || 0;
-    var documentHeight = Math.max(
-      doc.scrollHeight,
-      body ? body.scrollHeight : 0,
-      doc.offsetHeight,
-      body ? body.offsetHeight : 0,
-      doc.clientHeight
-    );
-    if (documentHeight <= 0) {
-      return;
-    }
-    var pct = Math.round(((scrollTop + viewportHeight) / documentHeight) * 100);
-    if (pct < 0) {
-      pct = 0;
-    }
-    if (pct > 100) {
-      pct = 100;
-    }
-    if (pct > maxScroll) {
-      maxScroll = pct;
-    }
-  }
-
-  function onScroll() {
-    if (!ticking) {
-      ticking = true;
-      requestAnimationFrame(computeScroll);
-    }
-  }
-
-  window.addEventListener('scroll', onScroll, { passive: true });
-  computeScroll();
-
-  function sendEngagement() {
-    if (sent) {
-      return;
-    }
-    sent = true;
-    var payload = {
-      t: 'engagement',
-      v: viewId,
-      s: maxScroll,
-      d: Date.now() - startTime,
-    };
-    var json = JSON.stringify(payload);
-    if (navigator.sendBeacon) {
+    var send = function (payload) {
       try {
-        navigator.sendBeacon(
-          '/api/collect',
-          new Blob([json], { type: 'application/json' })
-        );
-        return;
+        fetch('/api/collect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload),
+          keepalive: true,
+          credentials: 'omit',
+        });
       } catch (e) {
-        // fall through to fetch
+        // ignore
       }
+    };
+
+    send({ t: 'pageview', p: location.pathname, r: document.referrer || '', v: viewId });
+
+    var computeScroll = function () {
+      ticking = false;
+      var doc = document.documentElement;
+      var body = document.body;
+      var scrollTop = window.pageYOffset || doc.scrollTop || (body && body.scrollTop) || 0;
+      var viewportHeight = window.innerHeight || doc.clientHeight || 0;
+      var documentHeight = Math.max(
+        doc.scrollHeight,
+        body ? body.scrollHeight : 0,
+        doc.offsetHeight,
+        body ? body.offsetHeight : 0,
+        doc.clientHeight
+      );
+      if (documentHeight <= 0) {
+        return;
+      }
+      var pct = Math.round(((scrollTop + viewportHeight) / documentHeight) * 100);
+      if (pct < 0) pct = 0;
+      if (pct > 100) pct = 100;
+      if (pct > maxScroll) maxScroll = pct;
+    };
+
+    var onScroll = function () {
+      if (!ticking) {
+        ticking = true;
+        requestAnimationFrame(computeScroll);
+      }
+    };
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    computeScroll();
+
+    var sendEngagement = function () {
+      if (sent) return;
+      sent = true;
+      var json = JSON.stringify({
+        t: 'engagement',
+        v: viewId,
+        s: maxScroll,
+        d: Date.now() - startTime,
+      });
+      if (navigator.sendBeacon) {
+        try {
+          navigator.sendBeacon('/api/collect', new Blob([json], { type: 'application/json' }));
+          return;
+        } catch (e) {
+          // fall through to fetch
+        }
+      }
+      try {
+        fetch('/api/collect', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: json,
+          keepalive: true,
+          credentials: 'omit',
+        });
+      } catch (e) {
+        // ignore
+      }
+    };
+
+    document.addEventListener('visibilitychange', function () {
+      if (document.visibilityState === 'hidden') {
+        sendEngagement();
+      }
+    });
+    window.addEventListener('pagehide', sendEngagement);
+  }
+
+  // ---------------------------------------------------------------------------
+  // Page furniture: share control + aggregate read count (always, incl. DNT)
+  // ---------------------------------------------------------------------------
+  function shareUrl() {
+    var canonical = document.querySelector('link[rel="canonical"]');
+    return (canonical && canonical.href) || location.href;
+  }
+
+  function copyLink(button) {
+    var url = shareUrl();
+    var done = function () {
+      var original = button.textContent;
+      button.textContent = 'Link copied';
+      setTimeout(function () {
+        button.textContent = original;
+      }, 2000);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(url).then(done, function () {});
+      return;
     }
     try {
-      fetch('/api/collect', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: json,
-        keepalive: true,
-        credentials: 'omit',
-      });
+      var input = document.createElement('input');
+      input.value = url;
+      document.body.appendChild(input);
+      input.select();
+      document.execCommand('copy');
+      document.body.removeChild(input);
+      done();
     } catch (e) {
       // ignore
     }
   }
 
-  document.addEventListener('visibilitychange', function () {
-    if (document.visibilityState === 'hidden') {
-      sendEngagement();
+  function onShare(button) {
+    if (navigator.share) {
+      navigator
+        .share({ title: document.title, url: shareUrl() })
+        .catch(function () {});
+      return;
     }
-  });
-  window.addEventListener('pagehide', sendEngagement);
+    copyLink(button);
+  }
+
+  function injectStyles() {
+    if (document.getElementById('oiatc-furniture-style')) return;
+    var css =
+      '.oiatc-share{margin-top:40px;padding-top:24px;border-top:1px solid var(--rule,#d9d2c2);' +
+      'display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;' +
+      'font-family:var(--sans,system-ui,sans-serif)}' +
+      '.oiatc-share__count{font-size:13px;color:var(--ink-mute,#5b6473);font-variant-numeric:tabular-nums}' +
+      '.oiatc-share__btn{font-family:inherit;font-size:12px;font-weight:600;letter-spacing:.06em;' +
+      'text-transform:uppercase;color:var(--accent,#6a3a1f);background:transparent;' +
+      'border:1px solid var(--accent-soft,#b88a5a);border-radius:4px;padding:8px 16px;cursor:pointer;' +
+      'transition:background .15s,color .15s}' +
+      '.oiatc-share__btn:hover{background:var(--accent,#6a3a1f);color:#fff}';
+    var style = document.createElement('style');
+    style.id = 'oiatc-furniture-style';
+    style.textContent = css;
+    document.head.appendChild(style);
+  }
+
+  function initFurniture() {
+    if (!ARTICLE_RE.test(location.pathname)) return;
+    if (document.getElementById('oiatc-furniture')) return;
+    var main = document.querySelector('main') || document.body;
+    if (!main) return;
+
+    injectStyles();
+
+    var bar = document.createElement('div');
+    bar.className = 'oiatc-share';
+    bar.id = 'oiatc-furniture';
+
+    var count = document.createElement('span');
+    count.className = 'oiatc-share__count';
+    count.hidden = true;
+
+    var button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'oiatc-share__btn';
+    button.textContent = navigator.share ? 'Share this page' : 'Copy link';
+    button.addEventListener('click', function () {
+      onShare(button);
+    });
+
+    bar.appendChild(count);
+    bar.appendChild(button);
+    main.appendChild(bar);
+
+    fetch('/api/page-stats?path=' + encodeURIComponent(location.pathname), {
+      credentials: 'omit',
+    })
+      .then(function (r) {
+        return r.ok ? r.json() : null;
+      })
+      .then(function (data) {
+        if (!data || typeof data.views !== 'number' || data.views < COUNT_FLOOR) return;
+        count.textContent = 'Read ' + data.views.toLocaleString() + ' times';
+        count.hidden = false;
+      })
+      .catch(function () {});
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initFurniture);
+  } else {
+    initFurniture();
+  }
 })();

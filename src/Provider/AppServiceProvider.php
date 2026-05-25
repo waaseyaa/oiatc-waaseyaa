@@ -10,6 +10,7 @@ use App\Analytics\AnalyticsSchema;
 use App\Controller\AnalyticsDashboardController;
 use App\Controller\CollectController;
 use App\Controller\HomeController;
+use App\Controller\PageStatsController;
 use Symfony\Component\HttpFoundation\Request;
 use Waaseyaa\Database\DatabaseInterface;
 use Waaseyaa\Foundation\ServiceProvider\ServiceProvider;
@@ -133,8 +134,10 @@ final class AppServiceProvider extends ServiceProvider
         if ($database !== null) {
             $secret = getenv('WAASEYAA_ANALYTICS_SECRET')
                 ?: (getenv('WAASEYAA_JWT_SECRET') ?: 'oiatc-analytics');
+            $report = new AnalyticsReport($database);
             $collect = new CollectController(new AnalyticsRecorder($database, $secret));
-            $analytics = new AnalyticsDashboardController(new AnalyticsReport($database));
+            $analytics = new AnalyticsDashboardController($report);
+            $pageStats = new PageStatsController($report);
 
             $router->addRoute(
                 'analytics.collect',
@@ -150,6 +153,15 @@ final class AppServiceProvider extends ServiceProvider
                 // Public at the app layer; gated by Caddy basic auth on /admin/* (waaseyaa-infra).
                 RouteBuilder::create('/admin/analytics')
                     ->controller(fn (Request $request) => $analytics->index($request))
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+
+            $router->addRoute(
+                'analytics.page-stats',
+                RouteBuilder::create('/api/page-stats')
+                    ->controller(fn (Request $request) => $pageStats->stats($request))
                     ->allowAll()
                     ->methods('GET')
                     ->build(),

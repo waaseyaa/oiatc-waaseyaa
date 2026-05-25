@@ -109,6 +109,20 @@ final class AnalyticsReport
     }
 
     /**
+     * All-time pageview count for a single path (for public per-page social proof).
+     */
+    public function viewsForPath(string $path): int
+    {
+        $row = $this->one(
+            'SELECT COUNT(*) AS views FROM ' . AnalyticsSchema::TABLE
+            . " WHERE event_type = 'pageview' AND path = ?",
+            [$path],
+        );
+
+        return (int) ($row['views'] ?? 0);
+    }
+
+    /**
      * @param list<mixed> $args
      *
      * @return array<string,mixed>
