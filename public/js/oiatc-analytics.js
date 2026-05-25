@@ -11,7 +11,7 @@
   'use strict';
 
   var COUNT_FLOOR = 10; // don't show a read count below this (avoids "read 2 times")
-  var ARTICLE_RE = /^\/(explainers|positions|practice)\//;
+  var ARTICLE_RE = /^\/(explainers|positions|practice|news)\//;
 
   var dnt =
     navigator.doNotTrack === '1' ||
@@ -172,7 +172,14 @@
       'text-transform:uppercase;color:var(--accent,#6a3a1f);background:transparent;' +
       'border:1px solid var(--accent-soft,#b88a5a);border-radius:4px;padding:8px 16px;cursor:pointer;' +
       'transition:background .15s,color .15s}' +
-      '.oiatc-share__btn:hover{background:var(--accent,#6a3a1f);color:#fff}';
+      '.oiatc-share__btn:hover{background:var(--accent,#6a3a1f);color:#fff}' +
+      '.oiatc-updates{margin-top:40px;padding-top:24px;border-top:1px solid var(--rule,#d9d2c2);font-family:var(--sans,system-ui,sans-serif)}' +
+      '.oiatc-updates__h{font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--accent,#6a3a1f);margin:0 0 12px}' +
+      '.oiatc-updates__row{display:flex;gap:14px;align-items:baseline;padding:10px 0;border-bottom:1px solid var(--rule-soft,#ebe6d8);color:var(--ink,#0d1420)}' +
+      '.oiatc-updates__row:hover{color:var(--accent,#6a3a1f)}' +
+      '.oiatc-updates__date{font-family:var(--mono,ui-monospace,monospace);font-size:12px;color:var(--accent,#6a3a1f);white-space:nowrap;font-variant-numeric:tabular-nums}' +
+      '.oiatc-updates__t{font-size:16px;line-height:1.4}' +
+      '.oiatc-updates__all{display:inline-block;margin-top:14px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--accent,#6a3a1f);border-bottom:none}';
     var style = document.createElement('style');
     style.id = 'oiatc-furniture-style';
     style.textContent = css;
@@ -221,9 +228,69 @@
       .catch(function () {});
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initFurniture);
-  } else {
+  // "Latest updates" block on explainer pages: newest news posts tagged to
+  // this explainer (slug = first path segment after /explainers/).
+  function initLatestUpdates() {
+    var match = location.pathname.match(/^\/explainers\/([^\/]+)/);
+    if (!match) return;
+    var slug = match[1];
+    var main = document.querySelector('main');
+    if (!main || document.getElementById('oiatc-updates')) return;
+
+    fetch('/api/explainer-updates?explainer=' + encodeURIComponent(slug), { credentials: 'omit' })
+      .then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (data) {
+        if (!data || !data.posts || data.posts.length === 0) return;
+        injectStyles();
+
+        var box = document.createElement('aside');
+        box.id = 'oiatc-updates';
+        box.className = 'oiatc-updates';
+
+        var heading = document.createElement('p');
+        heading.className = 'oiatc-updates__h';
+        heading.textContent = 'Latest updates';
+        box.appendChild(heading);
+
+        data.posts.forEach(function (post) {
+          var row = document.createElement('a');
+          row.className = 'oiatc-updates__row';
+          row.href = '/news/' + encodeURIComponent(post.slug);
+
+          var date = document.createElement('span');
+          date.className = 'oiatc-updates__date';
+          date.textContent = new Date(post.published_at * 1000).toLocaleDateString('en-CA', {
+            year: 'numeric', month: 'short', day: 'numeric',
+          });
+
+          var title = document.createElement('span');
+          title.className = 'oiatc-updates__t';
+          title.textContent = post.title;
+
+          row.appendChild(date);
+          row.appendChild(title);
+          box.appendChild(row);
+        });
+
+        var all = document.createElement('a');
+        all.className = 'oiatc-updates__all';
+        all.href = '/news?explainer=' + encodeURIComponent(slug);
+        all.textContent = 'All news →';
+        box.appendChild(all);
+
+        main.appendChild(box);
+      })
+      .catch(function () {});
+  }
+
+  function initPageExtras() {
+    initLatestUpdates();
     initFurniture();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initPageExtras);
+  } else {
+    initPageExtras();
   }
 })();
