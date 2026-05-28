@@ -150,11 +150,15 @@ final class AppServiceProvider extends ServiceProvider
 
             $router->addRoute(
                 'admin.analytics',
-                // Public at the app layer; gated by Caddy basic auth on /admin/* (waaseyaa-infra).
+                // Public (no Caddy basic_auth currently on /admin/*). priority(10) is
+                // required so this exact route wins over admin-surface's `admin_spa`
+                // catch-all (`/admin/{path}`, priority 0), which otherwise serves its
+                // bundled SPA here and shadows the dashboard.
                 RouteBuilder::create('/admin/analytics')
                     ->controller(fn (Request $request) => $analytics->index($request))
                     ->allowAll()
                     ->methods('GET')
+                    ->priority(10)
                     ->build(),
             );
 
