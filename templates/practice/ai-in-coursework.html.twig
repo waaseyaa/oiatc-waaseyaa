@@ -1,10 +1,11 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Practice · AI in coursework · OIATC</title>
-  <meta name="description" content="A real case study of AI use in a Grade 11 Environmental Science course, with the audit logs that make every step legible.">
+{% extends 'base.html.twig' %}
+
+{% block title %}Practice · AI in coursework · OIATC{% endblock %}
+{% block description %}A real case study of AI use in a Grade 11 Environmental Science course, with the audit logs that make every step legible.{% endblock %}
+{% block body_class %}route-practice-ai-coursework{% endblock %}
+{% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
+
+{% block head_meta %}
   <meta name="robots" content="noindex,follow">
   <link rel="canonical" href="https://oiatc.ca/practice/ai-in-coursework">
   <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
@@ -18,16 +19,9 @@
   <meta name="twitter:title" content="Practice · AI in coursework">
   <meta name="twitter:description" content="A real case study of AI use in a Grade 11 Environmental Science course.">
   <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/favicon.ico" sizes="32x32">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;1,8..60,300;1,8..60,400&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap">
-  <link rel="stylesheet" href="/css/site.css">
-  <script defer src="/js/oiatc-analytics.js?v=3"></script>
+{% endblock %}
+
+{% block head_styles %}
   <style>
     /* Page-specific Council DS extensions used only on this case study. */
 
@@ -126,24 +120,9 @@
       .case-notes__row { grid-template-columns: 1fr; gap: var(--gap-2); }
     }
   </style>
-</head>
-<body data-theme="light" data-grain="off" data-density="comfortable" class="route-practice-ai-coursework">
-  <a class="skip-link" href="#main-content">Skip to content</a>
+{% endblock %}
 
-  <header class="top">
-    <div class="top__inner">
-      <a class="brand" href="/">
-        <span class="brand__mark">OIATC</span>
-        <span class="brand__title">Ontario Indigenous AI &amp; Technology Council</span>
-      </a>
-      <div class="top__meta">
-        <a href="/">&larr; Home</a>
-        <button class="theme-toggle" type="button" aria-label="Toggle theme" data-theme-toggle>Dark</button>
-      </div>
-    </div>
-  </header>
-
-  <main id="main-content">
+{% block content %}
     <section class="masthead">
       <div class="shell">
         <div>
@@ -340,61 +319,4 @@
         </div>
       </div>
     </section>
-  </main>
-
-  <footer class="site-foot">
-    <div class="shell">
-      <span>Ontario Indigenous AI &amp; Technology Council</span>
-      <span>
-        <a href="https://waaseyaa.org" target="_blank" rel="noopener">Waaseyaa</a>
-        &nbsp;·&nbsp;
-        <a href="https://minoo.live" target="_blank" rel="noopener">Minoo</a>
-        &nbsp;·&nbsp;
-        <a href="https://web.net" target="_blank" rel="noopener">Web Networks</a>
-        &nbsp;·&nbsp;
-        <a href="mailto:jonesrussell42@gmail.com">Email</a>
-      </span>
-    </div>
-  </footer>
-
-  <script>
-    (function () {
-      var body = document.body;
-      var btn = document.querySelector('[data-theme-toggle]');
-      var stored = null;
-      try { stored = localStorage.getItem('oiatc-theme'); } catch (e) {}
-      if (stored === 'dark' || stored === 'light') {
-        body.setAttribute('data-theme', stored);
-      }
-      function syncLabel() {
-        if (!btn) return;
-        btn.textContent = body.getAttribute('data-theme') === 'dark' ? 'Light' : 'Dark';
-      }
-      syncLabel();
-      if (btn) {
-        btn.addEventListener('click', function () {
-          var next = body.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
-          body.setAttribute('data-theme', next);
-          try { localStorage.setItem('oiatc-theme', next); } catch (e) {}
-          syncLabel();
-        });
-      }
-
-      var els = document.querySelectorAll('.reveal');
-      if (!els.length || !window.IntersectionObserver) {
-        els.forEach(function (el) { el.classList.add('is-revealed'); });
-        return;
-      }
-      var io = new IntersectionObserver(function (entries) {
-        entries.forEach(function (entry) {
-          if (entry.isIntersecting) {
-            entry.target.classList.add('is-revealed');
-            io.unobserve(entry.target);
-          }
-        });
-      }, { threshold: 0.1 });
-      els.forEach(function (el) { io.observe(el); });
-    })();
-  </script>
-</body>
-</html>
+{% endblock %}

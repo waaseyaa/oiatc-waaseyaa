@@ -10,9 +10,22 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Waaseyaa\Routing\WaaseyaaRouter;
+use Waaseyaa\SSR\SsrServiceProvider;
 
 final class PublicPagesTest extends TestCase
 {
+    /**
+     * Boot the SSR Twig environment once for the suite, the same way the
+     * kernel does (setKernelContext + boot), so the static-page controllers
+     * can render their templates/ files. Mirrors how the app runs.
+     */
+    public static function setUpBeforeClass(): void
+    {
+        $provider = new SsrServiceProvider();
+        $provider->setKernelContext(dirname(__DIR__, 2), [], []);
+        $provider->boot();
+    }
+
     #[Test]
     public function app_service_provider_registers_home_and_design_system_and_legacy_redirects(): void
     {
@@ -58,6 +71,11 @@ final class PublicPagesTest extends TestCase
         foreach (['principles', 'color', 'type', 'space', 'motion', 'components', 'patterns', 'icons', 'voice', 'a11y'] as $sectionId) {
             $this->assertStringContainsString(sprintf('id="%s"', $sectionId), $html, sprintf('Design system should render #%s section.', $sectionId));
         }
+
+        // Regression guard for the file_get_contents pipeline: Twig must execute,
+        // not leak template source. The {% for %} grid loop rendered 12 cells.
+        $this->assertStringNotContainsString('{%', $html, 'Raw Twig tags must not leak into the rendered page.');
+        $this->assertSame(12, substr_count($html, 'height: 56px'), 'The grid demo loop should render 12 cells.');
     }
 
     #[Test]
