@@ -30,14 +30,14 @@ final class PublicPagesTest extends TestCase
     public function app_service_provider_registers_home_and_design_system_and_legacy_redirects(): void
     {
         $router = new WaaseyaaRouter();
-        (new AppServiceProvider())->routes($router);
+        new AppServiceProvider()->routes($router);
 
         $this->assertSame('home', $router->match('/')['_route'] ?? null);
         $this->assertSame('design-system', $router->match('/design-system')['_route'] ?? null);
 
         foreach (['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'] as $legacy) {
             $match = $router->match($legacy);
-            $this->assertNotNull($match, sprintf('Expected %s to resolve to a legacy redirect route.', $legacy));
+            $this->assertArrayHasKey('_route', $match, sprintf('Expected %s to resolve to a legacy redirect route.', $legacy));
             $this->assertStringStartsWith('legacy.redirect', $match['_route'] ?? '');
         }
     }
@@ -45,7 +45,7 @@ final class PublicPagesTest extends TestCase
     #[Test]
     public function homepage_renders_council_identity_and_pillars(): void
     {
-        $response = (new HomeController())->index();
+        $response = new HomeController()->index();
         $html = (string) $response->getContent();
 
         $this->assertSame(200, $response->getStatusCode());
@@ -62,7 +62,7 @@ final class PublicPagesTest extends TestCase
     #[Test]
     public function design_system_page_renders_all_ten_sections(): void
     {
-        $response = (new HomeController())->designSystem();
+        $response = new HomeController()->designSystem();
         $html = (string) $response->getContent();
 
         $this->assertSame(200, $response->getStatusCode());
@@ -81,7 +81,7 @@ final class PublicPagesTest extends TestCase
     #[Test]
     public function legacy_paths_redirect_to_home_with_301(): void
     {
-        $response = (new HomeController())->redirectToHome();
+        $response = new HomeController()->redirectToHome();
 
         $this->assertInstanceOf(RedirectResponse::class, $response);
         $this->assertSame(301, $response->getStatusCode());

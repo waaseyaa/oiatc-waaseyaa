@@ -25,7 +25,7 @@ final class AnalyticsReportTest extends TestCase
     protected function setUp(): void
     {
         $this->db = DBALDatabase::createSqlite(':memory:');
-        (new AnalyticsSchema($this->db))->ensure();
+        new AnalyticsSchema($this->db)->ensure();
         $this->recorder = new AnalyticsRecorder($this->db, 'test-secret');
         $this->report = new AnalyticsReport($this->db);
         // The recorder stamps created_at with the current UTC day.

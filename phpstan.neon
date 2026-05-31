@@ -1,0 +1,12 @@
+# Mirrors waaseyaa/framework's phpstan.neon at level 5 / PHP 8.5, scoped to this
+# app's src/ and tests/. The framework's includes (strict-rules, entity rules,
+# baseline) and its extra strictness toggles (checkUninitializedProperties etc.)
+# are framework-internal — the last one fights PHPUnit's setUp() idiom in this
+# app's test classes — so they are intentionally not pulled in here. Level 5 is
+# the gate.
+parameters:
+    level: 5
+    phpVersion: 80500
+    paths:
+        - src
+        - tests

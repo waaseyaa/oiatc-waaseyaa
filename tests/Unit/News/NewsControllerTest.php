@@ -83,8 +83,8 @@ final class NewsControllerTest extends TestCase
      */
     private function repository(array $entities): EntityRepositoryInterface
     {
-        return new class($entities) implements EntityRepositoryInterface {
-            /** @param list<NewsPost> $entities */
+        return new class ($entities) implements EntityRepositoryInterface {
+            /** @param list<EntityInterface> $entities */
             public function __construct(private array $entities) {}
 
             public function findBy(array $criteria, ?array $orderBy = null, ?int $limit = null): array
