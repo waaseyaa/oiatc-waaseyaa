@@ -7,3 +7,6 @@
 .env
 .phpunit.cache/
 .superpowers/
+/node_modules/
+/package.json
+/package-lock.json
