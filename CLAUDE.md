@@ -7,6 +7,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 <!-- Replace with your app description -->
 A Waaseyaa application built on the [Waaseyaa framework](https://github.com/waaseyaa/framework).
 
+## Strategy folder & published-site inventory
+
+This repo is the single source of truth for everything published on **oiatc.ca**. A separate OIATC strategy folder (Russell's `Projects/OIATC/` workspace, outside this repo) keeps a documentation/index layer:
+
+- `oiatc-ca-inventory.md` maps every live page to its canonical Twig source here, its URL, and its last-updated date, plus the news/analytics systems, social-post drafts, and cut pages.
+- That folder's `CLAUDE.md` points back to this repo as the source of truth.
+
+When a page ships, is renamed, or is retired here, reconcile `oiatc-ca-inventory.md`. If the two disagree, this repo wins.
+
 ## Architecture
 
 ```
