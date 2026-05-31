@@ -103,37 +103,30 @@ $queue->dispatch(new SendWelcomeEmail($userId));
 
 ## Frontend Design System
 
-All frontend lives in `public/css/site.css` and `templates/`. No build step — plain CSS + Twig.
+All frontend lives in `public/css/site.css` and `templates/`. No build step — plain CSS + Twig. Every page is rendered through the SSR Twig environment (`Waaseyaa\SSR\SsrServiceProvider::getTwigEnvironment()`); controllers never read template files directly.
+
+### Template families
+
+There are three distinct page families. Know which one you're editing:
+
+1. **Site shell** — `templates/base.html.twig` is the shared layout for the marketing/site pages (`home`, `design-system`, `practice/*`). It owns the `<head>` (Source Serif 4 / Inter / JetBrains Mono via Google Fonts, `/css/site.css`, analytics beacon), the `header.top` masthead + theme toggle, the `site-foot` footer, and the theme-toggle + `.reveal` IntersectionObserver script. Child pages `{% extends 'base.html.twig' %}` and fill blocks: `title`, `description`, `head_meta` (per-page canonical/OG/Twitter/JSON-LD), `head_styles` (per-page `<style>`), `body_class`, `topnav`, `content`, `footer`, `scripts_extra`.
+2. **Longform documents** — the explainers (`templates/explainers/*`), positions (`templates/positions/*`), and disclosures (`templates/disclosure/*`) are self-contained editorial documents, each with its own large inline `<style>` and masthead/footer. They do **not** extend `base.html.twig` and do **not** use `site.css`. (Follow-up: extract a shared `templates/_doc.html.twig` for them — they currently duplicate their `:root` tokens per file.)
+3. **News** — `templates/news/*` extends `templates/news/_layout.html.twig` (its own "newsprint" theme, separate from the site shell).
 
 ### Design tokens (`site.css :root`)
 
-**Storm palette** (current):
+`site.css` (~540 lines) defines tokens in **oklch**, with a default light theme on `:root` and a dark override under `[data-theme="dark"]` (toggled by the base-layout button, persisted to `localStorage`).
 
-| Token | Value | Role |
-|-------|-------|------|
-| `--bg` | `#141c28` | Page background |
-| `--bg-deep` | `#0e1420` | Deeper background |
-| `--paper` | `rgba(22,30,46,.95)` | Card/surface backgrounds |
-| `--text` | `#dce8f4` | Body text |
-| `--muted` | `#8298b8` | Secondary text |
-| `--copper` | `#e8a020` | Primary accent (amber) |
-| `--copper-deep` | `#c07c10` | Accent hover |
-| `--forest` | `#1c3048` | Dark surface / statement bg |
-| `--lake` | `#3890b8` | Secondary accent (steel blue) |
-| `--cream` | `#dce8f4` | Light text on dark surfaces |
-| `--font-display` | `"Syne"` | Headings (geometric sans) |
-| `--font-body` | `"Outfit"` | Body copy |
+| Token | Role |
+|-------|------|
+| `--font-serif` `"Source Serif 4"` | Display + body serif |
+| `--font-sans` `"Inter"` | UI / labels |
+| `--font-mono` `"JetBrains Mono"` | Code, dates, eyebrows |
+| `--accent` (oklch hue 55) | Amber accent; `--accent-deep` / `--accent-soft` / `--accent-wash` derived |
+| `--paper` / `--paper-2` / `--paper-3` | Surfaces (warm in light, blue-grey in dark) |
+| `--ink` / `--ink-2` / `--ink-3` | Text (primary → muted) |
 
-Fonts loaded via Google Fonts in `templates/base.html.twig`.
-
-### CSS structure
-
-`site.css` is organised in three blocks:
-1. **Base** (lines 1–1020) — reset, layout, components, responsive. Do not edit without care — all components are here.
-2. **MVP Polish** — appended block: grain texture, reveal animations, pillar accents, dark statement section, typography refinements.
-3. **Storm Theme** — hardcoded colour overrides for dark-bg elements that don't use CSS variables (founder card, hero backdrop, nav, footer, etc.).
-
-When changing the palette, update `:root` variables AND the Storm Theme block.
+When changing the palette, update both the `:root` (light) and `[data-theme="dark"]` token blocks.
 
 ### OG image
 

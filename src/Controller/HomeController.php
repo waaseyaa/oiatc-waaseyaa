@@ -6,6 +6,7 @@ namespace App\Controller;
 
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
+use Waaseyaa\SSR\SsrServiceProvider;
 
 final class HomeController
 {
@@ -66,9 +67,15 @@ final class HomeController
 
     private function renderTemplate(string $name): Response
     {
-        $path = dirname(__DIR__, 2) . '/templates/' . $name;
-        $html = (string) file_get_contents($path);
+        $twig = SsrServiceProvider::getTwigEnvironment();
+        if ($twig === null) {
+            return new Response('Page unavailable: Twig is not initialised.', 500);
+        }
 
-        return new Response($html, 200, ['Content-Type' => 'text/html; charset=UTF-8']);
+        return new Response(
+            $twig->render($name, []),
+            200,
+            ['Content-Type' => 'text/html; charset=UTF-8'],
+        );
     }
 }
