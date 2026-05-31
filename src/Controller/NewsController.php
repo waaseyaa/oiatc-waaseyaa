@@ -31,7 +31,7 @@ final class NewsController
         $explainer = trim((string) $request->query->get('explainer', ''));
 
         $visible = $explainer !== ''
-            ? array_values(array_filter($posts, static fn (array $p): bool => $p['related_explainer'] === $explainer))
+            ? array_values(array_filter($posts, static fn(array $p): bool => $p['related_explainer'] === $explainer))
             : $posts;
 
         return $this->render('news/index.html.twig', [
@@ -139,7 +139,7 @@ final class NewsController
             ];
         }
 
-        usort($posts, static fn (array $a, array $b): int => $b['published_at'] <=> $a['published_at']);
+        usort($posts, static fn(array $a, array $b): int => $b['published_at'] <=> $a['published_at']);
 
         return $posts;
     }

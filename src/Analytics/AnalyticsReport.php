@@ -33,7 +33,7 @@ final class AnalyticsReport
         $table = AnalyticsSchema::TABLE;
 
         $totalsRow = $this->one(
-            "SELECT COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS visitors"
+            'SELECT COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS visitors'
             . " FROM {$table} WHERE event_type = 'pageview' AND created_at BETWEEN ? AND ?",
             [$from, $to],
         );
@@ -44,9 +44,9 @@ final class AnalyticsReport
 
         $pages = [];
         $rows = $this->db->query(
-            "SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS visitors"
+            'SELECT path, COUNT(*) AS views, COUNT(DISTINCT visitor_hash) AS visitors'
             . " FROM {$table} WHERE event_type = 'pageview' AND created_at BETWEEN ? AND ?"
-            . " GROUP BY path ORDER BY views DESC",
+            . ' GROUP BY path ORDER BY views DESC',
             [$from, $to],
         );
         foreach ($rows as $r) {
@@ -62,10 +62,10 @@ final class AnalyticsReport
 
         // Engagement rows carry no path; join them to their pageview via view_id.
         $engagement = $this->db->query(
-            "SELECT p.path AS path, AVG(e.scroll_pct) AS avg_scroll, AVG(e.dwell_ms) AS avg_dwell"
+            'SELECT p.path AS path, AVG(e.scroll_pct) AS avg_scroll, AVG(e.dwell_ms) AS avg_dwell'
             . " FROM {$table} e JOIN {$table} p ON p.view_id = e.view_id AND p.event_type = 'pageview'"
             . " WHERE e.event_type = 'engagement' AND e.created_at BETWEEN ? AND ?"
-            . " GROUP BY p.path",
+            . ' GROUP BY p.path',
             [$from, $to],
         );
         foreach ($engagement as $r) {
@@ -80,7 +80,7 @@ final class AnalyticsReport
         $rows = $this->db->query(
             "SELECT referrer_host AS host, COUNT(*) AS count FROM {$table}"
             . " WHERE event_type = 'pageview' AND referrer_host IS NOT NULL AND created_at BETWEEN ? AND ?"
-            . " GROUP BY referrer_host ORDER BY count DESC LIMIT 20",
+            . ' GROUP BY referrer_host ORDER BY count DESC LIMIT 20',
             [$from, $to],
         );
         foreach ($rows as $r) {
@@ -91,7 +91,7 @@ final class AnalyticsReport
         $rows = $this->db->query(
             "SELECT COALESCE(device, 'unknown') AS device, COUNT(*) AS count FROM {$table}"
             . " WHERE event_type = 'pageview' AND created_at BETWEEN ? AND ?"
-            . " GROUP BY device ORDER BY count DESC",
+            . ' GROUP BY device ORDER BY count DESC',
             [$from, $to],
         );
         foreach ($rows as $r) {

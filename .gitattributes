@@ -1,0 +1,13 @@
+# Normalize line endings to LF in the repo and on checkout, so PHP CS Fixer's
+# Unix-line-ending rule is satisfied on every platform (Windows included) and
+# diffs stay noise-free.
+* text=auto eol=lf
+
+# Binary assets — never normalize.
+*.png binary
+*.ico binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.woff binary
+*.woff2 binary

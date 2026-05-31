@@ -26,7 +26,7 @@ final class CollectController
         $raw = $request->getContent();
 
         if (
-            is_string($raw) && $raw !== '' && strlen($raw) <= self::MAX_BODY_BYTES
+            $raw !== '' && strlen($raw) <= self::MAX_BODY_BYTES
             && $this->originAllowed($request)
         ) {
             $data = json_decode($raw, true);

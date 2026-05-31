@@ -6,6 +6,7 @@
 *.sqlite
 .env
 .phpunit.cache/
+.php-cs-fixer.cache
 .superpowers/
 /node_modules/
 /package.json
