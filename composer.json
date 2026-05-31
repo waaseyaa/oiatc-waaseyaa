@@ -6,7 +6,7 @@
     "require": {
         "php": ">=8.5",
         "symfony/dotenv": "^8.0",
-        "waaseyaa/framework": "^0.1.0-alpha.152"
+        "waaseyaa/framework": "^0.1.0-alpha.188"
     },
     "autoload": {
         "psr-4": {
