@@ -54,6 +54,11 @@ final class HomeController
         return $this->renderTemplate('practice/ai-in-coursework.html.twig');
     }
 
+    public function sagamokPortalDisclosure(): Response
+    {
+        return $this->renderTemplate('disclosure/sagamok-portal.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);
