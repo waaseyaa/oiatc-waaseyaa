@@ -1,0 +1,72 @@
+# Waaseyaa upstream notes
+
+A running log of framework quirks, bugs, breakages, missing pieces, and
+workarounds hit while building this app on an **alpha** release of
+[`waaseyaa/framework`](https://github.com/waaseyaa/framework). The goal is to
+fix these **upstream** later rather than carrying app-level hacks indefinitely.
+
+When you hit a Waaseyaa quirk, add an entry. Keep app-level issues (our own
+code) out of here — those belong in the audit / punch-list, not in upstream
+notes.
+
+**Entry format:**
+
+```
+## NNN — short title
+
+- **Date / version:** YYYY-MM-DD · waaseyaa/framework alpha.NNN
+- **Doing:** what we were doing when we hit it
+- **Symptom:** the observable problem (error text, wrong output, etc.)
+- **Workaround:** what we did to get unblocked (or "none needed — informational")
+- **Likely upstream fix:** the proper change in waaseyaa/framework
+```
+
+---
+
+## 001 — Framework `VERSION` file is stale (reads alpha.4)
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Reporting the installed framework version for the upgrade assessment.
+- **Symptom:** `vendor/waaseyaa/framework/VERSION` contains `0.1.0-alpha.4`, while the installed package (git tag / `composer.lock`) is `v0.1.0-alpha.188`. The two disagree by 184 releases. Anything trusting the `VERSION` file for provenance/drift checks would read a wildly wrong value.
+- **Workaround:** Treat the git tag / `composer.lock` `version` as the source of truth; ignore the `VERSION` file. (`bin/waaseyaa-version` should be the canonical provenance tool.)
+- **Likely upstream fix:** Have the release-cut process (`scripts/release.sh` / `release-cut.yml`) rewrite `VERSION` from the tag at publish time — the same mechanism that already resolves `self.version` for sibling packages. Or delete the file and make `bin/waaseyaa-version` read the lockfile/tag exclusively, so there is no second, stale source.
+
+## 002 — "Ambiguous class resolution" warnings: metapackage vendors the same classes as the split mirrors
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** `composer install` / `composer update` (autoloader generation).
+- **Symptom:** ~10 Composer warnings like `Ambiguous class resolution, "Waaseyaa\GitHub\GitHubClient" was found in both vendor/waaseyaa/framework/packages/github/src and vendor/waaseyaa/github/src, the first will be used.` (also `Waaseyaa\Engagement\*`). The monolithic `waaseyaa/framework` package vendors `packages/github`, `packages/engagement`, etc., **and** the standalone split-mirror packages (`waaseyaa/github`, `waaseyaa/engagement`) ship the identical classes — both end up in the classmap.
+- **Workaround:** None needed — informational. "first will be used" (the framework copy wins) and behavior is correct. Just noise.
+- **Likely upstream fix:** The framework metapackage's `autoload` should `exclude-from-classmap` the `packages/*/src` dirs that are also published as standalone packages, or the split mirrors should be `replace`d by `waaseyaa/framework` in its `composer.json` so Composer never loads both. Cleanest: declare `"replace": { "waaseyaa/github": "self.version", "waaseyaa/engagement": "self.version", ... }` in the framework root manifest.
+
+## 003 — `composer.lock` drift after `php: >=8.5` added post-hash
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** First `composer install` on a fresh clone.
+- **Symptom:** `Warning: The lock file is not up to date with the latest changes in composer.json … run composer update`. Root cause: the alpha.152→alpha.188 bump regenerated the lock, then a later commit added `php: >=8.5` to `composer.json` (an alpha.188 platform requirement) **without** regenerating the lock, so the content-hash no longer matched. Harmless (the constraint is satisfied) but it nags on every install and would block `--no-update` workflows.
+- **Workaround:** Ran `composer update` on a branch (`chore/refresh-lock`) to regenerate the lock; only transitive Symfony/Twig point releases moved, framework stayed at alpha.188.
+- **Likely upstream fix:** This is partly an app discipline issue (always regenerate the lock when editing `composer.json`), but the framework could help: when alpha.188 raised the **PHP floor to 8.5**, the skeleton's `composer.json`/`composer.lock` (`skeleton/` in the framework repo) should have been bumped together in the same release so downstream `composer create-project` users start consistent. Add a release gate that fails if `skeleton/composer.json` platform reqs and `skeleton/composer.lock` content-hash disagree.
+
+## 004 — Hard `ext-sodium` dependency via `oidc → lcobucci/jwt`
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** `composer install` on a stock Windows PHP 8.5 build with `ext-sodium` disabled.
+- **Symptom:** Install **fails**: `lcobucci/jwt 5.6.0 requires ext-sodium * -> it is missing from your system` (pulled in by `waaseyaa/oidc → lcobucci/jwt ^5.3`). The dependency is transitive and non-obvious — nothing in the app uses OIDC/JWT directly, yet a fresh clone can't install without sodium.
+- **Workaround:** Enabled `extension=sodium` in the machine's `php.ini` (the DLL shipped, just commented out). Interim: `php -d extension=sodium composer install`.
+- **Likely upstream fix:** (a) Document `ext-sodium` in the framework's platform requirements / install docs and add it to root `composer.json` `require` (`"ext-sodium": "*"`) so Composer reports it up front as a clear platform error instead of a deep transitive surprise. (b) Consider whether `waaseyaa/oidc` belongs in the default `waaseyaa/framework` metapackage dependency graph at all — apps that don't issue/verify OIDC tokens shouldn't transitively require a sodium-backed JWT lib. Splitting oidc into an opt-in package would remove the requirement for non-OIDC apps like this one.
+
+## 005 — No migration CLI; schema must be created at runtime (boot)
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Reviewing how the app's `analytics_event` (non-entity) table gets created (`src/Analytics/AnalyticsSchema.php`).
+- **Symptom:** The framework has no schema-migration CLI for non-entity / supporting tables, so the app creates its table inside `AppServiceProvider::boot()` via `$db->schema()->createTable(...)`, guarded by `tableExists()`. This runs a schema check on **every request** and couples DDL to the request lifecycle (the code comment says as much: "The framework has no migration CLI, so the table is ensured at boot").
+- **Workaround:** Boot-time `ensure()` with a `tableExists()` short-circuit. Works, but is not how schema should be managed in production.
+- **Likely upstream fix:** Provide a first-class migration mechanism in `waaseyaa/migration` (or a `bin/waaseyaa migrate`-style CLI) that covers raw/supporting tables, not just entity-storage schema, so apps can declare migrations and run them out-of-band instead of on every boot.
+
+## 006 — `BroadcastStorageScheduleEntries` warns on every boot when `BroadcastStorage` is unbound
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Smoke-testing public pages under `php -S` (dev server log).
+- **Symptom:** Every request emits `warning … BroadcastStorageScheduleEntries: BroadcastStorage not bound; broadcast_log_prune task will not be registered. Bind Waaseyaa\Api\Controller\BroadcastStorage in a ServiceProvider to enable pruning.` This app doesn't use SSE broadcasting, so the warning is pure noise and repeats on every boot/request.
+- **Workaround:** None — informational; the page renders fine (200). Ignored.
+- **Likely upstream fix:** Downgrade to `debug` level (or emit once per process, not per request) when the broadcast feature is simply not wired. A schedule-entries class whose optional dependency is absent should no-op quietly, not `warning` — reserve `warning` for misconfiguration, not for a feature the consumer never opted into.
