@@ -65,6 +65,11 @@ final class HomeController
         return $this->renderTemplate('resources/sagamok.html.twig');
     }
 
+    public function whereYourDataLives(): Response
+    {
+        return $this->renderTemplate('explainers/where-your-data-lives.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);

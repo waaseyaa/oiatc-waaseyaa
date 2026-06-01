@@ -131,4 +131,49 @@ final class PublicPagesTest extends TestCase
         // Rendered through Twig; no raw template tags leaked.
         $this->assertStringNotContainsString('{%', $html);
     }
+
+    #[Test]
+    public function data_sovereignty_explainer_route_is_registered(): void
+    {
+        $router = new WaaseyaaRouter();
+        new AppServiceProvider()->routes($router);
+
+        $this->assertSame('explainers.where-your-data-lives', $router->match('/explainers/where-your-data-lives')['_route'] ?? null);
+    }
+
+    #[Test]
+    public function data_sovereignty_explainer_renders_visuals_notes_and_sources(): void
+    {
+        $response = new HomeController()->whereYourDataLives();
+        $html = (string) $response->getContent();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString("Where does your community's data actually live?", $html);
+
+        // Both custom visuals are present: the redacted CDN-link anatomy and the SVG map.
+        $this->assertStringContainsString('cdn.prod.website-files.com', $html);
+        $this->assertStringContainsString('class="dsv-url"', $html);
+        $this->assertStringContainsString('class="dsv-map"', $html);
+        $this->assertStringContainsString('<svg', $html);
+        $this->assertStringContainsString('Northern Virginia', $html);
+
+        // Not-legal-advice and not-affiliated notes retained.
+        $this->assertStringContainsString('is not legal advice', $html);
+        $this->assertStringContainsString('Independent of Sagamok Chief and Council', $html);
+
+        // Sources retained (CLOUD Act, OCAP/FNIGC) and the reciprocal link to the disclosure.
+        $this->assertStringContainsString('CLOUD Act', $html);
+        $this->assertStringContainsString('fnigc.ca', $html);
+        $this->assertStringContainsString('/disclosure/sagamok-portal', $html);
+
+        $this->assertStringNotContainsString('{%', $html);
+    }
+
+    #[Test]
+    public function disclosure_links_back_to_the_data_sovereignty_explainer(): void
+    {
+        $html = (string) new HomeController()->sagamokPortalDisclosure()->getContent();
+
+        $this->assertStringContainsString('/explainers/where-your-data-lives', $html, 'Disclosure must link to the companion explainer.');
+    }
 }
