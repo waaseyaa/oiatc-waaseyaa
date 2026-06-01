@@ -1,0 +1,110 @@
+{% extends 'base.html.twig' %}
+
+{#
+  Anokii instance shell. One shared graph, rendered from a per-community vantage.
+  Reuses the OIATC base layout, fonts, and oklch tokens from site.css; the
+  Anokii chrome is styled entirely with those existing tokens (no imported
+  purple/cyan palette). Children fill {% block module %} and may extend
+  head_styles via {{ parent() }}.
+
+  Expected context: community (slug), communityName, communities (slug => {name}).
+#}
+
+{% block body_class %}route-anokii anokii{% endblock %}
+
+{% block topnav %}<a href="/anokii">Anokii</a>{% endblock %}
+
+{% block head_styles %}
+  <style>
+    .ak-shell { display: grid; grid-template-columns: 248px 1fr; gap: 0; min-height: 70vh; max-width: 1120px; margin: 0 auto; }
+    .ak-side { border-right: 1px solid var(--rule); padding: var(--gap-5) var(--gap-4) var(--gap-7); }
+    .ak-brand { font-family: var(--font-sans); font-weight: 700; font-size: 18px; color: var(--ink); letter-spacing: .01em; }
+    .ak-brand span { color: var(--accent-deep); }
+    .ak-tag { font-size: 12.5px; color: var(--ink-3); margin: 4px 0 var(--gap-5); }
+
+    .ak-switch { display: flex; flex-direction: column; gap: 4px; margin: 0 0 var(--gap-5); }
+    .ak-switch__label, .ak-nav__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+    .ak-switch a { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: var(--radius-md); color: var(--ink-2); font-family: var(--font-sans); font-size: 15px; text-decoration: none; border: 1px solid transparent; }
+    .ak-switch a:hover { background: var(--paper-2); color: var(--ink); }
+    .ak-switch a[aria-current="page"] { background: var(--accent-wash); border-color: var(--accent-soft); color: var(--ink); font-weight: 600; }
+
+    .ak-nav { display: flex; flex-direction: column; gap: 2px; margin-top: var(--gap-5); }
+    .ak-nav button { appearance: none; text-align: left; background: none; border: 0; border-radius: var(--radius-md); padding: 9px 10px; color: var(--ink-2); font-family: var(--font-sans); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .ak-nav button:hover { background: var(--paper-2); color: var(--ink); }
+    .ak-nav button[aria-current="true"] { background: var(--paper-3); color: var(--ink); font-weight: 600; }
+    .ak-nav button[disabled] { color: var(--ink-3); cursor: default; opacity: .7; }
+    .ak-nav button[disabled]:hover { background: none; }
+    .ak-badge { font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 1px 7px; }
+
+    .ak-main { padding: var(--gap-5) var(--gap-6) var(--gap-9); min-width: 0; }
+    .ak-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px var(--gap-3); padding-bottom: var(--gap-4); border-bottom: 1px solid var(--rule); margin-bottom: var(--gap-5); }
+    .ak-top h1 { font-family: var(--font-serif); font-size: clamp(24px, 4vw, 34px); margin: 0; color: var(--ink); }
+    .ak-top__indep { font-size: 13px; color: var(--ink-3); }
+
+    .ak-module { display: none; }
+    .ak-module.is-active { display: block; animation: r-fade .2s ease; }
+
+    .ak-disclaimer { margin: var(--gap-7) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-3); max-width: 72ch; }
+
+    @media (max-width: 720px) {
+      .ak-shell { grid-template-columns: 1fr; }
+      .ak-side { border-right: 0; border-bottom: 1px solid var(--rule); }
+      .ak-main { padding: var(--gap-5) var(--gap-4) var(--gap-8); }
+    }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="ak-shell">
+  <aside class="ak-side">
+    <div class="ak-brand"><span>Anokii</span></div>
+    <p class="ak-tag">A shared community knowledge graph from OIATC.</p>
+
+    <nav class="ak-switch" aria-label="Community">
+      <p class="ak-switch__label">Community</p>
+      {% for slug, c in communities %}
+        <a href="/anokii/{{ slug }}"{% if slug == community %} aria-current="page"{% endif %}>{{ c.name }}</a>
+      {% endfor %}
+    </nav>
+
+    <nav class="ak-nav" aria-label="Modules">
+      <p class="ak-nav__label">Modules</p>
+      <button type="button" data-module="cointelligence" aria-current="true">Co-Intelligence</button>
+      <button type="button" data-module="resources">Resources</button>
+      <button type="button" disabled>Drive <span class="ak-badge">Preview</span></button>
+      <button type="button" disabled>Data Rooms <span class="ak-badge">Preview</span></button>
+      <button type="button" disabled>Workspaces <span class="ak-badge">Preview</span></button>
+      <button type="button" disabled>Vault <span class="ak-badge">Preview</span></button>
+      <button type="button" disabled>Governance <span class="ak-badge">Preview</span></button>
+      <button type="button" disabled>Portal <span class="ak-badge">Preview</span></button>
+    </nav>
+  </aside>
+
+  <div class="ak-main">
+    <header class="ak-top">
+      <h1>{{ communityName }}</h1>
+      <span class="ak-top__indep">An independent OIATC view. Not affiliated with or endorsed by {{ communityName }}.</span>
+    </header>
+
+    {% block module %}{% endblock %}
+
+    <p class="ak-disclaimer">Anokii is a community resource from OIATC, the Ontario Indigenous AI and Technology Council. It is independent of the communities and organizations named, draws only on public information, and does not collect personal information. Always confirm with the community office. For emergencies, call 911.</p>
+  </div>
+</div>
+{% endblock %}
+
+{% block scripts_extra %}
+  <script>
+    (function () {
+      var navButtons = Array.prototype.slice.call(document.querySelectorAll('.ak-nav button[data-module]'));
+      var modules = Array.prototype.slice.call(document.querySelectorAll('.ak-module'));
+      function show(name) {
+        navButtons.forEach(function (b) { b.setAttribute('aria-current', b.getAttribute('data-module') === name ? 'true' : 'false'); });
+        modules.forEach(function (m) { m.classList.toggle('is-active', m.getAttribute('data-module') === name); });
+      }
+      navButtons.forEach(function (b) {
+        b.addEventListener('click', function () { show(b.getAttribute('data-module')); });
+      });
+    })();
+  </script>
+{% endblock %}

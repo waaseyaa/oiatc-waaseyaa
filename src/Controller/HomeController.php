@@ -60,11 +60,6 @@ final class HomeController
         return $this->renderTemplate('disclosure/sagamok-portal.html.twig');
     }
 
-    public function sagamokResources(): Response
-    {
-        return $this->renderTemplate('resources/sagamok.html.twig');
-    }
-
     public function whereYourDataLives(): Response
     {
         return $this->renderTemplate('explainers/where-your-data-lives.html.twig');

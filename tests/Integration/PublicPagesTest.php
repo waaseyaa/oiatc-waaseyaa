@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Tests\Integration;
 
+use App\Controller\AnokiiController;
 use App\Controller\HomeController;
 use App\Provider\AppServiceProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -89,18 +90,22 @@ final class PublicPagesTest extends TestCase
     }
 
     #[Test]
-    public function sagamok_resources_route_is_registered(): void
+    public function anokii_routes_are_registered_and_old_resources_url_redirects(): void
     {
         $router = new WaaseyaaRouter();
         new AppServiceProvider()->routes($router);
 
+        $this->assertSame('anokii.home', $router->match('/anokii')['_route'] ?? null);
+        $this->assertSame('anokii.sagamok', $router->match('/anokii/sagamok')['_route'] ?? null);
+        $this->assertSame('anokii.massey', $router->match('/anokii/massey')['_route'] ?? null);
+        // The old resources URL is still routed (now a 301 redirect to the lens).
         $this->assertSame('resources.sagamok', $router->match('/resources/sagamok')['_route'] ?? null);
     }
 
     #[Test]
-    public function sagamok_resources_page_renders_tabs_search_and_corrected_content(): void
+    public function sagamok_lens_renders_tabs_search_and_corrected_content(): void
     {
-        $response = new HomeController()->sagamokResources();
+        $response = new AnokiiController()->sagamok();
         $html = (string) $response->getContent();
 
         $this->assertSame(200, $response->getStatusCode());

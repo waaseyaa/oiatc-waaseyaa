@@ -45,6 +45,12 @@ final class DocChunk extends ContentEntityBase implements HydratableFromStorageI
     #[Field(type: 'text', label: 'Text', description: 'The passage text, whitespace-normalized.', required: true, settings: ['weight' => 4])]
     public string $text = '';
 
+    #[Field(label: 'Source entity type', description: 'Graph entity this chunk belongs to (e.g. service, project). Empty for general OIATC content.', settings: ['weight' => 5])]
+    public string $entity_type = '';
+
+    #[Field(label: 'Source entity id', description: 'Slug of the linked source entity (e.g. sagamok-housing, massey-solar).', settings: ['weight' => 6])]
+    public string $entity_id = '';
+
     /**
      * @param array<string, mixed> $values
      * @param array<string, string> $entityKeys

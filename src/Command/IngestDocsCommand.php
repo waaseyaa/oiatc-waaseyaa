@@ -31,9 +31,15 @@ final class IngestDocsCommand
      * @var array<string, string>
      */
     private const PAGES = [
-        '/resources/sagamok' => 'resources/sagamok.html.twig',
+        // Sagamok resources now live at the Anokii Sagamok lens; ingest the content
+        // partial directly so chunks carry the canonical /anokii/sagamok source_url
+        // without the shell chrome.
+        '/anokii/sagamok' => 'anokii/_sagamok-resources.html.twig',
         '/explainers/robinson-huron-treaty' => 'explainers/robinson-huron-treaty.html.twig',
+        // Massey corpus: the explainer cluster only (no news post in this environment).
         '/explainers/massey-solar-project' => 'explainers/massey-solar-project.html.twig',
+        '/explainers/massey-solar-project-voices' => 'explainers/massey-solar-project-voices.html.twig',
+        '/explainers/massey-solar-project-what-youve-heard' => 'explainers/massey-solar-project-what-youve-heard.html.twig',
         '/explainers/where-your-data-lives' => 'explainers/where-your-data-lives.html.twig',
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',

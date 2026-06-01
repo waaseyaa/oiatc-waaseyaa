@@ -8,14 +8,17 @@ use App\Analytics\AnalyticsRecorder;
 use App\Analytics\AnalyticsReport;
 use App\Analytics\AnalyticsSchema;
 use App\Controller\AnalyticsDashboardController;
+use App\Controller\AnokiiController;
 use App\Controller\ChatController;
 use App\Controller\CollectController;
 use App\Controller\HomeController;
 use App\Controller\PageStatsController;
 use App\Support\ChatPromptBuilder;
-use App\Support\KnowledgeRetriever;
+use App\Support\GraphRetriever;
 use App\Support\SqliteRateLimiter;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Waaseyaa\AI\Agent\Provider\AnthropicProvider;
 use Waaseyaa\AI\Agent\Provider\ProviderInterface;
 use Waaseyaa\Database\DatabaseInterface;
 use Waaseyaa\Database\DBALDatabase;
@@ -26,13 +29,20 @@ use Waaseyaa\Routing\WaaseyaaRouter;
 
 final class AppServiceProvider extends ServiceProvider
 {
+    private ?DatabaseInterface $persistentDatabase = null;
+
     public function register(): void {}
 
     public function boot(): void
     {
-        $database = $this->tryResolveDatabase();
-        if ($database !== null) {
-            new AnalyticsSchema($database)->ensure();
+        // Ensure the schema on the persistent file connection, NOT the ephemeral
+        // one resolve(DatabaseInterface) hands back at boot — otherwise the table
+        // is created on a connection that never reaches storage/waaseyaa.sqlite,
+        // and the file-pinned analytics wiring in routes() finds no table. The
+        // tryResolveDatabase() probe still gates this so routing-only unit tests
+        // (no kernel) skip analytics entirely. See upstream note #018.
+        if ($this->tryResolveDatabase() !== null) {
+            new AnalyticsSchema($this->persistentDatabase())->ensure();
         }
     }
 
@@ -67,6 +77,19 @@ final class AppServiceProvider extends ServiceProvider
         $isAbsolute = str_starts_with($configured, '/') || preg_match('#^[A-Za-z]:[\\\\/]#', $configured) === 1;
 
         return $isAbsolute ? $configured : $this->projectRoot . '/' . ltrim($configured, './');
+    }
+
+    /**
+     * A DatabaseInterface pinned to the persistent SQLite file, memoised per
+     * provider instance. resolve(DatabaseInterface) at route-build / boot time
+     * can hand back an ephemeral connection (controllers are built once, not
+     * per request), so writes wired to it never land in storage/waaseyaa.sqlite.
+     * Everything that must persist — the rate limiter and analytics — shares
+     * this file-backed connection instead. See upstream note #018.
+     */
+    private function persistentDatabase(): DatabaseInterface
+    {
+        return $this->persistentDatabase ??= DBALDatabase::createSqlite($this->databasePath());
     }
 
     public function routes(WaaseyaaRouter $router, ?\Waaseyaa\Entity\EntityTypeManager $entityTypeManager = null): void
@@ -163,10 +186,41 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // Anokii: shared relational-graph instance with per-community vantage lenses.
+        $anokii = new AnokiiController();
+
+        $router->addRoute(
+            'anokii.home',
+            RouteBuilder::create('/anokii')
+                ->controller(fn() => $anokii->home())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'anokii.sagamok',
+            RouteBuilder::create('/anokii/sagamok')
+                ->controller(fn() => $anokii->sagamok())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'anokii.massey',
+            RouteBuilder::create('/anokii/massey')
+                ->controller(fn() => $anokii->massey())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        // The old Sagamok resources page now lives at the Anokii Sagamok lens.
         $router->addRoute(
             'resources.sagamok',
             RouteBuilder::create('/resources/sagamok')
-                ->controller(fn() => $controller->sagamokResources())
+                ->controller(fn() => new RedirectResponse('/anokii/sagamok', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -181,8 +235,16 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
-        $database = $this->tryResolveDatabase();
-        if ($database !== null) {
+        if ($this->tryResolveDatabase() !== null) {
+            // Pin analytics to the persistent SQLite file. resolve(DatabaseInterface)
+            // here returns an ephemeral connection (the route/controller closure is
+            // built once, not per request), so beacon writes wired to it never reach
+            // storage/waaseyaa.sqlite and the dashboard reads an empty ephemeral DB —
+            // verified: POST /api/collect returned 204 but persisted 0 rows. The
+            // tryResolveDatabase() probe stays only as a "kernel present?" gate so
+            // routing-only unit tests skip analytics. Same fix as the chat limiter;
+            // see upstream note #018.
+            $database = $this->persistentDatabase();
             $secret = getenv('WAASEYAA_ANALYTICS_SECRET')
                 ?: (getenv('WAASEYAA_JWT_SECRET') ?: 'oiatc-analytics');
             $report = new AnalyticsReport($database);
@@ -265,17 +327,25 @@ final class AppServiceProvider extends ServiceProvider
 
             // Grounded RAG chat over the doc_chunk knowledge base (Path B).
             // JSON request body -> CSRF auto-skipped; rate-limited per client.
-            // Pin the limiter to the persistent SQLite file. resolve(DatabaseInterface)
-            // at route-registration time can hand back an ephemeral connection
-            // (the route/controller is built once, not per request), which would
-            // make the rate limit reset every request. See upstream note #018.
+            // Pin the limiter to the persistent SQLite file (shared helper).
+            // resolve(DatabaseInterface) at route-registration time can hand back
+            // an ephemeral connection (the route/controller is built once, not per
+            // request), which would make the rate limit reset every request. See
+            // upstream note #018.
+            // Construct the chat provider directly from the env key rather than
+            // resolve(ProviderInterface): at route-build time the container hands
+            // back the framework's NullLlmProvider default, not our binding (same
+            // build-once/ephemeral issue as the DB — see upstream #018).
+            $anthropicKey = getenv('ANTHROPIC_API_KEY') ?: '';
             $chat = new ChatController(
-                retriever: new KnowledgeRetriever($entityTypeManager->getRepository('doc_chunk')),
+                retriever: new GraphRetriever($this->persistentDatabase()),
                 prompts: new ChatPromptBuilder(),
-                provider: $this->resolve(ProviderInterface::class),
-                limiter: new SqliteRateLimiter(DBALDatabase::createSqlite($this->databasePath())),
+                provider: $anthropicKey !== ''
+                    ? new AnthropicProvider($anthropicKey, AiServiceProvider::MODEL)
+                    : $this->resolve(ProviderInterface::class),
+                limiter: new SqliteRateLimiter($this->persistentDatabase()),
                 logger: $this->resolve(LoggerInterface::class),
-                configured: (getenv('ANTHROPIC_API_KEY') ?: '') !== '',
+                configured: $anthropicKey !== '',
             );
             $router->addRoute(
                 'chat',

@@ -32,6 +32,9 @@ final class ChatController
     private const TOP_K = 6;
     private const MAX_QUESTION_CHARS = 500;
     private const MAX_TOKENS = 700;
+
+    /** Known vantage communities; an unknown/missing value defaults to Sagamok. */
+    private const COMMUNITIES = ['sagamok', 'massey'];
     public function __construct(
         private readonly RetrieverInterface $retriever,
         private readonly ChatPromptBuilder $prompts,
@@ -57,27 +60,31 @@ final class ChatController
             return new JsonResponse(['error' => 'Provide a non-empty "question" (max 500 characters).'], Response::HTTP_BAD_REQUEST);
         }
 
+        // Vantage community: a point of view onto the shared graph, not a tenant.
+        $community = $this->readCommunity($request);
+
         if (!$this->configured) {
             return $this->streamMessageText('The assistant is not available right now. Please use the page contacts, or the Sagamok directory at sagamokanishnawbek.com.', []);
         }
 
-        $passages = $this->retriever->retrieve($question, self::TOP_K);
+        $passages = $this->retriever->retrieve($question, $community, self::TOP_K);
         if ($passages === []) {
-            // Off-corpus: deterministic refusal, no model call.
-            return $this->streamMessageText(ChatPromptBuilder::NO_ANSWER, []);
+            // Off-corpus / outside this community's reach: deterministic refusal,
+            // no model call. The message points to the right place for the vantage.
+            return $this->streamMessageText($this->prompts->noAnswerFor($community), []);
         }
 
-        return $this->streamAnswer($question, $passages);
+        return $this->streamAnswer($question, $community, $passages);
     }
 
     /**
      * @param list<Passage> $passages
      */
-    private function streamAnswer(string $question, array $passages): StreamedResponse
+    private function streamAnswer(string $question, string $community, array $passages): StreamedResponse
     {
         $messageRequest = new MessageRequest(
             messages: [['role' => 'user', 'content' => $this->prompts->userMessage($question, $passages)]],
-            system: $this->prompts->system(),
+            system: $this->prompts->system($community),
             maxTokens: self::MAX_TOKENS,
         );
         $sources = $this->sources($passages);
@@ -85,34 +92,40 @@ final class ChatController
         $prompts = $this->prompts;
         $logger = $this->logger;
 
-        return $this->sse(static function () use ($provider, $messageRequest, $sources, $prompts, $logger): void {
+        return $this->sse(static function () use ($provider, $messageRequest, $sources, $prompts, $logger, $question, $community): void {
             try {
                 if ($provider instanceof StreamingProviderInterface) {
                     $response = $provider->streamMessage($messageRequest, static function (StreamChunk $chunk): void {
                         if ($chunk->type === 'text_delta' && $chunk->text !== '') {
-                            self::emit('delta', ['text' => $chunk->text]);
+                            // Strip em/en dashes server-side so a stray dash never
+                            // ships even if the model ignores the prompt rule.
+                            self::emit('delta', ['text' => ChatPromptBuilder::sanitizeDashes($chunk->text)]);
                         }
                     });
                 } else {
                     // Provider can't stream: send once and emit the whole answer.
                     $response = $provider->sendMessage($messageRequest);
-                    self::emit('delta', ['text' => $response->getText()]);
+                    self::emit('delta', ['text' => ChatPromptBuilder::sanitizeDashes($response->getText())]);
                 }
                 self::emit('done', ['sources' => $sources]);
                 // Token-spend record (ai-observability cost traces require an
                 // active AgentExecutor trace, which Path B doesn't use; logging
                 // the counts is the honest minimal record — see upstream #013).
                 $usage = $response->usage + ['input_tokens' => 0, 'output_tokens' => 0];
+                // No PII: only the question and the chunks used (cited source URLs)
+                // are recorded, plus the vantage and token counts.
                 $logger->info('chat.llm.completed', [
                     'model' => AiServiceProvider::MODEL,
+                    'community' => $community,
+                    'question' => $question,
                     'input_tokens' => $usage['input_tokens'],
                     'output_tokens' => $usage['output_tokens'],
                     'stop_reason' => $response->stopReason,
-                    'sources' => count($sources),
+                    'chunks_used' => array_map(static fn(array $s): string => $s['source_url'], $sources),
                 ]);
             } catch (\Throwable $e) {
-                $logger->error('chat.llm.failed', ['error' => $e->getMessage()]);
-                self::emit('delta', ['text' => $prompts::NO_ANSWER]);
+                $logger->error('chat.llm.failed', ['error' => $e->getMessage(), 'community' => $community]);
+                self::emit('delta', ['text' => $prompts->noAnswerFor($community)]);
                 self::emit('done', ['sources' => []]);
             }
         });
@@ -190,6 +203,20 @@ final class ChatController
         }
 
         return $question;
+    }
+
+    /**
+     * The vantage community slug from the request body. Optional and defaults to
+     * Sagamok; an unrecognized value also falls back to Sagamok rather than
+     * erroring, so a stale client can't break the endpoint.
+     */
+    private function readCommunity(Request $request): string
+    {
+        $payload = json_decode((string) $request->getContent(), true);
+        $value = is_array($payload) ? ($payload['community'] ?? null) : null;
+        $slug = is_string($value) ? strtolower(trim($value)) : '';
+
+        return in_array($slug, self::COMMUNITIES, true) ? $slug : 'sagamok';
     }
 
     private function clientKey(Request $request): string

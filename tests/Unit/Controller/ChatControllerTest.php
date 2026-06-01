@@ -65,6 +65,31 @@ final class ChatControllerTest extends TestCase
     }
 
     #[Test]
+    public function model_em_and_en_dashes_are_stripped_before_streaming(): void
+    {
+        $provider = $this->provider(["Call Finance \u{2014} ext 225", " (hours 9\u{2013}5)."]);
+        $response = $this->controller(retriever: $this->retriever([$this->passage()]), provider: $provider, configured: true)
+            ->handle($this->request('who do I contact about per capita?'));
+
+        $out = $this->capture($response);
+        self::assertStringNotContainsString("\u{2014}", $out, 'No em dash may ship.');
+        self::assertStringNotContainsString("\u{2013}", $out, 'No en dash may ship.');
+        self::assertStringContainsString('Call Finance, ext 225', $out, 'Em dash collapsed to a comma.');
+        self::assertStringContainsString('hours 9-5', $out, 'En dash became a hyphen.');
+    }
+
+    #[Test]
+    public function massey_vantage_refusal_points_to_the_explainers(): void
+    {
+        $request = Request::create('/api/chat', 'POST', [], [], [], ['REMOTE_ADDR' => '203.0.113.9'], json_encode(['question' => 'mental health help', 'community' => 'massey']));
+        $response = $this->controller(retriever: $this->retriever([]), provider: $this->provider(), configured: true)->handle($request);
+
+        $out = $this->capture($response);
+        self::assertStringContainsString('/explainers/massey-solar-project', $out, 'Massey refusal points to the explainers.');
+        self::assertStringContainsString('limited', $out, 'Massey refusal names the thin corpus.');
+    }
+
+    #[Test]
     public function bad_request_without_a_question_is_rejected(): void
     {
         $response = $this->controller(retriever: $this->retriever([]), provider: $this->provider(), configured: true)
@@ -139,7 +164,7 @@ final class ChatControllerTest extends TestCase
             /** @param list<Passage> $passages */
             public function __construct(private array $passages) {}
 
-            public function retrieve(string $query, int $k = 6): array
+            public function retrieve(string $query, string $community, int $k = 6): array
             {
                 return $this->passages;
             }

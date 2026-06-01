@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Provider;
 
 use App\Command\IngestDocsCommand;
+use App\Command\SeedGraphCommand;
 use App\Support\DocChunker;
 use Waaseyaa\CLI\CliIO;
 use Waaseyaa\CLI\CommandDefinition;
@@ -57,6 +58,28 @@ final class IngestDocsServiceProvider extends ServiceProvider implements HasNati
                 );
 
                 return $command->run($io);
+            },
+        );
+
+        yield new CommandDefinition(
+            name: 'app:seed-graph',
+            description: 'Seed the Anokii relational graph (communities, places, services, the shared project) and backfill chunk links.',
+            options: [
+                new OptionDefinition(
+                    name: 'dry-run',
+                    mode: OptionMode::None,
+                    description: 'Report what would be seeded without writing.',
+                ),
+            ],
+            handler: function (CliIO $io): int {
+                $entityTypeManager = $this->resolve(EntityTypeManager::class);
+                $types = ['topic', 'place', 'community', 'organization', 'service', 'project', 'doc_chunk'];
+                $repos = [];
+                foreach ($types as $type) {
+                    $repos[$type] = $entityTypeManager->getRepository($type);
+                }
+
+                return new SeedGraphCommand($repos)->run($io);
             },
         );
     }

@@ -14,21 +14,31 @@ namespace App\Support;
  */
 final class ChatPromptBuilder
 {
-    /** Standard refusal, also used directly when retrieval finds nothing. */
+    /** Standard refusal (Sagamok vantage), also used directly when retrieval finds nothing. */
     public const NO_ANSWER = "I don't know from the OIATC site. For this, contact the band directly, and use the official Sagamok directory at sagamokanishnawbek.com.";
 
-    public function system(): string
+    /** Massey vantage refusal: the corpus is thin, so it points to the explainers. */
+    public const NO_ANSWER_MASSEY = "I don't know that from the Anokii content for Massey yet, which is limited right now. For the Massey Solar Project, see the explainers at /explainers/massey-solar-project. For other matters, contact your community office directly.";
+
+    public function system(string $community = 'sagamok'): string
     {
+        $noAnswer = $this->noAnswerFor($community);
+
         return <<<PROMPT
-            You are the OIATC site assistant. OIATC (the Ontario Indigenous AI & Technology Council) publishes plain-language community resources. You answer questions using ONLY the numbered passages provided in the user's message.
+            You are the Anokii community assistant on the OIATC site. OIATC (the Ontario Indigenous AI & Technology Council) publishes plain-language, public community resources. You answer questions using ONLY the numbered passages provided in the user's message.
+
+            Each passage carries a "location" describing how its resource relates to the community being asked from: the community's own place, a place in its surrounding region, or a shared project. Resources can come from the surrounding region, that is expected.
 
             Rules:
             - Answer ONLY from the passages. Do not use outside knowledge.
-            - If the passages do not contain the answer, reply exactly: "{$this->noAnswer()}" Do not guess.
-            - Cite the page you used at the end of each relevant point, as "(source: <title> — <source_url>)". Use only source_url and title values that appear in the passages.
-            - Never invent phone numbers, names, emails, links, or programs. If a contact is not in the passages, do not state one.
-            - Do not ask for, collect, or store any personal information. If a question needs the user's personal details, tell them to contact the band directly instead.
-            - Keep answers short and plain. This is general information from public pages, not legal, medical, or financial advice, and not affiliated with or endorsed by Sagamok Chief and Council.
+            - If the passages do not contain the answer, reply exactly: "{$noAnswer}" Do not guess.
+            - When a resource sits in the surrounding region or is a shared project rather than in the community itself, say so plainly using its location.
+            - Cite the page you used at the end of each relevant point, as "(source: <title>, <source_url>)". Use only source_url and title values that appear in the passages.
+            - Never invent phone numbers, names, emails, links, programs, distances, or travel times. If a contact is not in the passages, do not state one.
+            - Do not ask for, collect, or store any personal information. If a question needs the user's personal details, tell them to contact their community office directly instead.
+            - Keep answers short and plain.
+            - Never use em dashes or en dashes. Use commas, periods, or parentheses instead.
+            - Do not add a disclaimer, affiliation note, or "general information / not legal advice" caveat. The page already shows one below your answer. Stop once the question is answered.
             - For emergencies, tell the user to call 911.
             PROMPT;
     }
@@ -41,15 +51,37 @@ final class ChatPromptBuilder
         $blocks = [];
         foreach ($passages as $i => $p) {
             $n = $i + 1;
-            $blocks[] = "[Passage {$n}] title: {$p->title} | heading: {$p->heading} | source_url: {$p->sourceUrl}\n{$p->text}";
+            $location = $p->relationship !== '' ? $p->relationship : 'OIATC';
+            $blocks[] = "[Passage {$n}] title: {$p->title} | heading: {$p->heading} | location: {$location} | source_url: {$p->sourceUrl}\n{$p->text}";
         }
         $context = $blocks === [] ? '(no passages found)' : implode("\n\n", $blocks);
 
         return "Question: {$question}\n\nPassages:\n{$context}";
     }
 
-    private function noAnswer(): string
+    /**
+     * The exact refusal text for a vantage community: Sagamok points to the band
+     * directory; Massey, whose corpus is thin, points to the Massey explainers.
+     */
+    public function noAnswerFor(string $community): string
     {
-        return self::NO_ANSWER;
+        return $community === 'massey' ? self::NO_ANSWER_MASSEY : self::NO_ANSWER;
+    }
+
+    /**
+     * Deterministically strip em dashes (U+2014) and en dashes (U+2013) from
+     * model text before it ships, so a stray dash never reaches the browser even
+     * if the model ignores the system-prompt rule. An em dash (clause separator)
+     * collapses with its surrounding spaces into a comma; an en dash (usually a
+     * range) becomes a plain hyphen so "9-5" stays readable. Newlines are left
+     * intact so the client-side markdown render is unaffected. Pure/testable.
+     */
+    public static function sanitizeDashes(string $text): string
+    {
+        // Em dash, with any surrounding spaces/tabs (not newlines), becomes ", ".
+        $text = preg_replace('/[ \t]*\x{2014}[ \t]*/u', ', ', $text) ?? $text;
+
+        // En dash becomes a hyphen-minus (keeps numeric ranges readable).
+        return str_replace("\u{2013}", '-', $text);
     }
 }

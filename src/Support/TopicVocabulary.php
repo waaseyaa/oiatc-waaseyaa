@@ -1,0 +1,102 @@
+<?php
+
+declare(strict_types=1);
+
+namespace App\Support;
+
+/**
+ * The canonical Anokii topic vocabulary and the keyword inference used to map a
+ * question (and a doc_chunk) to a topic slug.
+ *
+ * This is the single source of truth shared by the seeder (which creates Topic
+ * entities and tags Services/Projects, and assigns each Sagamok chunk to a
+ * topic-matched Service) and the retriever (which infers the question's topic so
+ * topic match can drive ranking). Keyword matching only; no embeddings.
+ */
+final class TopicVocabulary
+{
+    /**
+     * slug => [name, keywords]. Multi-word keywords are matched as substrings of
+     * the lower-cased question; single words are matched as whole tokens.
+     *
+     * @var array<string, array{name: string, keywords: list<string>}>
+     */
+    private const TOPICS = [
+        'housing' => [
+            'name' => 'Housing',
+            'keywords' => ['housing', 'house', 'home', 'rent', 'rental', 'rent-to-own', 'landlord', 'eviction', 'repair', 'maintenance', 'renovation', 'mortgage', 'cmhc', 'waiting list'],
+        ],
+        'employment-training' => [
+            'name' => 'Employment and training',
+            'keywords' => ['job', 'jobs', 'employment', 'work', 'training', 'career', 'hire', 'hiring', 'resume', 'apprentice', 'apprenticeship', 'lifelong learning', 'self-employment', 'upgrading'],
+        ],
+        'business' => [
+            'name' => 'Business and economic development',
+            'keywords' => ['business', 'entrepreneur', 'entrepreneurial', 'startup', 'start-up', 'economic development', 'enterprise', 'company', 'loan', 'sdc'],
+        ],
+        'health-wellness' => [
+            'name' => 'Health and wellness',
+            'keywords' => ['health', 'wellness', 'mental', 'addictions', 'addiction', 'nurse', 'medical', 'clinic', 'doctor', 'counselling', 'counseling', 'crisis', 'wellbeing', 'medical transportation', 'nogdawindamin'],
+        ],
+        'finance' => [
+            'name' => 'Finance and per capita',
+            'keywords' => ['per capita', 'per-capita', 'finance', 'deposit', 'pre-authorized', 'payment', 'cheque', 'payout', 'distribution', 'banking'],
+        ],
+        'membership-status' => [
+            'name' => 'Membership and status',
+            'keywords' => ['membership', 'member', 'status card', 'status', 'register', 'registration', 'band number', 'citizenship', 'enrolment', 'enrollment'],
+        ],
+        'lands-environment' => [
+            'name' => 'Lands and environment',
+            'keywords' => ['land', 'lands', 'hunting', 'fishing', 'harvest', 'environment', 'territory', 'trapping', 'water', 'lre'],
+        ],
+        'education-youth' => [
+            'name' => 'Education and youth',
+            'keywords' => ['school', 'student', 'youth', 'children', 'daycare', 'scholarship', 'tuition', 'post-secondary', 'kids', 'education'],
+        ],
+        'energy-solar' => [
+            'name' => 'Energy and solar',
+            'keywords' => ['solar', 'energy', 'battery', 'bess', 'panel', 'electricity', 'renewable', 'grid', 'megawatt', 'ieso', 'iesos', 'massey solar', 'storage'],
+        ],
+    ];
+
+    /**
+     * @return array<string, array{name: string, keywords: list<string>}>
+     */
+    public function all(): array
+    {
+        return self::TOPICS;
+    }
+
+    /**
+     * Infer the best-matching topic slug for a piece of text, or null when no
+     * topic's keywords appear. The topic with the most distinct keyword hits
+     * wins; ties resolve to the earliest-declared topic for determinism.
+     */
+    public function infer(string $text): ?string
+    {
+        $haystack = ' ' . strtolower(preg_replace('/[^a-z0-9 ]+/i', ' ', $text) ?? '') . ' ';
+
+        $best = null;
+        $bestScore = 0;
+        foreach (self::TOPICS as $slug => $topic) {
+            $hits = 0;
+            foreach ($topic['keywords'] as $keyword) {
+                $needle = str_contains($keyword, ' ') ? $keyword : ' ' . $keyword . ' ';
+                if (str_contains($keyword, ' ')) {
+                    if (str_contains($haystack, ' ' . $keyword . ' ') || str_contains($haystack, ' ' . $keyword)) {
+                        $hits++;
+                    }
+                } elseif (str_contains($haystack, $needle)) {
+                    $hits++;
+                }
+            }
+            if ($hits > $bestScore) {
+                $bestScore = $hits;
+                $best = $slug;
+            }
+        }
+
+        return $best;
+    }
+}

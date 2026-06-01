@@ -1,0 +1,137 @@
+{#
+  Co-Intelligence chat module. Grounded, cited answers over the shared graph from
+  the vantage of {{ community }}. Streams plain text for the live feel, then
+  renders the accumulated markdown to sanitized HTML on completion. Sends the
+  vantage community on the /api/chat body. Collects no personal information.
+#}
+<section class="ak-module is-active" data-module="cointelligence" aria-label="Co-Intelligence">
+  <p class="r-lead">Ask a plain-language question. Answers are drawn only from OIATC's public pages for {{ communityName }} and its surrounding region, with the source linked. It does not collect any personal information.</p>
+  <form class="r-ask__form" id="r-ask-form" data-community="{{ community }}">
+    <input class="r-ask__input" id="r-ask-input" type="text" maxlength="500" autocomplete="off"
+           placeholder="e.g. How do I apply for housing? Who do I call about per capita?" aria-label="Your question">
+    <button class="r-ask__send" id="r-ask-send" type="submit">Ask</button>
+  </form>
+  <div class="r-ask__answer" id="r-ask-answer" aria-live="polite"></div>
+  <div class="r-ask__sources" id="r-ask-sources"></div>
+  <p class="r-ask__hint">General information from public pages, not legal, medical, or financial advice, and not affiliated with or endorsed by the community. Always confirm with the community office. For emergencies, call 911.</p>
+
+  <script>
+    (function () {
+      var askForm = document.getElementById('r-ask-form');
+      if (!askForm) { return; }
+      var community = askForm.getAttribute('data-community') || 'sagamok';
+      var askInput = document.getElementById('r-ask-input');
+      var askSend = document.getElementById('r-ask-send');
+      var askAnswer = document.getElementById('r-ask-answer');
+      var askSources = document.getElementById('r-ask-sources');
+
+      function renderSources(sources) {
+        if (!sources || !sources.length) { askSources.innerHTML = ''; return; }
+        var links = sources.map(function (s) {
+          var a = document.createElement('a');
+          a.href = s.source_url; a.textContent = s.title || s.source_url;
+          return a.outerHTML;
+        });
+        askSources.innerHTML = 'Sources: ' + links.join(' &middot; ');
+      }
+
+      function drainFrames(buffer, onFrame) {
+        var parts = buffer.split('\n\n');
+        var rest = parts.pop();
+        parts.forEach(function (frame) {
+          var event = 'message', data = '';
+          frame.split('\n').forEach(function (line) {
+            if (line.indexOf('event:') === 0) { event = line.slice(6).trim(); }
+            else if (line.indexOf('data:') === 0) { data += line.slice(5).trim(); }
+          });
+          if (data) { try { onFrame(event, JSON.parse(data)); } catch (e) {} }
+        });
+        return rest;
+      }
+
+      // Minimal safe markdown renderer: bold, bullet lists, links, paragraphs.
+      // Headings become bold paragraphs; rules and blockquote markers drop.
+      // Everything is HTML-escaped first and only whitelisted tags are emitted.
+      function escapeHtml(s) {
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+      }
+      function inlineMd(s) {
+        s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (m, text, url) {
+          if (!/^https?:\/\//.test(url) && url.charAt(0) !== '/') { return text; }
+          return '<a href="' + url + '" target="_blank" rel="noopener">' + text + '</a>';
+        });
+        return s.replace(/\*\*([^*]+)\*\*/g, '<strong>$1</strong>');
+      }
+      function renderMarkdown(src) {
+        var lines = escapeHtml(src).split('\n');
+        var html = '', para = [], i = 0;
+        function flushPara() {
+          if (para.length) { html += '<p>' + inlineMd(para.join('<br>')) + '</p>'; para = []; }
+        }
+        while (i < lines.length) {
+          var t = lines[i].trim();
+          if (/^([-*_])\1{2,}$/.test(t)) { flushPara(); i++; continue; }
+          if (/^[-*]\s+/.test(t)) {
+            flushPara();
+            var items = '';
+            while (i < lines.length && /^[-*]\s+/.test(lines[i].trim())) {
+              items += '<li>' + inlineMd(lines[i].trim().replace(/^[-*]\s+/, '')) + '</li>';
+              i++;
+            }
+            html += '<ul>' + items + '</ul>';
+            continue;
+          }
+          if (/^#{1,6}\s+/.test(t)) {
+            flushPara();
+            html += '<p><strong>' + inlineMd(t.replace(/^#{1,6}\s+/, '')) + '</strong></p>';
+            i++;
+            continue;
+          }
+          if (/^&gt;\s?/.test(t)) { para.push(t.replace(/^&gt;\s?/, '')); i++; continue; }
+          if (t === '') { flushPara(); i++; continue; }
+          para.push(t);
+          i++;
+        }
+        flushPara();
+        return html;
+      }
+
+      askForm.addEventListener('submit', function (e) {
+        e.preventDefault();
+        var question = (askInput.value || '').trim();
+        if (!question) { return; }
+        askSend.disabled = true;
+        askAnswer.textContent = '';
+        askSources.innerHTML = '';
+        var raw = '';
+
+        fetch('/api/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
+          body: JSON.stringify({ question: question, community: community }),
+        }).then(function (resp) {
+          if (resp.status === 429) { askAnswer.textContent = 'Too many questions just now. Please wait a moment and try again.'; askSend.disabled = false; return; }
+          if (!resp.ok || !resp.body) { askAnswer.textContent = 'Sorry, something went wrong. Please try again.'; askSend.disabled = false; return; }
+          var reader = resp.body.getReader();
+          var decoder = new TextDecoder();
+          var buffer = '';
+          function pump() {
+            return reader.read().then(function (result) {
+              if (result.done) { askSend.disabled = false; return; }
+              buffer += decoder.decode(result.value, { stream: true });
+              buffer = drainFrames(buffer, function (event, data) {
+                if (event === 'delta' && data.text) { raw += data.text; askAnswer.textContent = raw; }
+                else if (event === 'done') { askAnswer.innerHTML = renderMarkdown(raw); renderSources(data.sources); }
+              });
+              return pump();
+            });
+          }
+          return pump();
+        }).catch(function () {
+          askAnswer.textContent = 'Sorry, something went wrong. Please try again.';
+          askSend.disabled = false;
+        });
+      });
+    })();
+  </script>
+</section>

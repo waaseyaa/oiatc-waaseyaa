@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Anokii · OIATC{% endblock %}
+{% block description %}Anokii is a shared community knowledge graph from OIATC. One graph, many vantage points: communities, the resources around them, and the projects they share. Independent of the communities named; public information only.{% endblock %}
+{% block body_class %}route-anokii-home{% endblock %}
+{% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
+
+{% block head_styles %}
+  <style>
+    .akh-wrap { max-width: 880px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+    .akh-lead { color: var(--ink-2); max-width: 64ch; margin: 0 0 var(--gap-6); }
+    .akh-h { font-family: var(--font-mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: var(--gap-6) 0 var(--gap-3); }
+    .akh-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: var(--gap-3); }
+    .akh-comm { display: block; text-decoration: none; background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius-md); padding: 18px; color: var(--ink); }
+    .akh-comm:hover { border-color: var(--accent); background: var(--paper-2); }
+    .akh-comm b { font-family: var(--font-sans); font-size: 17px; }
+    .akh-comm span { display: block; color: var(--ink-3); font-size: 13.5px; margin-top: 4px; }
+    .akh-mods { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: var(--gap-2); }
+    .akh-mod { border: 1px solid var(--rule); border-radius: var(--radius-md); padding: 12px 14px; font-family: var(--font-sans); font-size: 14.5px; color: var(--ink-2); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .akh-mod.is-live { color: var(--ink); border-color: var(--accent-soft); background: var(--accent-wash); }
+    .akh-tag { font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 1px 7px; }
+    .akh-note { font-size: 13px; color: var(--ink-3); margin: var(--gap-6) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); max-width: 72ch; }
+  </style>
+{% endblock %}
+
+{% block content %}
+<div class="akh-wrap">
+  <div class="eyebrow">OIATC · Anokii</div>
+  <h1 class="display">Anokii</h1>
+  <p class="lede akh-lead">One shared community knowledge graph, seen from many vantage points. A community is a point of view onto the graph, not a separate silo: resources cross community lines, and shared projects are related to several communities at once, never copied.</p>
+
+  <p class="akh-h">Communities</p>
+  <div class="akh-grid">
+    {% for slug, c in communities %}
+      <a class="akh-comm" href="/anokii/{{ slug }}"><b>{{ c.name }}</b><span>Open the {{ c.name }} vantage</span></a>
+    {% endfor %}
+  </div>
+
+  <p class="akh-h">Modules</p>
+  <div class="akh-mods">
+    <div class="akh-mod is-live">Co-Intelligence <span class="akh-tag">Live</span></div>
+    <div class="akh-mod is-live">Resources <span class="akh-tag">Live</span></div>
+    <div class="akh-mod">Drive <span class="akh-tag">Preview</span></div>
+    <div class="akh-mod">Data Rooms <span class="akh-tag">Preview</span></div>
+    <div class="akh-mod">Workspaces <span class="akh-tag">Preview</span></div>
+    <div class="akh-mod">Vault <span class="akh-tag">Preview</span></div>
+    <div class="akh-mod">Governance <span class="akh-tag">Preview</span></div>
+    <div class="akh-mod">Portal <span class="akh-tag">Preview</span></div>
+  </div>
+
+  <p class="akh-note">Anokii is a community resource from OIATC, the Ontario Indigenous AI and Technology Council. It is independent of the communities and organizations named, draws only on public information, and collects no personal information.</p>
+</div>
+{% endblock %}

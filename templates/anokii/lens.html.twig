@@ -1,0 +1,106 @@
+{% extends 'anokii/_shell.html.twig' %}
+
+{% block title %}{{ communityName }} · Anokii · OIATC{% endblock %}
+{% block description %}Anokii is a shared community knowledge graph from OIATC. Ask plain-language questions and browse public resources from the vantage of {{ communityName }} and its surrounding region. Independent of {{ communityName }}, draws only on public information.{% endblock %}
+
+{% block head_meta %}
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://oiatc.ca/anokii/{{ community }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ communityName }} · Anokii · OIATC">
+  <meta property="og:description" content="A shared community knowledge graph from OIATC, from the vantage of {{ communityName }}.">
+  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
+{% endblock %}
+
+{% block head_styles %}
+  {{ parent() }}
+  <style>
+    /* Resources + Co-Intelligence module styling, namespaced .r-* so it never
+       collides with site.css. Uses the site's own design tokens throughout. */
+    .r-note { font-size: 14px; color: var(--ink-3); margin: var(--gap-4) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); max-width: 72ch; }
+    .r-lead { color: var(--ink-2); margin: 0 0 var(--gap-5); max-width: 64ch; }
+
+    .r-search { position: relative; margin: var(--gap-5) 0 var(--gap-2); }
+    .r-search input { width: 100%; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-md); color: var(--ink); font-family: var(--font-sans); font-size: 16px; padding: 13px 16px 13px 44px; outline: none; }
+    .r-search input:focus { border-color: var(--accent); }
+    .r-search svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-3); }
+    .r-nores { display: none; color: var(--ink-3); font-size: 14px; padding: var(--gap-4) 2px; }
+
+    .r-tabs { display: flex; gap: var(--gap-3); flex-wrap: wrap; margin: var(--gap-4) 0 var(--gap-5); border-bottom: 1px solid var(--rule); }
+    .r-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--ink-3); font-family: var(--font-sans); font-weight: 600; font-size: 15px; padding: 10px 6px; margin-bottom: -1px; cursor: pointer; }
+    .r-tab:hover { color: var(--ink); }
+    .r-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+    .r-panel { display: none; }
+    .r-panel.is-active { display: block; animation: r-fade .2s ease; }
+    @keyframes r-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .r-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap-3); }
+    .r-card { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius-md); overflow: hidden; }
+    .r-card > button { width: 100%; text-align: left; background: none; border: 0; color: var(--ink); font-family: var(--font-sans); font-size: 16px; font-weight: 600; padding: 16px 18px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .r-card > button:hover { background: var(--paper-2); }
+    .r-card .r-chev { transition: transform .2s; color: var(--ink-3); flex: none; font-size: 20px; line-height: 1; }
+    .r-card.is-open .r-chev { transform: rotate(90deg); }
+    .r-card .r-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 15.5px; }
+    .r-card.is-open .r-body { display: block; }
+    .r-card .r-body p { margin: 14px 0 0; }
+
+    .r-who { display: flex; flex-wrap: wrap; gap: var(--gap-2); margin: 14px 0 0; }
+    .r-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 6px 12px; font-family: var(--font-sans); font-size: 13.5px; color: var(--ink-2); }
+    .r-pill b { color: var(--ink); font-weight: 600; }
+
+    .r-doors { margin: 14px 0 0; border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+    .r-doors h4 { margin: 0 0 6px; font-family: var(--font-sans); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-deep); }
+    .r-doors p { margin: 8px 0 0; font-size: 14.5px; }
+
+    .r-flag { margin: 14px 0 0; border-left: 3px solid var(--rule-strong); padding: 2px 0 2px 16px; color: var(--ink-2); font-size: 14.5px; }
+    .r-flag b { color: var(--ink); }
+
+    .r-council h3 { font-family: var(--font-sans); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-deep); margin: 28px 0 8px; }
+    .r-council p { color: var(--ink-2); margin: 0 0 14px; max-width: 66ch; }
+
+    /* Co-Intelligence (chat) */
+    .r-ask__form { display: flex; gap: var(--gap-2); margin: var(--gap-3) 0 var(--gap-2); flex-wrap: wrap; }
+    .r-ask__input { flex: 1 1 280px; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-md); color: var(--ink); font-family: var(--font-sans); font-size: 16px; padding: 12px 14px; outline: none; }
+    .r-ask__input:focus { border-color: var(--accent); }
+    .r-ask__send { font-family: var(--font-sans); font-weight: 600; font-size: 15px; background: var(--accent); color: var(--paper); border: 0; border-radius: var(--radius-md); padding: 12px 20px; cursor: pointer; }
+    .r-ask__send:hover { background: var(--accent-deep); }
+    .r-ask__send:disabled { opacity: .55; cursor: default; }
+    .r-ask__answer { margin: var(--gap-4) 0 0; min-height: 1.6em; color: var(--ink); font-size: 16px; line-height: 1.7; }
+    .r-ask__answer p { margin: 0 0 .75em; }
+    .r-ask__answer p:last-child { margin-bottom: 0; }
+    .r-ask__answer ul { margin: .4em 0 .85em; padding-left: 1.3em; }
+    .r-ask__answer li { margin: .2em 0; }
+    .r-ask__answer strong { font-weight: 650; }
+    .r-ask__answer a { color: var(--accent-deep); }
+    .r-ask__sources { margin: var(--gap-3) 0 0; font-size: 13.5px; color: var(--ink-3); }
+    .r-ask__sources a { color: var(--accent-deep); }
+    .r-ask__hint { font-size: 13px; color: var(--ink-3); margin: var(--gap-2) 0 0; }
+  </style>
+{% endblock %}
+
+{% block module %}
+  {% include 'anokii/_chat.html.twig' %}
+
+  {% if community == 'sagamok' %}
+    {% include 'anokii/_sagamok-resources.html.twig' %}
+  {% else %}
+    <section class="ak-module" data-module="resources" aria-label="Resources">
+      <div class="eyebrow">OIATC · Resources · {{ communityName }}</div>
+      <h1 class="display">{{ communityName }} resources</h1>
+      <p class="r-lead">Anokii's {{ communityName }} content begins with the Massey Solar Project, a shared project that also relates to Sagamok. The corpus here is limited right now, so for detail, read the explainers below or ask the Co-Intelligence module.</p>
+      <div class="r-grid">
+        <div class="r-card is-open">
+          <button type="button"><span>Massey Solar Project</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>A plain-language explainer cluster from OIATC on the Massey Solar Project:</p>
+            <p>&bull; <a href="/explainers/massey-solar-project">The Massey Solar Project in 2026, a guide</a><br>
+            &bull; <a href="/explainers/massey-solar-project-what-youve-heard">What you've heard, checked against the record</a><br>
+            &bull; <a href="/explainers/massey-solar-project-voices">Voices from the community</a></p>
+          </div>
+        </div>
+      </div>
+      <p class="r-note">Massey's Anokii corpus is limited to the public Massey Solar explainers for now. OIATC has not published other Massey services here, so the assistant will say when it does not know and point you to the explainers.</p>
+    </section>
+  {% endif %}
+{% endblock %}
