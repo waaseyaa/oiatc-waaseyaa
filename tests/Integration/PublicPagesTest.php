@@ -263,6 +263,12 @@ final class PublicPagesTest extends TestCase
         $this->assertStringContainsString('does not take a position', $html);
         $this->assertStringContainsString('Renewable Energy Approval', $html);
         $this->assertStringContainsString('ieso.ca', $html);
+        // Source citations point at specific source pages, open in a new tab with
+        // rel="noopener", and never link a bare domain root.
+        $this->assertStringContainsString('href="https://www.ieso.ca/en/Learn/Ontario-Electricity-Grid/Supply-Mix-and-Generation" target="_blank" rel="noopener"', $html);
+        $this->assertStringContainsString('href="https://www.ontario.ca/document/technical-guide-renewable-energy-approvals-0/chapter-7-guidance-preparing-decommissioning" target="_blank" rel="noopener"', $html);
+        $this->assertStringNotContainsString('href="https://www.ieso.ca"', $html, 'No bare domain-root source links.');
+        $this->assertStringNotContainsString('href="https://www.ipcc.ch"', $html);
         // In-text references to the main explainer link to it.
         $this->assertStringContainsString('href="/explainers/massey-solar-project"', $html);
         // Standard cluster byline/footer.
