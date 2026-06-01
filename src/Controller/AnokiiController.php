@@ -38,14 +38,18 @@ final class AnokiiController
         'sagamok' => [
             'How do I apply for housing?',
             'I want to start a business',
-            'Where do I get mental health support?',
-            'Who handles per capita?',
+            'Where can I get mental health support?',
+            'I need to see a doctor, where do I go?',
+            'How do I apply for Ontario Works?',
             'How do I bring something to Council?',
         ],
         'massey' => [
             'What is the Massey Solar Project?',
-            'What have people heard about the solar project?',
-            'How does the solar project relate to Sagamok?',
+            'Will the solar project help with climate change?',
+            'What about the farmland, water, and wildlife?',
+            'What happens to the panels at the end of their life?',
+            'Where is the project in the approval process?',
+            'How does the project relate to Sagamok?',
         ],
     ];
 

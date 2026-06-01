@@ -140,17 +140,40 @@ final class PublicPagesTest extends TestCase
     #[Test]
     public function each_lens_renders_its_communitys_suggested_prompts(): void
     {
+        $sagamokPrompts = [
+            'How do I apply for housing?',
+            'I want to start a business',
+            'Where can I get mental health support?',
+            'I need to see a doctor, where do I go?',
+            'How do I apply for Ontario Works?',
+            'How do I bring something to Council?',
+        ];
+        $masseyPrompts = [
+            'What is the Massey Solar Project?',
+            'Will the solar project help with climate change?',
+            'What about the farmland, water, and wildlife?',
+            'What happens to the panels at the end of their life?',
+            'Where is the project in the approval process?',
+            'How does the project relate to Sagamok?',
+        ];
+
         $sagamok = (string) new AnokiiController()->sagamok()->getContent();
         $this->assertStringContainsString('class="r-ask__pill"', $sagamok, 'Pills render on the Sagamok lens.');
-        $this->assertStringContainsString('data-q="How do I apply for housing?"', $sagamok);
-        $this->assertStringContainsString('How do I bring something to Council?', $sagamok);
-        $this->assertStringNotContainsString('What is the Massey Solar Project?', $sagamok, 'Sagamok lens must not show Massey pills.');
+        foreach ($sagamokPrompts as $prompt) {
+            $this->assertStringContainsString('data-q="' . $prompt . '"', $sagamok, sprintf('Sagamok lens shows: %s', $prompt));
+        }
+        foreach ($masseyPrompts as $prompt) {
+            $this->assertStringNotContainsString('data-q="' . $prompt . '"', $sagamok, 'Sagamok lens must not show Massey pills.');
+        }
 
         $massey = (string) new AnokiiController()->massey()->getContent();
         $this->assertStringContainsString('class="r-ask__pill"', $massey, 'Pills render on the Massey lens.');
-        $this->assertStringContainsString('data-q="What is the Massey Solar Project?"', $massey);
-        $this->assertStringContainsString('How does the solar project relate to Sagamok?', $massey);
-        $this->assertStringNotContainsString('Who handles per capita?', $massey, 'Massey lens must not show Sagamok pills.');
+        foreach ($masseyPrompts as $prompt) {
+            $this->assertStringContainsString('data-q="' . $prompt . '"', $massey, sprintf('Massey lens shows: %s', $prompt));
+        }
+        foreach ($sagamokPrompts as $prompt) {
+            $this->assertStringNotContainsString('data-q="' . $prompt . '"', $massey, 'Massey lens must not show Sagamok pills.');
+        }
     }
 
     #[Test]
