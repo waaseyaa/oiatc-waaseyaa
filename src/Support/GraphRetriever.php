@@ -161,7 +161,7 @@ final class GraphRetriever implements RetrieverInterface
      *
      * @param array{source_url: string, title: string, heading: string, text: string, entity_type: string, entity_id: string} $chunk
      * @param array<string, bool> $regionSet
-     * @param array<string, array{place: string, topic: string}> $services
+     * @param array<string, array{name: string, place: string, topic: string}> $services
      * @param array<string, array{name: string, place: string, topic: string, relates: list<string>}> $projects
      * @param array<string, array{name: string, lat: float, lng: float, travel: string}> $places
      *
@@ -175,7 +175,14 @@ final class GraphRetriever implements RetrieverInterface
         if ($type === 'service' && isset($services[$id])) {
             $place = $services[$id]['place'];
             $topic = $services[$id]['topic'];
-            if ($place !== '' && $place === $ownPlace) {
+            // A province-wide service (no single town, e.g. a helpline) has an
+            // empty place. It is reachable from any vantage as broader content and
+            // is labelled by its own name, never pinned to a town or implied to be
+            // OIATC's. Ranked after own and region by closeness.
+            if ($place === '') {
+                return ['place' => '', 'topic' => $topic, 'relationship' => $services[$id]['name'], 'closeness' => self::CLOSE_BROADER];
+            }
+            if ($place === $ownPlace) {
                 return ['place' => $place, 'topic' => $topic, 'relationship' => $this->placeName($places, $place), 'closeness' => self::CLOSE_OWN];
             }
             if (isset($regionSet[$place])) {
@@ -267,17 +274,18 @@ final class GraphRetriever implements RetrieverInterface
     }
 
     /**
-     * @return array<string, array{place: string, topic: string}>
+     * @return array<string, array{name: string, place: string, topic: string}>
      */
     private function loadServices(): array
     {
         $out = [];
-        foreach ($this->rows('SELECT name, _data FROM service') as [, $data]) {
+        foreach ($this->rows('SELECT name, _data FROM service') as [$name, $data]) {
             $slug = (string) ($data['slug'] ?? '');
             if ($slug === '') {
                 continue;
             }
             $out[$slug] = [
+                'name' => $name,
                 'place' => (string) ($data['located_at'] ?? ''),
                 'topic' => (string) ($data['has_topic'] ?? ''),
             ];

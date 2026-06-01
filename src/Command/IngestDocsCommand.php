@@ -195,6 +195,11 @@ final class IngestDocsCommand
         $deleted = 0;
         if ($prune) {
             foreach ($byKey as $key => $existing) {
+                // Curated chunks are owned by app:seed-graph, not extracted from a
+                // published page, so a page-ingest run must not prune them.
+                if (str_starts_with($key, SeedGraphCommand::CURATED_KEY_PREFIX)) {
+                    continue;
+                }
                 if (!isset($seen[$key])) {
                     $repo->delete($existing);
                     $deleted++;

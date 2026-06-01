@@ -24,19 +24,47 @@ final class TopicVocabulary
     private const TOPICS = [
         'housing' => [
             'name' => 'Housing',
-            'keywords' => ['housing', 'house', 'home', 'rent', 'rental', 'rent-to-own', 'landlord', 'eviction', 'repair', 'maintenance', 'renovation', 'mortgage', 'cmhc', 'waiting list'],
+            'keywords' => ['housing', 'house', 'home', 'rent', 'rental', 'rent-to-own', 'landlord', 'eviction', 'repair', 'maintenance', 'renovation', 'mortgage', 'cmhc', 'waiting list', 'shelter', 'homeless', 'homelessness', 'social housing', 'community housing', 'rent-geared-to-income'],
         ],
         'employment-training' => [
-            'name' => 'Employment and training',
-            'keywords' => ['job', 'jobs', 'employment', 'work', 'training', 'career', 'hire', 'hiring', 'resume', 'apprentice', 'apprenticeship', 'lifelong learning', 'self-employment', 'upgrading'],
+            'name' => 'Jobs and training',
+            'keywords' => ['job', 'jobs', 'employment', 'work', 'training', 'career', 'hire', 'hiring', 'resume', 'apprentice', 'apprenticeship', 'lifelong learning', 'self-employment', 'upgrading', 'jobs and training', 'skills'],
         ],
         'business' => [
             'name' => 'Business and economic development',
             'keywords' => ['business', 'entrepreneur', 'entrepreneurial', 'startup', 'start-up', 'economic development', 'enterprise', 'company', 'loan', 'sdc'],
         ],
-        'health-wellness' => [
-            'name' => 'Health and wellness',
-            'keywords' => ['health', 'wellness', 'mental', 'addictions', 'addiction', 'nurse', 'medical', 'clinic', 'doctor', 'counselling', 'counseling', 'crisis', 'wellbeing', 'medical transportation', 'nogdawindamin'],
+        'primary-health' => [
+            'name' => 'Primary health',
+            'keywords' => ['health', 'primary care', 'primary health', 'doctor', 'physician', 'nurse', 'nurse practitioner', 'clinic', 'medical', 'health centre', 'health center', 'health access', 'health team', 'immunization', 'immunisation', 'vaccine', 'vaccination', 'public health', 'diabetes', 'foot care', 'prenatal'],
+        ],
+        'mental-health-addictions' => [
+            'name' => 'Mental health and addictions',
+            'keywords' => ['mental', 'mental health', 'addictions', 'addiction', 'counselling', 'counseling', 'crisis', 'wellness', 'wellbeing', 'well-being', 'substance', 'substance use', 'detox', 'withdrawal', 'suicide', 'trauma', 'healing', 'talk4healing', 'overdose', 'mental wellness'],
+        ],
+        'child-and-family' => [
+            'name' => 'Child and family',
+            'keywords' => ['child', 'children', 'childcare', 'child care', 'daycare', 'day care', 'family', 'families', 'parenting', 'parent', 'earlyon', 'early years', 'early on', 'infant', 'toddler', 'kids', 'child welfare', 'foster', 'nogdawindamin'],
+        ],
+        'income-support' => [
+            'name' => 'Income support',
+            'keywords' => ['ontario works', 'income support', 'social assistance', 'welfare', 'odsp', 'financial assistance', 'emergency assistance', 'social services', 'benefits'],
+        ],
+        'food-security' => [
+            'name' => 'Food security',
+            'keywords' => ['food', 'food bank', 'foodbank', 'food security', 'hunger', 'meal', 'meals', 'grocery', 'groceries', 'good food box', 'nutrition'],
+        ],
+        'transportation' => [
+            'name' => 'Transportation',
+            'keywords' => ['transportation', 'transit', 'bus', 'ride', 'rides', 'transport', 'driver', 'medical transportation', 'travel'],
+        ],
+        'legal-aid' => [
+            'name' => 'Legal aid',
+            'keywords' => ['legal', 'legal aid', 'lawyer', 'court', 'justice', 'gladue', 'duty counsel'],
+        ],
+        'education-youth' => [
+            'name' => 'Education and youth',
+            'keywords' => ['school', 'student', 'youth', 'scholarship', 'tuition', 'post-secondary', 'education', 'college', 'university', 'classroom'],
         ],
         'finance' => [
             'name' => 'Finance and per capita',
@@ -49,10 +77,6 @@ final class TopicVocabulary
         'lands-environment' => [
             'name' => 'Lands and environment',
             'keywords' => ['land', 'lands', 'hunting', 'fishing', 'harvest', 'environment', 'territory', 'trapping', 'water', 'lre'],
-        ],
-        'education-youth' => [
-            'name' => 'Education and youth',
-            'keywords' => ['school', 'student', 'youth', 'children', 'daycare', 'scholarship', 'tuition', 'post-secondary', 'kids', 'education'],
         ],
         'energy-solar' => [
             'name' => 'Energy and solar',

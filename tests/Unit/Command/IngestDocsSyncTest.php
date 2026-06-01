@@ -5,6 +5,7 @@ declare(strict_types=1);
 namespace App\Tests\Unit\Command;
 
 use App\Command\IngestDocsCommand;
+use App\Command\SeedGraphCommand;
 use App\Entity\DocChunk;
 use App\Support\ChunkData;
 use PHPUnit\Framework\Attributes\Test;
@@ -68,6 +69,28 @@ final class IngestDocsSyncTest extends TestCase
 
         self::assertSame(0, $result['deleted']);
         self::assertCount(3, $repo->findBy([]), 'With --no-prune, stale chunks remain.');
+    }
+
+    #[Test]
+    public function pruning_never_deletes_curated_chunks_owned_by_the_seeder(): void
+    {
+        $repo = $this->repository();
+        // A curated chunk created by app:seed-graph (external source, not a page).
+        $repo->save(DocChunk::make([
+            'chunk_key' => SeedGraphCommand::CURATED_KEY_PREFIX . 'nmninoeyaa',
+            'source_url' => 'https://maamwesying.ca/nmninoeyaa-aboriginal-health-access-centre',
+            'title' => 'Maamwesying',
+            'heading' => 'Primary care',
+            'text' => 'Sourced curated text.',
+            'entity_type' => 'service',
+            'entity_id' => 'nmninoeyaa',
+        ]));
+
+        // A page-ingest run that knows nothing about the curated chunk.
+        $result = IngestDocsCommand::syncChunks($repo, [$this->chunk('a')], prune: true);
+
+        self::assertSame(0, $result['deleted'], 'The curated chunk must not be pruned.');
+        self::assertArrayHasKey(SeedGraphCommand::CURATED_KEY_PREFIX . 'nmninoeyaa', $this->byKey($repo));
     }
 
     /**
