@@ -139,6 +139,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'resources.sagamok',
+            RouteBuilder::create('/resources/sagamok')
+                ->controller(fn() => $controller->sagamokResources())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         $database = $this->tryResolveDatabase();
         if ($database !== null) {
             $secret = getenv('WAASEYAA_ANALYTICS_SECRET')

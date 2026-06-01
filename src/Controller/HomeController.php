@@ -60,6 +60,11 @@ final class HomeController
         return $this->renderTemplate('disclosure/sagamok-portal.html.twig');
     }
 
+    public function sagamokResources(): Response
+    {
+        return $this->renderTemplate('resources/sagamok.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);

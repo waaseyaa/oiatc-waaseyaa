@@ -1,0 +1,390 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sagamok member resources · OIATC{% endblock %}
+{% block description %}A plain-language guide for Sagamok Anishnawbek members: how to get something done with the band, the programs you can access, and how Council works. A community resource from OIATC, independent of Sagamok Chief and Council.{% endblock %}
+{% block body_class %}route-resources-sagamok{% endblock %}
+{% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
+
+{% block head_meta %}
+  <meta name="robots" content="index,follow">
+  <link rel="canonical" href="https://oiatc.ca/resources/sagamok">
+  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://oiatc.ca/resources/sagamok">
+  <meta property="og:title" content="Sagamok member resources">
+  <meta property="og:description" content="How to get something done with the band, the programs you can access, and how Council works. A community resource from OIATC.">
+  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="Sagamok member resources">
+  <meta name="twitter:description" content="How to get something done with the band, the programs you can access, and how Council works.">
+  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+{% endblock %}
+
+{% block head_styles %}
+  <style>
+    /* Sagamok member resources: tabbed navigator/programs/council with search.
+       Namespaced .r-* so it never collides with site.css .card/.active/.open.
+       Styled entirely with the site's own design tokens. */
+    .r-wrap { max-width: 820px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+
+    .r-note { font-size: 14px; color: var(--ink-3); margin: var(--gap-4) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); max-width: 72ch; }
+    .r-lead { color: var(--ink-2); margin: 0 0 var(--gap-5); max-width: 64ch; }
+
+    .r-search { position: relative; margin: var(--gap-5) 0 var(--gap-2); }
+    .r-search input { width: 100%; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-md); color: var(--ink); font-family: var(--font-sans); font-size: 16px; padding: 13px 16px 13px 44px; outline: none; }
+    .r-search input:focus { border-color: var(--accent); }
+    .r-search svg { position: absolute; left: 15px; top: 50%; transform: translateY(-50%); color: var(--ink-3); }
+    .r-nores { display: none; color: var(--ink-3); font-size: 14px; padding: var(--gap-4) 2px; }
+
+    .r-tabs { display: flex; gap: var(--gap-3); flex-wrap: wrap; margin: var(--gap-4) 0 var(--gap-5); border-bottom: 1px solid var(--rule); }
+    .r-tab { appearance: none; background: none; border: 0; border-bottom: 2px solid transparent; color: var(--ink-3); font-family: var(--font-sans); font-weight: 600; font-size: 15px; padding: 10px 6px; margin-bottom: -1px; cursor: pointer; }
+    .r-tab:hover { color: var(--ink); }
+    .r-tab[aria-selected="true"] { color: var(--ink); border-bottom-color: var(--accent); }
+
+    .r-panel { display: none; }
+    .r-panel.is-active { display: block; animation: r-fade .2s ease; }
+    @keyframes r-fade { from { opacity: 0; transform: translateY(4px); } to { opacity: 1; transform: none; } }
+
+    .r-grid { display: grid; grid-template-columns: 1fr; gap: var(--gap-3); }
+    .r-card { background: var(--paper); border: 1px solid var(--rule); border-radius: var(--radius-md); overflow: hidden; }
+    .r-card > button { width: 100%; text-align: left; background: none; border: 0; color: var(--ink); font-family: var(--font-sans); font-size: 16px; font-weight: 600; padding: 16px 18px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+    .r-card > button:hover { background: var(--paper-2); }
+    .r-card .r-chev { transition: transform .2s; color: var(--ink-3); flex: none; font-size: 20px; line-height: 1; }
+    .r-card.is-open .r-chev { transform: rotate(90deg); }
+    .r-card .r-body { display: none; padding: 0 18px 18px; border-top: 1px solid var(--rule); color: var(--ink-2); font-size: 15.5px; }
+    .r-card.is-open .r-body { display: block; }
+    .r-card .r-body p { margin: 14px 0 0; }
+
+    .r-who { display: flex; flex-wrap: wrap; gap: var(--gap-2); margin: 14px 0 0; }
+    .r-pill { display: inline-flex; align-items: center; gap: 6px; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 6px 12px; font-family: var(--font-sans); font-size: 13.5px; color: var(--ink-2); }
+    .r-pill b { color: var(--ink); font-weight: 600; }
+
+    .r-doors { margin: 14px 0 0; border-left: 3px solid var(--accent); padding: 4px 0 4px 16px; }
+    .r-doors h4 { margin: 0 0 6px; font-family: var(--font-sans); font-size: 13px; letter-spacing: .04em; text-transform: uppercase; color: var(--accent-deep); }
+    .r-doors p { margin: 8px 0 0; font-size: 14.5px; }
+
+    /* "Not a Sagamok service" / context flags. */
+    .r-flag { margin: 14px 0 0; border-left: 3px solid var(--rule-strong); padding: 2px 0 2px 16px; color: var(--ink-2); font-size: 14.5px; }
+    .r-flag b { color: var(--ink); }
+
+    .r-council h3 { font-family: var(--font-sans); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-deep); margin: 28px 0 8px; }
+    .r-council p { color: var(--ink-2); margin: 0 0 14px; max-width: 66ch; }
+  </style>
+{% endblock %}
+
+{% block content %}
+<section class="sec">
+  <div class="r-wrap">
+
+    <div class="eyebrow">OIATC · Resources · Sagamok Anishnawbek</div>
+    <h1 class="display">Sagamok member resources</h1>
+    <p class="lede">Ahnii. A plain-language guide to getting things done with the band, the programs you can use, and how Council works. Tap a question to see where to go.</p>
+    <p class="r-note">A community resource put together by Russell Jones, a Sagamok Anishnawbek member, on behalf of OIATC. Independent of Sagamok Chief and Council and its administration. Everything links to an official Sagamok source. Contacts change over time; the <a href="https://www.sagamokanishnawbek.com/directory" target="_blank" rel="noopener">staff directory</a> is always the most current. Corrections welcome.</p>
+
+    <div class="r-search">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.3-4.3"/></svg>
+      <input id="r-q" type="search" placeholder="Search: housing, jobs, status card, business, health..." aria-label="Search resources">
+    </div>
+
+    <div class="r-tabs" role="tablist" aria-label="Sagamok resources">
+      <button class="r-tab" role="tab" aria-selected="true" data-panel="nav">Get something done</button>
+      <button class="r-tab" role="tab" aria-selected="false" data-panel="prog">Programs &amp; services</button>
+      <button class="r-tab" role="tab" aria-selected="false" data-panel="council">How Council works</button>
+    </div>
+
+    <p class="r-nores" id="r-nores">No matches. Try a different word, or clear the search.</p>
+
+    {# ---------------- NAVIGATOR ---------------- #}
+    <section id="nav" role="tabpanel" class="r-panel is-active" aria-label="Get something done">
+      <p class="r-lead">Not sure who handles your question? Find it below and start in the right place instead of getting bounced.</p>
+      <div class="r-grid" id="navgrid">
+
+        <div class="r-card" data-text="business start grow self employment entrepreneur company sdc economic development zgamok funding lifelong learning">
+          <button type="button"><span>Start or grow a business</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Business support sits in more than one place, which is the most common reason members get sent in circles. Here is which door is which.</p>
+            <div class="r-doors">
+              <h4>The three doors</h4>
+              <p><b>Sagamok Development Corporation (SDC)</b> offers entrepreneurial support. A good first door for an individual member with a business idea. General Manager: Evan O'Leary.</p>
+              <p><b>Band Economic Development</b> is the band-administration door. Manager: Arnelda Bennett (ext. 563).</p>
+              <p><b>Z'gamok Enterprises</b> is the resource-sector and contracting arm. The right door for construction and resource work, usually not for a small tech or service start-up.</p>
+            </div>
+            <p>For start-up support as a member, also ask the Lifelong Learning Centre (705-501-8950) about training and Self-Employment Assistance (see Programs).</p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="job jobs work training school education career coach lifelong learning employment self employment assistance">
+          <button type="button"><span>Find a job, training, or schooling</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Employment, training, and schooling run through Sagamok Education and its Lifelong Learning Centre. Call the Lifelong Learning Centre and ask about training and Self-Employment Assistance; a guidance and career coach can help with training plans and work goals.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Lifelong Learning Centre</b> 705-501-8950</span>
+              <span class="r-pill"><b>Guidance &amp; Career Coach</b> ext. 242</span>
+            </div>
+            <p><a href="https://sagamokeducation.ca/" target="_blank" rel="noopener">Open the Sagamok Education site</a></p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="house housing rent rental rent to own home build repair self help loan caldwell">
+          <button type="button"><span>Apply for housing</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>The Housing Department handles rentals, rent-to-own, self-help loans, and maintenance. To apply or ask where you sit on a list, contact them directly.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Housing Director</b> William Caldwell, ext. 130</span>
+            </div>
+            <p><a href="https://www.sagamokanishnawbek.com/housing-department" target="_blank" rel="noopener">Open the Housing Department page</a></p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="health nurse doctor medical mental health addictions counselling medical transportation travel home care elder youth wellness">
+          <button type="button"><span>See a nurse, get mental-health support, or arrange medical travel</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>The Community Wellness Department runs out of the health centre, Naandwedjige-Gamik.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Health centre</b> (705) 865-2171</span>
+            </div>
+            <p><a href="https://www.sagamokanishnawbek.com/community-wellness-department" target="_blank" rel="noopener">Open the Community Wellness page</a></p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="child family kids youth advocacy cfau resiliency support prevention nogdawindamin koognaasewin child welfare">
+          <button type="button"><span>Get help with a child and family matter</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Family and Community Support Services helps children, youth, and families through the Child and Family Advocacy Unit and related teams.</p>
+            <p>The Child and Family Advocacy Unit is a prevention service for families who are involved with, or at risk of involvement with, Nogdawindamin, the regional child welfare agency for the North Shore First Nations.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Child &amp; Family Advocacy Unit</b> (705) 865-3229</span>
+            </div>
+            <p><a href="https://www.sagamokanishnawbek.com/family-and-community-support-services" target="_blank" rel="noopener">Open the Family and Community Support page</a></p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="status card indian registration band membership estates renee owl member number">
+          <button type="button"><span>Ask about status, band membership, or estates</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Membership, Indian Registration and Estates handles status, band membership, and estates. Contact them directly rather than relying on the online forms.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Membership</b> Renee Owl, ext. 256</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="per capita distribution money payment pre authorized deposit finance pad">
+          <button type="button"><span>Ask about per capita or pre-authorized deposit</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Per capita distribution and pre-authorized deposit are handled by Finance. Contact them directly rather than relying on the online forms.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Finance</b> ext. 225</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="land hunting fishing environment lands resources lre keysis">
+          <button type="button"><span>Ask about land, hunting, fishing, or the environment</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Lands, Resources and Environment handles land, harvesting, and environmental matters.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Lands, Resources &amp; Environment</b> (705) 863-0494</span>
+            </div>
+            <p><a href="https://www.sagamokanishnawbek.com/lands-resources-and-environment" target="_blank" rel="noopener">Open the LRE page</a></p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="bylaw by-law victim services justice community justice police safety">
+          <button type="button"><span>Report a by-law issue or reach victim services</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>The Community Justice Program (Gweyaksijigewin Teg) handles by-law and victim services.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Community Justice</b> (705) 865-1884</span>
+              <span class="r-pill"><b>Anishinabek Police</b> 1-888-310-1122</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="elder elders long term care eagle lodge seniors">
+          <button type="button"><span>Reach Elder care or long-term care</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Long-term care and Elder support run through the Elders Eagle Lodge.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Elders Eagle Lodge</b> (705) 865-2926</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="council chief bring something agenda secretariat political office meeting toulouse">
+          <button type="button"><span>Bring something to Chief and Council</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>The path to Council runs through the Council Secretariat and Political Office. They handle correspondence and what goes on the agenda.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Council Secretariat</b> Andrea Hajt-Jacobs, ext. 133</span>
+              <span class="r-pill"><b>Political Office</b> Wade Owl, ext. 238</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {# ---------------- PROGRAMS ---------------- #}
+    <section id="prog" role="tabpanel" class="r-panel" aria-label="Programs and services">
+      <p class="r-lead">What you can access, what each one is, and where to go. OIATC describes and links to these; it does not run any of them.</p>
+      <div class="r-grid" id="proggrid">
+
+        <div class="r-card" data-text="education school early years biidaaban lifelong learning supports special education children students">
+          <button type="button"><span>Education and learning</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Sagamok Education runs learning from the early years through adult education.</p>
+            <p>&bull; <a href="https://www.sagamokeducation.ca/shki-waase-aaban-binoojiinh-gamik/shki-waase-aaban-binoojiinh-gamik" target="_blank" rel="noopener">Shki Waase-Aaban Binoojiinh Gamik</a>, the early childhood program.<br>
+            &bull; <a href="https://www.sagamokeducation.ca/biidaaban-kinoomaagegamik/biidaaban" target="_blank" rel="noopener">Biidaaban Kinoomaagegamik</a>, the school.<br>
+            &bull; <a href="https://www.sagamokeducation.ca/education-supports/education-supports" target="_blank" rel="noopener">Education Supports</a>, including special education.<br>
+            &bull; <a href="https://www.sagamokeducation.ca/life-long-learning/life-long-learning" target="_blank" rel="noopener">Lifelong Learning Centre</a>, adult learning.</p>
+            <div class="r-who"><span class="r-pill"><b>Director of Education</b> ext. 227</span></div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="employment training self employment assistance jobs career coach business funding lifelong learning centre">
+          <button type="button"><span>Employment, training, and self-employment</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Employment, training, and support for starting your own business run through the Lifelong Learning Centre. Call them and ask about current training funding and Self-Employment Assistance; a guidance and career coach can help plan training and work.</p>
+            <div class="r-who"><span class="r-pill"><b>Lifelong Learning Centre</b> 705-501-8950</span><span class="r-pill"><b>Career Coach</b> ext. 242</span></div>
+            <p>For which business door fits you, see <a href="#" data-go="nav">Get something done &#8250; Start or grow a business</a>.</p>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="housing rent rental rent to own self help loan build repair home">
+          <button type="button"><span>Housing</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>The Housing Department (created August 2024) handles applications, rentals, and maintenance.</p>
+            <p>&bull; <a href="https://www.sagamokanishnawbek.com/housing-program" target="_blank" rel="noopener">Rental homes</a><br>
+            &bull; Rent-to-Own portfolio<br>
+            &bull; Self-Help Program loans</p>
+            <div class="r-who"><span class="r-pill"><b>Housing</b> William Caldwell, ext. 130</span></div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="health wellness mental health addictions home community care youth wellness hub nurse">
+          <button type="button"><span>Health and wellness</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>The Community Wellness Department runs out of the health centre, Naandwedjige-Gamik.</p>
+            <p>&bull; <a href="https://www.sagamokanishnawbek.com/health-services" target="_blank" rel="noopener">Health Services</a> and medical transportation<br>
+            &bull; <a href="https://www.sagamokanishnawbek.com/mental-health-and-addiction" target="_blank" rel="noopener">Mental Health and Addictions</a><br>
+            &bull; <a href="https://www.sagamokanishnawbek.com/home-and-community-care-services" target="_blank" rel="noopener">Home and Community Care</a><br>
+            &bull; <a href="https://www.sagamokanishnawbek.com/youth-wellness-hub" target="_blank" rel="noopener">Youth Wellness Hub</a></p>
+            <div class="r-who"><span class="r-pill"><b>Health centre</b> (705) 865-2171</span></div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="family community support child advocacy cfau resiliency prevention nogdawindamin koognaasewin children youth child welfare jurisdiction">
+          <button type="button"><span>Family and community support</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>Family and Community Support Services helps children, youth, and families.</p>
+            <p>&bull; <a href="https://www.sagamokanishnawbek.com/child-and-family-services" target="_blank" rel="noopener">Child and Family Advocacy Unit</a>. This is a prevention service for families who are involved with, or at risk of involvement with, Nogdawindamin, the regional child welfare agency for the North Shore First Nations.<br>
+            &bull; <a href="https://www.sagamokanishnawbek.com/child-and-youth-resiliency-team" target="_blank" rel="noopener">Child and Youth Resiliency Unit</a><br>
+            &bull; <a href="https://www.sagamokanishnawbek.com/community-engagement-and-prevention-unit" target="_blank" rel="noopener">Community Engagement and Prevention Unit</a></p>
+            <div class="r-flag">
+              <p><b>Koognaasewin</b> is not a Sagamok service you apply to. It is a North Shore First Nations initiative, carried through Mamaweswen, the North Shore Tribal Council, to develop the communities' own Anishinaabe child well-being law and reclaim jurisdiction over child welfare. It has its own site: <a href="https://www.koognaasewin.com/about-koognaasewin-landing-page" target="_blank" rel="noopener">koognaasewin.com</a>.</p>
+            </div>
+            <div class="r-who"><span class="r-pill"><b>CFAU</b> (705) 865-3229</span></div>
+          </div>
+        </div>
+
+        <div class="r-card" data-text="member transactions per capita status card registry estates pre authorized deposit finance membership">
+          <button type="button"><span>Member transactions</span><span class="r-chev">&#8250;</span></button>
+          <div class="r-body">
+            <p>For per capita, status and band membership, estates, and pre-authorized deposit, contact the band directly rather than relying on the online forms.</p>
+            <div class="r-who">
+              <span class="r-pill"><b>Membership / status / estates</b> Renee Owl, ext. 256</span>
+              <span class="r-pill"><b>Finance / per capita</b> ext. 225</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    {# ---------------- COUNCIL ---------------- #}
+    <section id="council" role="tabpanel" class="r-panel r-council" aria-label="How Council works">
+      <p class="r-lead">How Sagamok is governed and where to read the record. This points you to the official source; it does not reproduce or summarize the minutes.</p>
+
+      <h3>Who governs</h3>
+      <p>Sagamok is led by an elected Chief and twelve Councillors. Chief Angus Toulouse and Council set direction and oversee the administration that delivers programs and services.</p>
+
+      <h3>How often Council meets</h3>
+      <p>Council meets on a regular cycle, roughly every two weeks, about twenty meetings a year, and minutes are written up and posted for members. A steady, frequent schedule means there is a regular written record of decisions.</p>
+
+      <h3>Where to read the minutes</h3>
+      <p>Sagamok posts its Chief and Council meeting minutes on its own website. That is the official source.</p>
+      <p><a class="btn btn--primary" href="https://www.sagamokanishnawbek.com/meeting-minutes/meeting-minutes" target="_blank" rel="noopener">Open Sagamok's meeting minutes</a></p>
+
+      <h3>How to bring something to Council</h3>
+      <p>The path runs through the Council Secretariat (Andrea Hajt-Jacobs, ext. 133) and the Political Office (Wade Owl, ext. 238), who handle correspondence and the agenda.</p>
+    </section>
+
+    <p class="r-note">A community resource from OIATC, the Ontario Indigenous AI and Technology Council. Independent of Sagamok Chief and Council and its administration, and of the partner organizations named. It describes and links to Sagamok's own programs and record; it does not provide, decide, or reproduce any of them. Main band line: (705) 865-2421.</p>
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts_extra %}
+  <script>
+    (function () {
+      var tabs = Array.prototype.slice.call(document.querySelectorAll('.r-tab'));
+      var panels = {
+        nav: document.getElementById('nav'),
+        prog: document.getElementById('prog'),
+        council: document.getElementById('council'),
+      };
+      var q = document.getElementById('r-q');
+      var nores = document.getElementById('r-nores');
+
+      function applySearch() {
+        var term = (q.value || '').trim().toLowerCase();
+        var active = document.querySelector('.r-panel.is-active');
+        if (!active) { return; }
+        var cards = Array.prototype.slice.call(active.querySelectorAll('.r-card'));
+        if (cards.length === 0) { nores.style.display = 'none'; return; }
+        var shown = 0;
+        cards.forEach(function (c) {
+          var hay = (c.getAttribute('data-text') || '') + ' ' + c.textContent.toLowerCase();
+          var match = term === '' || hay.indexOf(term) !== -1;
+          c.style.display = match ? '' : 'none';
+          if (match) { shown++; }
+        });
+        nores.style.display = (term !== '' && shown === 0) ? 'block' : 'none';
+      }
+
+      function showTab(name) {
+        tabs.forEach(function (t) {
+          t.setAttribute('aria-selected', t.getAttribute('data-panel') === name ? 'true' : 'false');
+        });
+        Object.keys(panels).forEach(function (k) {
+          if (panels[k]) { panels[k].classList.toggle('is-active', k === name); }
+        });
+        applySearch();
+      }
+
+      tabs.forEach(function (t) {
+        t.addEventListener('click', function () { showTab(t.getAttribute('data-panel')); });
+      });
+
+      // Accordion cards.
+      document.querySelectorAll('.r-card > button').forEach(function (b) {
+        b.addEventListener('click', function () { b.parentNode.classList.toggle('is-open'); });
+      });
+
+      // Cross-link from a program card to the navigator's first (business) card.
+      document.querySelectorAll('[data-go]').forEach(function (a) {
+        a.addEventListener('click', function (e) {
+          e.preventDefault();
+          showTab(a.getAttribute('data-go'));
+          var biz = document.querySelector('#navgrid .r-card');
+          if (biz) { biz.classList.add('is-open'); biz.scrollIntoView({ behavior: 'smooth', block: 'center' }); }
+        });
+      });
+
+      if (q) { q.addEventListener('input', applySearch); }
+    })();
+  </script>
+{% endblock %}
