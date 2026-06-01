@@ -61,24 +61,24 @@
 
     /* Co-Intelligence (chat) */
     .r-ask__form { display: flex; gap: var(--gap-2); margin: var(--gap-3) 0 var(--gap-2); flex-wrap: wrap; }
-    .r-ask__input { flex: 1 1 280px; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-md); color: var(--ink); font-family: var(--font-sans); font-size: 16px; padding: 12px 14px; outline: none; }
+    .r-ask__input { flex: 1 1 280px; min-width: 0; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-md); color: var(--ink); font-family: var(--font-sans); font-size: 16px; padding: 12px 14px; outline: none; }
     .r-ask__input:focus { border-color: var(--accent); }
     .r-ask__send { font-family: var(--font-sans); font-weight: 600; font-size: 15px; background: var(--accent); color: var(--paper); border: 0; border-radius: var(--radius-md); padding: 12px 20px; cursor: pointer; }
     .r-ask__send:hover { background: var(--accent-deep); }
     .r-ask__send:disabled { opacity: .55; cursor: default; }
-    .r-ask__answer { margin: var(--gap-4) 0 0; min-height: 1.6em; color: var(--ink); font-size: 16px; line-height: 1.7; }
+    .r-ask__answer { margin: var(--gap-4) 0 0; min-height: 1.6em; color: var(--ink); font-size: 16px; line-height: 1.7; overflow-wrap: anywhere; }
     .r-ask__answer p { margin: 0 0 .75em; }
     .r-ask__answer p:last-child { margin-bottom: 0; }
     .r-ask__answer ul { margin: .4em 0 .85em; padding-left: 1.3em; }
     .r-ask__answer li { margin: .2em 0; }
     .r-ask__answer strong { font-weight: 650; }
     .r-ask__answer a { color: var(--accent-deep); }
-    .r-ask__sources { margin: var(--gap-3) 0 0; font-size: 13.5px; color: var(--ink-3); }
+    .r-ask__sources { margin: var(--gap-3) 0 0; font-size: 13.5px; color: var(--ink-3); overflow-wrap: anywhere; }
     .r-ask__sources a { color: var(--accent-deep); }
     .r-ask__hint { font-size: 13px; color: var(--ink-3); margin: var(--gap-2) 0 0; }
     /* Suggested-prompt pills (chip style on the site's own tokens). */
     .r-ask__pills { display: flex; flex-wrap: wrap; gap: var(--gap-2); margin: var(--gap-3) 0 0; }
-    .r-ask__pill { appearance: none; cursor: pointer; font-family: var(--font-sans); font-size: 14px; line-height: 1.3; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 7px 14px; transition: background .15s, border-color .15s, color .15s; }
+    .r-ask__pill { appearance: none; cursor: pointer; max-width: 100%; text-align: left; font-family: var(--font-sans); font-size: 14px; line-height: 1.3; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 7px 14px; transition: background .15s, border-color .15s, color .15s; }
     .r-ask__pill:hover { background: var(--accent-wash); border-color: var(--accent-soft); color: var(--ink); }
     .r-ask__pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   </style>

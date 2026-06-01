@@ -16,27 +16,51 @@
 
 {% block head_styles %}
   <style>
-    .ak-shell { display: grid; grid-template-columns: 248px 1fr; gap: 0; min-height: 70vh; max-width: 1120px; margin: 0 auto; }
-    .ak-side { border-right: 1px solid var(--rule); padding: var(--gap-5) var(--gap-4) var(--gap-7); }
+    /* One outer container shared with the masthead (.top__inner) and footer
+       (.shell): same --shell-max and --gap-6 gutter, so the sidebar's left edge
+       lines up with the OIATC logo and the content column's right edge lines up
+       with the topbar controls. minmax(0,1fr) lets the content column shrink so
+       nothing forces a horizontal scrollbar. */
+    .ak-shell {
+      display: grid;
+      grid-template-columns: 248px minmax(0, 1fr);
+      grid-template-rows: auto 1fr;
+      grid-template-areas: "side main" "previews main";
+      align-content: start;
+      min-height: 70vh;
+      max-width: var(--shell-max);
+      margin: 0 auto;
+      padding: 0 var(--gap-6);
+    }
+    /* Left padding 0: sidebar content starts at the container gutter, aligned
+       with the logo above it. The rule sits at the right of the column. */
+    .ak-side { grid-area: side; border-right: 1px solid var(--rule); padding: var(--gap-5) var(--gap-5) var(--gap-5) 0; }
     .ak-brand { font-family: var(--font-sans); font-weight: 700; font-size: 18px; color: var(--ink); letter-spacing: .01em; }
     .ak-brand span { color: var(--accent-deep); }
     .ak-tag { font-size: 12.5px; color: var(--ink-3); margin: 4px 0 var(--gap-5); }
 
     .ak-switch { display: flex; flex-direction: column; gap: 4px; margin: 0 0 var(--gap-5); }
-    .ak-switch__label, .ak-nav__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
+    .ak-switch__label, .ak-nav__label, .ak-previews__label { font-family: var(--font-mono); font-size: 11px; letter-spacing: .08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 6px; }
     .ak-switch a { display: flex; align-items: center; justify-content: space-between; padding: 8px 10px; border-radius: var(--radius-md); color: var(--ink-2); font-family: var(--font-sans); font-size: 15px; text-decoration: none; border: 1px solid transparent; }
     .ak-switch a:hover { background: var(--paper-2); color: var(--ink); }
     .ak-switch a[aria-current="page"] { background: var(--accent-wash); border-color: var(--accent-soft); color: var(--ink); font-weight: 600; }
 
     .ak-nav { display: flex; flex-direction: column; gap: 2px; margin-top: var(--gap-5); }
-    .ak-nav button { appearance: none; text-align: left; background: none; border: 0; border-radius: var(--radius-md); padding: 9px 10px; color: var(--ink-2); font-family: var(--font-sans); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .ak-nav button, .ak-previews button { appearance: none; width: 100%; text-align: left; background: none; border: 0; border-radius: var(--radius-md); padding: 9px 10px; color: var(--ink-2); font-family: var(--font-sans); font-size: 15px; cursor: pointer; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
     .ak-nav button:hover { background: var(--paper-2); color: var(--ink); }
     .ak-nav button[aria-current="true"] { background: var(--paper-3); color: var(--ink); font-weight: 600; }
-    .ak-nav button[disabled] { color: var(--ink-3); cursor: default; opacity: .7; }
-    .ak-nav button[disabled]:hover { background: none; }
     .ak-badge { font-family: var(--font-mono); font-size: 10px; letter-spacing: .04em; text-transform: uppercase; color: var(--ink-3); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 1px 7px; }
 
-    .ak-main { padding: var(--gap-5) var(--gap-6) var(--gap-9); min-width: 0; }
+    /* Disabled "product preview" modules: their own grid area, under the sidebar
+       on desktop, moved below the content on mobile so they never sit in front
+       of the chat. */
+    .ak-previews { grid-area: previews; display: flex; flex-direction: column; gap: 2px; border-right: 1px solid var(--rule); padding: 0 var(--gap-5) var(--gap-7) 0; }
+    .ak-previews__label { margin-top: var(--gap-5); }
+    .ak-previews button[disabled] { color: var(--ink-3); cursor: default; opacity: .7; }
+
+    /* Right padding 0: content reaches the container gutter, aligned with the
+       topbar controls. min-width:0 prevents wide children forcing overflow. */
+    .ak-main { grid-area: main; padding: var(--gap-5) 0 var(--gap-9) var(--gap-6); min-width: 0; }
     .ak-top { display: flex; flex-wrap: wrap; align-items: baseline; gap: 8px var(--gap-3); padding-bottom: var(--gap-4); border-bottom: 1px solid var(--rule); margin-bottom: var(--gap-5); }
     .ak-top h1 { font-family: var(--font-serif); font-size: clamp(24px, 4vw, 34px); margin: 0; color: var(--ink); }
     .ak-top__indep { font-size: 13px; color: var(--ink-3); }
@@ -46,10 +70,26 @@
 
     .ak-disclaimer { margin: var(--gap-7) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); font-size: 13px; color: var(--ink-3); max-width: 72ch; }
 
-    @media (max-width: 720px) {
-      .ak-shell { grid-template-columns: 1fr; }
-      .ak-side { border-right: 0; border-bottom: 1px solid var(--rule); }
-      .ak-main { padding: var(--gap-5) var(--gap-4) var(--gap-8); }
+    /* Mobile: collapse the sidebar to a compact header (community switcher +
+       live modules as chip rows) so the Co-Intelligence ask box is reachable at
+       the top; preview modules drop below the content. */
+    @media (max-width: 780px) {
+      .ak-shell {
+        grid-template-columns: 1fr;
+        grid-template-rows: auto auto auto;
+        grid-template-areas: "side" "main" "previews";
+        padding: 0 var(--gap-4);
+      }
+      .ak-side { border-right: 0; border-bottom: 1px solid var(--rule); padding: var(--gap-4) 0; }
+      .ak-tag { display: none; }
+      .ak-switch { flex-direction: row; flex-wrap: wrap; align-items: center; gap: var(--gap-2); margin-bottom: var(--gap-4); }
+      .ak-switch__label, .ak-nav__label { width: 100%; margin: 0; }
+      .ak-switch a { padding: 6px 12px; border: 1px solid var(--rule); }
+      .ak-nav { flex-direction: row; flex-wrap: wrap; gap: var(--gap-2); margin-top: var(--gap-4); }
+      .ak-nav button { width: auto; border: 1px solid var(--rule); }
+      .ak-main { padding: var(--gap-5) 0 var(--gap-8); }
+      .ak-previews { border-right: 0; border-top: 1px solid var(--rule); padding: var(--gap-5) 0 var(--gap-7); }
+      .ak-previews__label { margin-top: 0; }
     }
   </style>
 {% endblock %}
@@ -71,12 +111,6 @@
       <p class="ak-nav__label">Modules</p>
       <button type="button" data-module="cointelligence" aria-current="true">Co-Intelligence</button>
       <button type="button" data-module="resources">Resources</button>
-      <button type="button" disabled>Drive <span class="ak-badge">Preview</span></button>
-      <button type="button" disabled>Data Rooms <span class="ak-badge">Preview</span></button>
-      <button type="button" disabled>Workspaces <span class="ak-badge">Preview</span></button>
-      <button type="button" disabled>Vault <span class="ak-badge">Preview</span></button>
-      <button type="button" disabled>Governance <span class="ak-badge">Preview</span></button>
-      <button type="button" disabled>Portal <span class="ak-badge">Preview</span></button>
     </nav>
   </aside>
 
@@ -90,6 +124,16 @@
 
     <p class="ak-disclaimer">Anokii is a community resource from OIATC, the Ontario Indigenous AI and Technology Council. It is independent of the communities and organizations named, draws only on public information, and does not collect personal information. Always confirm with the community office. For emergencies, call 911.</p>
   </div>
+
+  <nav class="ak-previews" aria-label="Product preview">
+    <p class="ak-previews__label">Product preview</p>
+    <button type="button" disabled>Drive <span class="ak-badge">Preview</span></button>
+    <button type="button" disabled>Data Rooms <span class="ak-badge">Preview</span></button>
+    <button type="button" disabled>Workspaces <span class="ak-badge">Preview</span></button>
+    <button type="button" disabled>Vault <span class="ak-badge">Preview</span></button>
+    <button type="button" disabled>Governance <span class="ak-badge">Preview</span></button>
+    <button type="button" disabled>Portal <span class="ak-badge">Preview</span></button>
+  </nav>
 </div>
 {% endblock %}
 
