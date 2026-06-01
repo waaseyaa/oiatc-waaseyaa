@@ -237,6 +237,49 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // Unlisted static demo bundle (Sheguiandah clickable prototype). Served
+        // verbatim from resources/ via DemoController, noindex,nofollow, not in
+        // the sitemap, and not linked from any nav. Reachable only by direct link
+        // at /demo/sheguiandah/ (the bare path 301s to the trailing slash so the
+        // bundle's relative asset references resolve).
+        $demo = new \App\Controller\DemoController($this->projectRoot . '/resources/demo/sheguiandah');
+
+        $router->addRoute(
+            'demo.sheguiandah',
+            RouteBuilder::create('/demo/sheguiandah/')
+                ->controller(fn() => $demo->sheguiandahIndex())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'demo.sheguiandah.bare',
+            RouteBuilder::create('/demo/sheguiandah')
+                ->controller(fn() => new RedirectResponse('/demo/sheguiandah/', 301))
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'demo.sheguiandah.app-js',
+            RouteBuilder::create('/demo/sheguiandah/app.js')
+                ->controller(fn() => $demo->sheguiandahAppJs())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'demo.sheguiandah.logo',
+            RouteBuilder::create('/demo/sheguiandah/sheg-fn-logo.png')
+                ->controller(fn() => $demo->sheguiandahLogo())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         if ($this->tryResolveDatabase() !== null) {
             // Pin analytics to the persistent SQLite file. resolve(DatabaseInterface)
             // here returns an ephemeral connection (the route/controller closure is
