@@ -5,10 +5,9 @@
 {% block body_class %}route-design-system{% endblock %}
 {% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
 
-{% block head_meta %}
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://oiatc.ca/design-system">
-{% endblock %}
+{# Internal design reference — keep out of search results. Canonical, og:* /
+   twitter:* and per-page OG card come from base defaults. #}
+{% block robots %}noindex,follow{% endblock %}
 
 {% block content %}
     <section class="masthead">

@@ -5,21 +5,9 @@
 {% block body_class %}route-practice-ai-coursework{% endblock %}
 {% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
 
-{% block head_meta %}
-  <meta name="robots" content="noindex,follow">
-  <link rel="canonical" href="https://oiatc.ca/practice/ai-in-coursework">
-  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://oiatc.ca/practice/ai-in-coursework">
-  <meta property="og:title" content="Practice · AI in coursework">
-  <meta property="og:description" content="A real case study of AI use in a Grade 11 Environmental Science course, with the audit logs that make every step legible.">
-  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Practice · AI in coursework">
-  <meta name="twitter:description" content="A real case study of AI use in a Grade 11 Environmental Science course.">
-  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
-{% endblock %}
+{# In-progress practice writeup — keep out of search results. og:* / twitter:*
+   and the per-page OG card come from base defaults. #}
+{% block robots %}noindex,follow{% endblock %}
 
 {% block head_styles %}
   <style>

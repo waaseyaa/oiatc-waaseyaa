@@ -5,21 +5,11 @@
 {% block body_class %}route-explainer-data-lives{% endblock %}
 {% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
 
-{% block head_meta %}
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://oiatc.ca/explainers/where-your-data-lives">
-  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://oiatc.ca/explainers/where-your-data-lives">
-  <meta property="og:title" content="Where does your community's data actually live?">
-  <meta property="og:description" content="Where member data goes, which laws reach it, and what data sovereignty really means, using the Sagamok portal as the example.">
-  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Where does your community's data actually live?">
-  <meta name="twitter:description" content="Where member data goes, which laws reach it, and what data sovereignty really means.">
-  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
-{% endblock %}
+{# Canonical / og:* / twitter:* are provided by base.html.twig defaults using
+   the page title + description blocks and the auto-rendered OG card at
+   /images/og/explainers-where-your-data-lives.png. Override og_description
+   here to give social previews a shorter line than the meta description. #}
+{% block og_description %}Where member data goes, which laws reach it, and what data sovereignty really means, using the Sagamok portal as the example.{% endblock %}
 
 {% block head_styles %}
   <style>

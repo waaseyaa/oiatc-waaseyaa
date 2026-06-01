@@ -5,7 +5,44 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>{% block title %}Ontario Indigenous AI &amp; Technology Council{% endblock %}</title>
   <meta name="description" content="{% block description %}A council of two working to improve the digital systems that deliver services to First Nations.{% endblock %}">
-  {% block head_meta %}{% endblock %}
+  {# Sensible defaults for canonical / OG / Twitter tags.
+
+     Pages override ONE LINE at a time — these are the canonical override
+     blocks. Most pages need nothing here; the base auto-fills everything
+     from {% block title %}, {% block description %}, and the per-page card
+     auto-rendered by scripts/generate-og.js (computed in HomeController::socialContext).
+
+     | Block            | What it controls                | Override example
+     | ---------------- | ------------------------------- | ------------------------------------------------------
+     | robots           | <meta robots>                   | {% block robots %}noindex,follow{% endblock %}
+     | canonical_url    | canonical + og:url (mirrored)   | {% block canonical_url %}https://oiatc.ca/foo{% endblock %}
+     | og_type          | og:type                         | {% block og_type %}website{% endblock %}
+     | og_title         | og:title + twitter:title        | {% block og_title %}Short headline{% endblock %}
+     | og_description   | og:description + twitter:desc   | {% block og_description %}Short social blurb.{% endblock %}
+     | og_image         | og:image + twitter:image        | {% block og_image %}https://oiatc.ca/images/og-my-card.png{% endblock %}
+
+     Whole-block override (skip ALL defaults) is still possible by re-declaring
+     {% block head_meta %} entirely in the child. Avoid that for the common case. #}
+  {% block head_meta %}
+    <meta name="robots" content="{% block robots %}index,follow{% endblock %}">
+    <link rel="canonical" href="{% block canonical_url %}{{ og_url|default('https://oiatc.ca') }}{% endblock %}">
+    <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+    <meta property="og:locale" content="en_CA">
+    <meta property="og:type" content="{% block og_type %}article{% endblock %}">
+    <meta property="og:url" content="{{ block('canonical_url') }}">
+    {# Decode &amp; (and a couple of common siblings) before Twig re-escapes for
+       the attribute, otherwise titles like "OIATC &amp;" become "&amp;amp;". #}
+    <meta property="og:title" content="{% block og_title %}{{ block('title')|replace({' · OIATC': '', ' — OIATC': '', '&amp;': '&', '&#039;': "'", '&quot;': '"'})|trim }}{% endblock %}">
+    <meta property="og:description" content="{% block og_description %}{{ block('description')|replace({'&amp;': '&', '&#039;': "'", '&quot;': '"'})|trim }}{% endblock %}">
+    <meta property="og:image" content="{% block og_image %}{{ og_image_url|default('https://oiatc.ca/images/og-default.png') }}{% endblock %}">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="{{ block('og_title') }}">
+    <meta name="twitter:description" content="{{ block('og_description') }}">
+    <meta name="twitter:image" content="{{ block('og_image') }}">
+  {% endblock %}
+  {# Optional structured-data block for schema.org JSON-LD. Pages append rich
+     data here without having to redeclare head_meta. #}
+  {% block schema_jsonld %}{% endblock %}
   <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
   <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
   <link rel="icon" href="/favicon.svg" type="image/svg+xml">
