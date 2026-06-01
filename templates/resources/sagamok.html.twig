@@ -70,6 +70,18 @@
 
     .r-council h3 { font-family: var(--font-sans); font-size: 13px; letter-spacing: .06em; text-transform: uppercase; color: var(--accent-deep); margin: 28px 0 8px; }
     .r-council p { color: var(--ink-2); margin: 0 0 14px; max-width: 66ch; }
+
+    /* Ask-a-question (RAG chat) panel */
+    .r-ask__form { display: flex; gap: var(--gap-2); margin: var(--gap-3) 0 var(--gap-2); flex-wrap: wrap; }
+    .r-ask__input { flex: 1 1 280px; background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: var(--radius-md); color: var(--ink); font-family: var(--font-sans); font-size: 16px; padding: 12px 14px; outline: none; }
+    .r-ask__input:focus { border-color: var(--accent); }
+    .r-ask__send { font-family: var(--font-sans); font-weight: 600; font-size: 15px; background: var(--accent); color: var(--paper); border: 0; border-radius: var(--radius-md); padding: 12px 20px; cursor: pointer; }
+    .r-ask__send:hover { background: var(--accent-deep); }
+    .r-ask__send:disabled { opacity: .55; cursor: default; }
+    .r-ask__answer { margin: var(--gap-4) 0 0; min-height: 1.6em; color: var(--ink); font-size: 16px; line-height: 1.7; white-space: pre-wrap; }
+    .r-ask__sources { margin: var(--gap-3) 0 0; font-size: 13.5px; color: var(--ink-3); }
+    .r-ask__sources a { color: var(--accent-deep); }
+    .r-ask__hint { font-size: 13px; color: var(--ink-3); margin: var(--gap-2) 0 0; }
   </style>
 {% endblock %}
 
@@ -93,6 +105,7 @@
       <button class="r-tab" role="tab" aria-selected="true" data-panel="nav">Get something done</button>
       <button class="r-tab" role="tab" aria-selected="false" data-panel="prog">Programs &amp; services</button>
       <button class="r-tab" role="tab" aria-selected="false" data-panel="council">How Council works</button>
+      <button class="r-tab" role="tab" aria-selected="false" data-panel="ask">Ask a question</button>
     </div>
 
     <p class="r-nores" id="r-nores">No matches. Try a different word, or clear the search.</p>
@@ -323,6 +336,19 @@
       <p>The path runs through the Council Secretariat (Andrea Hajt-Jacobs, ext. 133) and the Political Office (Wade Owl, ext. 238), who handle correspondence and the agenda.</p>
     </section>
 
+    {# ---------------- ASK A QUESTION (RAG chat) ---------------- #}
+    <section id="ask" role="tabpanel" class="r-panel r-ask" aria-label="Ask a question">
+      <p class="r-lead">Ask a plain-language question and get an answer drawn only from these OIATC pages, with the source linked. It does not collect any personal information.</p>
+      <form class="r-ask__form" id="r-ask-form">
+        <input class="r-ask__input" id="r-ask-input" type="text" maxlength="500" autocomplete="off"
+               placeholder="e.g. How do I apply for housing? Who do I call about per capita?" aria-label="Your question">
+        <button class="r-ask__send" id="r-ask-send" type="submit">Ask</button>
+      </form>
+      <div class="r-ask__answer" id="r-ask-answer" aria-live="polite"></div>
+      <div class="r-ask__sources" id="r-ask-sources"></div>
+      <p class="r-ask__hint">General information from public pages, not legal, medical, or financial advice, and not affiliated with or endorsed by Sagamok Chief and Council. Always confirm with the band. For emergencies, call 911.</p>
+    </section>
+
     <p class="r-note">A community resource from OIATC, the Ontario Indigenous AI and Technology Council. Independent of Sagamok Chief and Council and its administration, and of the partner organizations named. It describes and links to Sagamok's own programs and record; it does not provide, decide, or reproduce any of them. Main band line: (705) 865-2421.</p>
 
 </div>
@@ -336,6 +362,7 @@
         nav: document.getElementById('nav'),
         prog: document.getElementById('prog'),
         council: document.getElementById('council'),
+        ask: document.getElementById('ask'),
       };
       var q = document.getElementById('r-q');
       var nores = document.getElementById('r-nores');
@@ -386,6 +413,76 @@
       });
 
       if (q) { q.addEventListener('input', applySearch); }
+
+      // Ask-a-question: POST /api/chat and render the streamed SSE answer.
+      var askForm = document.getElementById('r-ask-form');
+      var askInput = document.getElementById('r-ask-input');
+      var askSend = document.getElementById('r-ask-send');
+      var askAnswer = document.getElementById('r-ask-answer');
+      var askSources = document.getElementById('r-ask-sources');
+
+      function renderSources(sources) {
+        if (!sources || !sources.length) { askSources.innerHTML = ''; return; }
+        var links = sources.map(function (s) {
+          var a = document.createElement('a');
+          a.href = s.source_url; a.textContent = s.title || s.source_url;
+          return a.outerHTML;
+        });
+        askSources.innerHTML = 'Sources: ' + links.join(' &middot; ');
+      }
+
+      // Parse an SSE buffer into {event, data} frames separated by a blank line.
+      function drainFrames(buffer, onFrame) {
+        var parts = buffer.split('\n\n');
+        var rest = parts.pop();
+        parts.forEach(function (frame) {
+          var event = 'message', data = '';
+          frame.split('\n').forEach(function (line) {
+            if (line.indexOf('event:') === 0) { event = line.slice(6).trim(); }
+            else if (line.indexOf('data:') === 0) { data += line.slice(5).trim(); }
+          });
+          if (data) { try { onFrame(event, JSON.parse(data)); } catch (e) {} }
+        });
+        return rest;
+      }
+
+      if (askForm) {
+        askForm.addEventListener('submit', function (e) {
+          e.preventDefault();
+          var question = (askInput.value || '').trim();
+          if (!question) { return; }
+          askSend.disabled = true;
+          askAnswer.textContent = '';
+          askSources.innerHTML = '';
+
+          fetch('/api/chat', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json', 'Accept': 'text/event-stream' },
+            body: JSON.stringify({ question: question }),
+          }).then(function (resp) {
+            if (resp.status === 429) { askAnswer.textContent = 'Too many questions just now. Please wait a moment and try again.'; askSend.disabled = false; return; }
+            if (!resp.ok || !resp.body) { askAnswer.textContent = 'Sorry, something went wrong. Please try again.'; askSend.disabled = false; return; }
+            var reader = resp.body.getReader();
+            var decoder = new TextDecoder();
+            var buffer = '';
+            function pump() {
+              return reader.read().then(function (result) {
+                if (result.done) { askSend.disabled = false; return; }
+                buffer += decoder.decode(result.value, { stream: true });
+                buffer = drainFrames(buffer, function (event, data) {
+                  if (event === 'delta' && data.text) { askAnswer.textContent += data.text; }
+                  else if (event === 'done') { renderSources(data.sources); }
+                });
+                return pump();
+              });
+            }
+            return pump();
+          }).catch(function () {
+            askAnswer.textContent = 'Sorry, something went wrong. Please try again.';
+            askSend.disabled = false;
+          });
+        });
+      }
     })();
   </script>
 {% endblock %}
