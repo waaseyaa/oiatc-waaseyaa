@@ -26,4 +26,10 @@ return [
         class: \App\Entity\NewsPost::class,
         keys: ['id' => 'id', 'uuid' => 'uuid', 'label' => 'title'],
     ),
+    new \Waaseyaa\Entity\EntityType(
+        id: 'doc_chunk',
+        label: 'Doc chunk',
+        class: \App\Entity\DocChunk::class,
+        keys: ['id' => 'id', 'uuid' => 'uuid', 'label' => 'title'],
+    ),
 ];
