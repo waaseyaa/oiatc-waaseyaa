@@ -109,6 +109,86 @@ final class AnalyticsReport
     }
 
     /**
+     * Co-Intelligence content-gap report: per vantage community, the questions
+     * that refused or matched nothing (the gap backlog) and the most-asked
+     * topics (demand). Reads the anonymous chat_query_log; no identifiers exist
+     * in that table to surface. Returns empty if the table is absent.
+     *
+     * @return array{
+     *   communities: array<string, array{
+     *     totals: array{total:int, unanswered:int},
+     *     unanswered: list<array{question:string, outcome:string, topic:string, created_at:string}>,
+     *     topics: list<array{topic:string, count:int}>
+     *   }>,
+     *   from:string, to:string
+     * }
+     */
+    public function chatGaps(string $fromDate, string $toDate): array
+    {
+        $from = $fromDate . ' 00:00:00';
+        $to = $toDate . ' 23:59:59';
+        $table = AnalyticsSchema::TABLE_CHAT;
+        $communities = [];
+
+        try {
+            $names = [];
+            foreach ($this->db->query("SELECT DISTINCT community FROM {$table} WHERE created_at BETWEEN ? AND ? ORDER BY community", [$from, $to]) as $r) {
+                $names[] = (string) ($r['community'] ?? '');
+            }
+
+            foreach ($names as $community) {
+                if ($community === '') {
+                    continue;
+                }
+                $totalsRow = $this->one(
+                    'SELECT COUNT(*) AS total,'
+                    . " SUM(CASE WHEN outcome IN ('refused','no_match') THEN 1 ELSE 0 END) AS unanswered"
+                    . " FROM {$table} WHERE community = ? AND created_at BETWEEN ? AND ?",
+                    [$community, $from, $to],
+                );
+
+                $unanswered = [];
+                foreach ($this->db->query(
+                    "SELECT question, outcome, COALESCE(NULLIF(topic, ''), 'none') AS topic, created_at FROM {$table}"
+                    . " WHERE community = ? AND outcome IN ('refused','no_match') AND created_at BETWEEN ? AND ?"
+                    . ' ORDER BY created_at DESC LIMIT 100',
+                    [$community, $from, $to],
+                ) as $r) {
+                    $unanswered[] = [
+                        'question' => (string) ($r['question'] ?? ''),
+                        'outcome' => (string) ($r['outcome'] ?? ''),
+                        'topic' => (string) ($r['topic'] ?? 'none'),
+                        'created_at' => (string) ($r['created_at'] ?? ''),
+                    ];
+                }
+
+                $topics = [];
+                foreach ($this->db->query(
+                    "SELECT COALESCE(NULLIF(topic, ''), 'none') AS topic, COUNT(*) AS count FROM {$table}"
+                    . ' WHERE community = ? AND created_at BETWEEN ? AND ?'
+                    . " GROUP BY COALESCE(NULLIF(topic, ''), 'none') ORDER BY count DESC, topic LIMIT 15",
+                    [$community, $from, $to],
+                ) as $r) {
+                    $topics[] = ['topic' => (string) ($r['topic'] ?? 'none'), 'count' => (int) $r['count']];
+                }
+
+                $communities[$community] = [
+                    'totals' => [
+                        'total' => (int) ($totalsRow['total'] ?? 0),
+                        'unanswered' => (int) ($totalsRow['unanswered'] ?? 0),
+                    ],
+                    'unanswered' => $unanswered,
+                    'topics' => $topics,
+                ];
+            }
+        } catch (\Throwable) {
+            $communities = [];
+        }
+
+        return ['communities' => $communities, 'from' => $fromDate, 'to' => $toDate];
+    }
+
+    /**
      * All-time pageview count for a single path (for public per-page social proof).
      */
     public function viewsForPath(string $path): int

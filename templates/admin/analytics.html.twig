@@ -328,6 +328,32 @@
       border-radius: 3px;
     }
 
+    /* Co-Intelligence content gaps */
+    .cgap { padding-top: var(--gap-5); }
+    .cgap:first-of-type { padding-top: 0; }
+    .cgap__head {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 14px;
+      margin: 0 0 var(--gap-3);
+    }
+    .cgap__name {
+      font-family: var(--sans);
+      font-size: 14px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: capitalize;
+      color: var(--ink);
+    }
+    .cgap__meta {
+      font-family: var(--mono);
+      font-size: 13px;
+      color: var(--ink-mute);
+      font-variant-numeric: tabular-nums;
+    }
+    .list__count.tag { text-transform: none; color: var(--ink-mute); }
+
     /* Footer */
     footer {
       max-width: var(--content);
@@ -457,6 +483,52 @@
 
     </div>
   </section>
+
+  {% if chat is defined and chat.communities is not empty %}
+  <section>
+    <h2>Co-Intelligence content gaps</h2>
+    {% for slug, c in chat.communities %}
+      <div class="cgap">
+        <div class="cgap__head">
+          <span class="cgap__name">{{ slug }}</span>
+          <span class="cgap__meta">{{ c.totals.unanswered }} unanswered of {{ c.totals.total }} asked</span>
+        </div>
+        <div class="panels">
+          <div class="panel">
+            <h3>Most-asked topics</h3>
+            {% if c.topics is empty %}
+              <p class="list__empty">None recorded</p>
+            {% else %}
+              <ul class="list">
+                {% for t in c.topics %}
+                  <li>
+                    <span class="list__name">{{ t.topic }}</span>
+                    <span class="list__count">{{ t.count }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+          <div class="panel">
+            <h3>Unanswered and no match</h3>
+            {% if c.unanswered is empty %}
+              <p class="list__empty">Nothing unanswered in this range</p>
+            {% else %}
+              <ul class="list">
+                {% for u in c.unanswered %}
+                  <li>
+                    <span class="list__name">{{ u.question }}</span>
+                    <span class="list__count tag">{{ u.outcome }} &middot; {{ u.topic }}</span>
+                  </li>
+                {% endfor %}
+              </ul>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    {% endfor %}
+  </section>
+  {% endif %}
 
 </main>
 

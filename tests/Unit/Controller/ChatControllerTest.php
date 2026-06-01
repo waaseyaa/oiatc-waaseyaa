@@ -4,11 +4,14 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Controller;
 
+use App\Analytics\ChatQueryLogInterface;
 use App\Controller\ChatController;
 use App\Support\ChatPromptBuilder;
 use App\Support\Passage;
 use App\Support\RateLimiterInterface;
 use App\Support\RetrieverInterface;
+use App\Support\TopicVocabulary;
+use App\Tests\Doubles\CapturingChatQueryLog;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\HttpFoundation\Request;
@@ -90,6 +93,49 @@ final class ChatControllerTest extends TestCase
     }
 
     #[Test]
+    public function logs_an_answered_query_with_topic_and_sources(): void
+    {
+        $log = $this->queryLog();
+        $response = $this->controller(retriever: $this->retriever([$this->passage()]), provider: $this->provider(['The Housing ', 'Department handles applications.']), configured: true, queryLog: $log)
+            ->handle($this->request('How do I apply for housing?'));
+        $this->capture($response);
+
+        self::assertCount(1, $log->records);
+        $rec = $log->records[0];
+        self::assertSame('sagamok', $rec['community']);
+        self::assertSame('How do I apply for housing?', $rec['question']);
+        self::assertSame('answered', $rec['outcome']);
+        self::assertSame('housing', $rec['topic']);
+        self::assertSame(['/resources/sagamok'], $rec['sources']);
+    }
+
+    #[Test]
+    public function logs_no_match_when_retrieval_is_empty(): void
+    {
+        $log = $this->queryLog();
+        $response = $this->controller(retriever: $this->retriever([]), provider: $this->provider(), configured: true, queryLog: $log)
+            ->handle($this->request('what is the weather tomorrow'));
+        $this->capture($response);
+
+        self::assertCount(1, $log->records);
+        self::assertSame('no_match', $log->records[0]['outcome']);
+        self::assertSame([], $log->records[0]['sources'], 'No sources on a no-match.');
+    }
+
+    #[Test]
+    public function logs_refused_when_the_model_returns_the_refusal_text(): void
+    {
+        // Passages were retrieved, but the model replies with the exact refusal.
+        $log = $this->queryLog();
+        $response = $this->controller(retriever: $this->retriever([$this->passage()]), provider: $this->provider([ChatPromptBuilder::NO_ANSWER]), configured: true, queryLog: $log)
+            ->handle($this->request('Do you sell concert tickets?'));
+        $this->capture($response);
+
+        self::assertCount(1, $log->records);
+        self::assertSame('refused', $log->records[0]['outcome'], 'Grounded passages existed but the model could not answer.');
+    }
+
+    #[Test]
     public function bad_request_without_a_question_is_rejected(): void
     {
         $response = $this->controller(retriever: $this->retriever([]), provider: $this->provider(), configured: true)
@@ -120,6 +166,7 @@ final class ChatControllerTest extends TestCase
         ProviderInterface $provider,
         bool $configured,
         ?RateLimiterInterface $limiter = null,
+        ?ChatQueryLogInterface $queryLog = null,
     ): ChatController {
         return new ChatController(
             retriever: $retriever,
@@ -127,8 +174,15 @@ final class ChatControllerTest extends TestCase
             provider: $provider,
             limiter: $limiter ?? $this->limiter(PHP_INT_MAX),
             logger: new NullLogger(),
+            queryLog: $queryLog ?? $this->queryLog(),
+            topics: new TopicVocabulary(),
             configured: $configured,
         );
+    }
+
+    private function queryLog(): CapturingChatQueryLog
+    {
+        return new CapturingChatQueryLog();
     }
 
     private function limiter(int $max): RateLimiterInterface

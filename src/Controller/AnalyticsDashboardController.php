@@ -33,6 +33,7 @@ final class AnalyticsDashboardController
 
         $html = $twig->render('admin/analytics.html.twig', [
             'report' => $this->report->summary($from, $to),
+            'chat' => $this->report->chatGaps($from, $to),
             'range' => ['from' => $from, 'to' => $to],
         ]);
 

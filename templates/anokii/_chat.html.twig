@@ -11,9 +11,17 @@
            placeholder="e.g. How do I apply for housing? Who do I call about per capita?" aria-label="Your question">
     <button class="r-ask__send" id="r-ask-send" type="submit">Ask</button>
   </form>
+  {% if suggestedPrompts is defined and suggestedPrompts is not empty %}
+    <div class="r-ask__pills" id="r-ask-pills" aria-label="Suggested questions">
+      {% for prompt in suggestedPrompts %}
+        <button type="button" class="r-ask__pill" data-q="{{ prompt }}">{{ prompt }}</button>
+      {% endfor %}
+    </div>
+  {% endif %}
   <div class="r-ask__answer" id="r-ask-answer" aria-live="polite"></div>
   <div class="r-ask__sources" id="r-ask-sources"></div>
   <p class="r-ask__hint">General information from public pages, not legal, medical, or financial advice, and not affiliated with or endorsed by the community. Always confirm with the community office. For emergencies, call 911.</p>
+  <p class="r-ask__hint">The questions asked here (not who asks them) are logged to improve these resources. Nothing identifying is stored.</p>
 
   <script>
     (function () {
@@ -24,6 +32,7 @@
       var askSend = document.getElementById('r-ask-send');
       var askAnswer = document.getElementById('r-ask-answer');
       var askSources = document.getElementById('r-ask-sources');
+      var askPills = document.getElementById('r-ask-pills');
 
       function renderSources(sources) {
         if (!sources || !sources.length) { askSources.innerHTML = ''; return; }
@@ -100,6 +109,9 @@
         e.preventDefault();
         var question = (askInput.value || '').trim();
         if (!question) { return; }
+        // Suggested prompts are a "start here" affordance; once a question is
+        // asked they have served their purpose, so hide them.
+        if (askPills) { askPills.style.display = 'none'; }
         askSend.disabled = true;
         askAnswer.textContent = '';
         askSources.innerHTML = '';
@@ -132,6 +144,20 @@
           askSend.disabled = false;
         });
       });
+
+      // Suggested-prompt pills: fill the input and submit down the same path.
+      if (askPills) {
+        askPills.addEventListener('click', function (e) {
+          var pill = e.target.closest('.r-ask__pill');
+          if (!pill) { return; }
+          askInput.value = pill.getAttribute('data-q') || pill.textContent.trim();
+          if (typeof askForm.requestSubmit === 'function') {
+            askForm.requestSubmit();
+          } else {
+            askForm.dispatchEvent(new Event('submit', { cancelable: true }));
+          }
+        });
+      }
     })();
   </script>
 </section>

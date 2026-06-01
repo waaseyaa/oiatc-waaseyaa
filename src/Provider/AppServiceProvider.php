@@ -7,6 +7,7 @@ namespace App\Provider;
 use App\Analytics\AnalyticsRecorder;
 use App\Analytics\AnalyticsReport;
 use App\Analytics\AnalyticsSchema;
+use App\Analytics\SqliteChatQueryLog;
 use App\Controller\AnalyticsDashboardController;
 use App\Controller\AnokiiController;
 use App\Controller\ChatController;
@@ -16,6 +17,7 @@ use App\Controller\PageStatsController;
 use App\Support\ChatPromptBuilder;
 use App\Support\GraphRetriever;
 use App\Support\SqliteRateLimiter;
+use App\Support\TopicVocabulary;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Waaseyaa\AI\Agent\Provider\AnthropicProvider;
@@ -345,6 +347,8 @@ final class AppServiceProvider extends ServiceProvider
                     : $this->resolve(ProviderInterface::class),
                 limiter: new SqliteRateLimiter($this->persistentDatabase()),
                 logger: $this->resolve(LoggerInterface::class),
+                queryLog: new SqliteChatQueryLog($this->persistentDatabase()),
+                topics: new TopicVocabulary(),
                 configured: $anthropicKey !== '',
             );
             $router->addRoute(

@@ -76,6 +76,11 @@
     .r-ask__sources { margin: var(--gap-3) 0 0; font-size: 13.5px; color: var(--ink-3); }
     .r-ask__sources a { color: var(--accent-deep); }
     .r-ask__hint { font-size: 13px; color: var(--ink-3); margin: var(--gap-2) 0 0; }
+    /* Suggested-prompt pills (chip style on the site's own tokens). */
+    .r-ask__pills { display: flex; flex-wrap: wrap; gap: var(--gap-2); margin: var(--gap-3) 0 0; }
+    .r-ask__pill { appearance: none; cursor: pointer; font-family: var(--font-sans); font-size: 14px; line-height: 1.3; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule-strong); border-radius: 999px; padding: 7px 14px; transition: background .15s, border-color .15s, color .15s; }
+    .r-ask__pill:hover { background: var(--accent-wash); border-color: var(--accent-soft); color: var(--ink); }
+    .r-ask__pill:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
   </style>
 {% endblock %}
 

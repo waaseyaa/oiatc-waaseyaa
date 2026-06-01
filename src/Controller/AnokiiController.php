@@ -27,6 +27,28 @@ final class AnokiiController
         'massey' => ['name' => 'Massey'],
     ];
 
+    /**
+     * Suggested starter questions shown as clickable pills under the chat input,
+     * per vantage community. Clicking one fills the input and submits it down the
+     * same path as Ask. Kept per community, not hardcoded to Sagamok.
+     *
+     * @var array<string, list<string>>
+     */
+    private const SUGGESTED_PROMPTS = [
+        'sagamok' => [
+            'How do I apply for housing?',
+            'I want to start a business',
+            'Where do I get mental health support?',
+            'Who handles per capita?',
+            'How do I bring something to Council?',
+        ],
+        'massey' => [
+            'What is the Massey Solar Project?',
+            'What have people heard about the solar project?',
+            'How does the solar project relate to Sagamok?',
+        ],
+    ];
+
     public function home(): Response
     {
         return $this->render('anokii/home.html.twig', [
@@ -50,6 +72,7 @@ final class AnokiiController
             'community' => $community,
             'communityName' => self::COMMUNITIES[$community]['name'] ?? ucfirst($community),
             'communities' => self::COMMUNITIES,
+            'suggestedPrompts' => self::SUGGESTED_PROMPTS[$community] ?? [],
         ]);
     }
 

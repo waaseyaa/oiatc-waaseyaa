@@ -138,6 +138,22 @@ final class PublicPagesTest extends TestCase
     }
 
     #[Test]
+    public function each_lens_renders_its_communitys_suggested_prompts(): void
+    {
+        $sagamok = (string) new AnokiiController()->sagamok()->getContent();
+        $this->assertStringContainsString('class="r-ask__pill"', $sagamok, 'Pills render on the Sagamok lens.');
+        $this->assertStringContainsString('data-q="How do I apply for housing?"', $sagamok);
+        $this->assertStringContainsString('How do I bring something to Council?', $sagamok);
+        $this->assertStringNotContainsString('What is the Massey Solar Project?', $sagamok, 'Sagamok lens must not show Massey pills.');
+
+        $massey = (string) new AnokiiController()->massey()->getContent();
+        $this->assertStringContainsString('class="r-ask__pill"', $massey, 'Pills render on the Massey lens.');
+        $this->assertStringContainsString('data-q="What is the Massey Solar Project?"', $massey);
+        $this->assertStringContainsString('How does the solar project relate to Sagamok?', $massey);
+        $this->assertStringNotContainsString('Who handles per capita?', $massey, 'Massey lens must not show Sagamok pills.');
+    }
+
+    #[Test]
     public function data_sovereignty_explainer_route_is_registered(): void
     {
         $router = new WaaseyaaRouter();

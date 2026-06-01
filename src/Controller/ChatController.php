@@ -4,11 +4,13 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Analytics\ChatQueryLogInterface;
 use App\Provider\AiServiceProvider;
 use App\Support\ChatPromptBuilder;
 use App\Support\Passage;
 use App\Support\RateLimiterInterface;
 use App\Support\RetrieverInterface;
+use App\Support\TopicVocabulary;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -41,6 +43,8 @@ final class ChatController
         private readonly ProviderInterface $provider,
         private readonly RateLimiterInterface $limiter,
         private readonly LoggerInterface $logger,
+        private readonly ChatQueryLogInterface $queryLog,
+        private readonly TopicVocabulary $topics,
         private readonly bool $configured,
     ) {}
 
@@ -62,8 +66,13 @@ final class ChatController
 
         // Vantage community: a point of view onto the shared graph, not a tenant.
         $community = $this->readCommunity($request);
+        // Inferred topic of the question, recorded for content-gap mining (the
+        // same vocabulary the retriever ranks by). Null when nothing matches.
+        $topic = $this->topics->infer($question);
 
         if (!$this->configured) {
+            $this->queryLog->record($community, $question, 'unavailable', $topic, []);
+
             return $this->streamMessageText('The assistant is not available right now. Please use the page contacts, or the Sagamok directory at sagamokanishnawbek.com.', []);
         }
 
@@ -71,16 +80,18 @@ final class ChatController
         if ($passages === []) {
             // Off-corpus / outside this community's reach: deterministic refusal,
             // no model call. The message points to the right place for the vantage.
+            $this->queryLog->record($community, $question, 'no_match', $topic, []);
+
             return $this->streamMessageText($this->prompts->noAnswerFor($community), []);
         }
 
-        return $this->streamAnswer($question, $community, $passages);
+        return $this->streamAnswer($question, $community, $topic, $passages);
     }
 
     /**
      * @param list<Passage> $passages
      */
-    private function streamAnswer(string $question, string $community, array $passages): StreamedResponse
+    private function streamAnswer(string $question, string $community, ?string $topic, array $passages): StreamedResponse
     {
         $messageRequest = new MessageRequest(
             messages: [['role' => 'user', 'content' => $this->prompts->userMessage($question, $passages)]],
@@ -88,43 +99,61 @@ final class ChatController
             maxTokens: self::MAX_TOKENS,
         );
         $sources = $this->sources($passages);
+        $sourceUrls = array_map(static fn(array $s): string => $s['source_url'], $sources);
         $provider = $this->provider;
         $prompts = $this->prompts;
         $logger = $this->logger;
+        $queryLog = $this->queryLog;
+        $noAnswer = $this->prompts->noAnswerFor($community);
 
-        return $this->sse(static function () use ($provider, $messageRequest, $sources, $prompts, $logger, $question, $community): void {
+        return $this->sse(static function () use ($provider, $messageRequest, $sources, $sourceUrls, $prompts, $logger, $queryLog, $question, $community, $topic, $noAnswer): void {
+            $answer = '';
             try {
                 if ($provider instanceof StreamingProviderInterface) {
-                    $response = $provider->streamMessage($messageRequest, static function (StreamChunk $chunk): void {
+                    $response = $provider->streamMessage($messageRequest, static function (StreamChunk $chunk) use (&$answer): void {
                         if ($chunk->type === 'text_delta' && $chunk->text !== '') {
                             // Strip em/en dashes server-side so a stray dash never
                             // ships even if the model ignores the prompt rule.
-                            self::emit('delta', ['text' => ChatPromptBuilder::sanitizeDashes($chunk->text)]);
+                            $clean = ChatPromptBuilder::sanitizeDashes($chunk->text);
+                            $answer .= $clean;
+                            self::emit('delta', ['text' => $clean]);
                         }
                     });
                 } else {
                     // Provider can't stream: send once and emit the whole answer.
                     $response = $provider->sendMessage($messageRequest);
-                    self::emit('delta', ['text' => ChatPromptBuilder::sanitizeDashes($response->getText())]);
+                    $answer = ChatPromptBuilder::sanitizeDashes($response->getText());
+                    self::emit('delta', ['text' => $answer]);
                 }
                 self::emit('done', ['sources' => $sources]);
+
+                // Outcome for content-gap mining: the model is told to reply with
+                // the exact refusal text when the passages don't cover the question,
+                // so an answer equal to it is "refused" (passages existed but didn't
+                // answer), distinct from "no_match" (no passages retrieved at all).
+                $outcome = trim($answer) === trim($noAnswer) ? 'refused' : 'answered';
+                $queryLog->record($community, $question, $outcome, $topic, $sourceUrls);
+
                 // Token-spend record (ai-observability cost traces require an
                 // active AgentExecutor trace, which Path B doesn't use; logging
                 // the counts is the honest minimal record — see upstream #013).
                 $usage = $response->usage + ['input_tokens' => 0, 'output_tokens' => 0];
                 // No PII: only the question and the chunks used (cited source URLs)
-                // are recorded, plus the vantage and token counts.
+                // are recorded, plus the vantage, outcome, topic, and token counts.
                 $logger->info('chat.llm.completed', [
                     'model' => AiServiceProvider::MODEL,
                     'community' => $community,
                     'question' => $question,
+                    'outcome' => $outcome,
+                    'topic' => $topic ?? 'none',
                     'input_tokens' => $usage['input_tokens'],
                     'output_tokens' => $usage['output_tokens'],
                     'stop_reason' => $response->stopReason,
-                    'chunks_used' => array_map(static fn(array $s): string => $s['source_url'], $sources),
+                    'chunks_used' => $sourceUrls,
                 ]);
             } catch (\Throwable $e) {
                 $logger->error('chat.llm.failed', ['error' => $e->getMessage(), 'community' => $community]);
+                $queryLog->record($community, $question, 'error', $topic, []);
                 self::emit('delta', ['text' => $prompts->noAnswerFor($community)]);
                 self::emit('done', ['sources' => []]);
             }
