@@ -101,6 +101,28 @@ final class DocChunkerTest extends TestCase
     }
 
     #[Test]
+    public function accordion_card_questions_become_their_own_headings(): void
+    {
+        $html = '<html><head><title>Cards</title></head><body><main>'
+            . '<button class="r-tab">Get something done</button>'
+            . '<div class="r-card"><button><span>Apply for housing</span></button>'
+            . '<div class="r-body"><p>The Housing Department handles applications and rent-to-own programs.</p></div></div>'
+            . '<div class="r-card"><button><span>Ask about per capita</span></button>'
+            . '<div class="r-body"><p>Per capita distribution is handled by Finance, not the online forms.</p></div></div>'
+            . '</main></body></html>';
+
+        $chunks = $this->chunker()->chunkHtml($html, '/resources/sagamok');
+        $headings = array_map(static fn($c) => $c->heading, $chunks);
+
+        self::assertContains('Apply for housing', $headings, 'Each card question is its own chunk heading.');
+        self::assertContains('Ask about per capita', $headings);
+        // The tab button (not a card) must not become a heading.
+        self::assertNotContains('Get something done', $headings);
+        $allText = implode(' ', array_map(static fn($c) => $c->text, $chunks));
+        self::assertStringNotContainsString('Get something done', $allText, 'Tab-button text is skipped, not ingested.');
+    }
+
+    #[Test]
     public function it_drops_fragments_below_the_minimum_length(): void
     {
         $html = '<html><head><title>Tiny</title></head><body><main><h2>Hi</h2><p>ok</p></main></body></html>';

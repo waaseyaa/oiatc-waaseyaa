@@ -119,6 +119,16 @@ final class DocChunker
                     $current['heading'] = self::normalize($child->textContent);
                     continue;
                 }
+                // Accordion card questions act as sub-headings so each card
+                // becomes its own chunk; other buttons (tabs, toggles) are skipped.
+                if ($tag === 'button') {
+                    $parent = $child->parentNode;
+                    if ($parent instanceof \DOMElement && str_contains($parent->getAttribute('class'), 'r-card')) {
+                        $flush($sections, $current);
+                        $current['heading'] = self::normalize($child->textContent);
+                    }
+                    continue;
+                }
                 $this->walk($child, $sections, $current, $flush);
                 continue;
             }

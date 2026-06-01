@@ -8,11 +8,18 @@ use App\Analytics\AnalyticsRecorder;
 use App\Analytics\AnalyticsReport;
 use App\Analytics\AnalyticsSchema;
 use App\Controller\AnalyticsDashboardController;
+use App\Controller\ChatController;
 use App\Controller\CollectController;
 use App\Controller\HomeController;
 use App\Controller\PageStatsController;
+use App\Support\ChatPromptBuilder;
+use App\Support\KnowledgeRetriever;
+use App\Support\SqliteRateLimiter;
 use Symfony\Component\HttpFoundation\Request;
+use Waaseyaa\AI\Agent\Provider\ProviderInterface;
 use Waaseyaa\Database\DatabaseInterface;
+use Waaseyaa\Database\DBALDatabase;
+use Waaseyaa\Foundation\Log\LoggerInterface;
 use Waaseyaa\Foundation\ServiceProvider\ServiceProvider;
 use Waaseyaa\Routing\RouteBuilder;
 use Waaseyaa\Routing\WaaseyaaRouter;
@@ -43,6 +50,23 @@ final class AppServiceProvider extends ServiceProvider
         }
 
         return $database instanceof DatabaseInterface ? $database : null;
+    }
+
+    /**
+     * The app's SQLite file path, mirroring the kernel: WAASEYAA_DB if set
+     * (relative paths resolved against the project root), else the default
+     * storage/waaseyaa.sqlite. Used to give the rate limiter a persistent
+     * connection independent of the container.
+     */
+    private function databasePath(): string
+    {
+        $configured = getenv('WAASEYAA_DB') ?: '';
+        if ($configured === '') {
+            return $this->projectRoot . '/storage/waaseyaa.sqlite';
+        }
+        $isAbsolute = str_starts_with($configured, '/') || preg_match('#^[A-Za-z]:[\\\\/]#', $configured) === 1;
+
+        return $isAbsolute ? $configured : $this->projectRoot . '/' . ltrim($configured, './');
     }
 
     public function routes(WaaseyaaRouter $router, ?\Waaseyaa\Entity\EntityTypeManager $entityTypeManager = null): void
@@ -236,6 +260,29 @@ final class AppServiceProvider extends ServiceProvider
                     ->controller(fn(Request $request) => $news->explainerUpdates($request))
                     ->allowAll()
                     ->methods('GET')
+                    ->build(),
+            );
+
+            // Grounded RAG chat over the doc_chunk knowledge base (Path B).
+            // JSON request body -> CSRF auto-skipped; rate-limited per client.
+            // Pin the limiter to the persistent SQLite file. resolve(DatabaseInterface)
+            // at route-registration time can hand back an ephemeral connection
+            // (the route/controller is built once, not per request), which would
+            // make the rate limit reset every request. See upstream note #018.
+            $chat = new ChatController(
+                retriever: new KnowledgeRetriever($entityTypeManager->getRepository('doc_chunk')),
+                prompts: new ChatPromptBuilder(),
+                provider: $this->resolve(ProviderInterface::class),
+                limiter: new SqliteRateLimiter(DBALDatabase::createSqlite($this->databasePath())),
+                logger: $this->resolve(LoggerInterface::class),
+                configured: (getenv('ANTHROPIC_API_KEY') ?: '') !== '',
+            );
+            $router->addRoute(
+                'chat',
+                RouteBuilder::create('/api/chat')
+                    ->controller(fn(Request $request) => $chat->handle($request))
+                    ->allowAll()
+                    ->methods('POST')
                     ->build(),
             );
         }
