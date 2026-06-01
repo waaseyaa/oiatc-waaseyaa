@@ -148,6 +148,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'explainers.where-your-data-lives',
+            RouteBuilder::create('/explainers/where-your-data-lives')
+                ->controller(fn() => $controller->whereYourDataLives())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         $database = $this->tryResolveDatabase();
         if ($database !== null) {
             $secret = getenv('WAASEYAA_ANALYTICS_SECRET')
