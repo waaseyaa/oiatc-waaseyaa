@@ -52,12 +52,34 @@ final class GraphRetrieverTest extends TestCase
         self::assertNotSame([], $top);
         self::assertSame('/explainers/robinson-huron-treaty', $top[0]->sourceUrl);
         self::assertSame('OIATC', $top[0]->relationship);
+        // The dedicated explainer is genuinely the most relevant; a related entity
+        // that only mentions the treaty in passing (the solar project) must not be
+        // dropped-in-its-place nor cited over it.
+        $urls = array_map(static fn(\App\Support\Passage $p): string => $p->sourceUrl, $top);
+        self::assertNotContains('/explainers/massey-solar-project', $urls);
     }
 
     #[Test]
     public function off_corpus_question_returns_nothing(): void
     {
         self::assertSame([], $this->retriever()->retrieve('xylophone zebra quasar', 'sagamok'));
+    }
+
+    #[Test]
+    public function a_clear_single_topic_question_cites_only_on_topic_sources(): void
+    {
+        // Housing is a strong own-community match, so the weakly-overlapping
+        // general pages must be dropped, not padded in and cited.
+        $top = $this->retriever()->retrieve('How do I apply for housing?', 'sagamok', 6);
+
+        self::assertNotSame([], $top);
+        self::assertSame('Apply for housing', $top[0]->heading);
+        self::assertSame('/anokii/sagamok', $top[0]->sourceUrl);
+
+        $urls = array_map(static fn(\App\Support\Passage $p): string => $p->sourceUrl, $top);
+        self::assertNotContains('/explainers/where-your-data-lives', $urls, 'data-sovereignty page must not be cited');
+        self::assertNotContains('/explainers/robinson-huron-treaty', $urls, 'RHT page must not be cited');
+        self::assertSame(['/anokii/sagamok'], array_values(array_unique($urls)), 'only the on-topic Sagamok source remains');
     }
 
     #[Test]
@@ -84,11 +106,19 @@ final class GraphRetrieverTest extends TestCase
         $this->row($db, 'community', 'Massey', ['slug' => 'massey', 'located_at' => 'massey', 'region' => json_encode(['sagamok', 'elliot-lake'])]);
 
         $this->row($db, 'service', 'Community Wellness Department', ['slug' => 'sagamok-health', 'located_at' => 'sagamok', 'has_topic' => 'health-wellness']);
+        $this->row($db, 'service', 'Housing Department', ['slug' => 'sagamok-housing', 'located_at' => 'sagamok', 'has_topic' => 'housing']);
         $this->row($db, 'project', 'Massey Solar Project', ['slug' => 'massey-solar', 'located_at' => 'massey', 'has_topic' => 'energy-solar', 'relates_to' => json_encode(['sagamok', 'massey'])]);
 
         $this->chunk($db, 'Health and wellness', 'The Community Wellness Department offers mental health and addictions support and medical transportation.', '/anokii/sagamok', 'service', 'sagamok-health');
-        $this->chunk($db, 'The project itself', 'The Massey Solar Project is a solar energy and battery storage project.', '/explainers/massey-solar-project', 'project', 'massey-solar');
-        $this->chunk($db, 'The annuity', 'The Robinson Huron Treaty annuity case concerns the treaty.', '/explainers/robinson-huron-treaty', '', '');
+        $this->chunk($db, 'Apply for housing', 'The Housing Department handles housing rentals, rent-to-own, and self-help loans. To apply for housing, contact the Housing Department.', '/anokii/sagamok', 'service', 'sagamok-housing');
+        // Mentions the treaty only in passing (one overlapping term), so a treaty
+        // query matches it weakly; the dedicated RHT explainer must win and this
+        // incidental mention must be gated out, not cited over it.
+        $this->chunk($db, 'The project itself', 'The Massey Solar Project is a solar energy and battery storage project near treaty lands.', '/explainers/massey-solar-project', 'project', 'massey-solar');
+        // Two general OIATC pages that weakly overlap the housing query (they
+        // contain "apply" but not "housing"); the relevance gate must drop them.
+        $this->chunk($db, 'The annuity', 'The Robinson Huron Treaty annuity case concerns the treaty. Members can apply for the distribution.', '/explainers/robinson-huron-treaty', '', '');
+        $this->chunk($db, 'Where your data lives', 'Where your community data actually lives. You can apply data-sovereignty principles.', '/explainers/where-your-data-lives', '', '');
 
         return new GraphRetriever($db);
     }

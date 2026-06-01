@@ -37,6 +37,18 @@ final class GraphRetriever implements RetrieverInterface
     private const CLOSE_REGION = 1;
     private const CLOSE_BROADER = 2;
 
+    /**
+     * Relevance gate, so weak matches are not padded in and cited. A passage is
+     * kept only if its keyword overlap is within SCORE_MARGIN of the strongest
+     * match in the candidate set AND clears SCORE_FLOOR (a non-trivial overlap,
+     * above a single weak body-term hit which scores 1.0). Gating on keyword
+     * relevance (not closeness) means a weak broader page is dropped next to a
+     * strong local answer, and a weak local match is dropped next to a strongly
+     * relevant broader page; closeness only influences ordering, not inclusion.
+     */
+    private const SCORE_MARGIN = 0.5;
+    private const SCORE_FLOOR = 1.5;
+
     /** @var list<string> */
     private const STOPWORDS = [
         'a', 'an', 'and', 'are', 'as', 'at', 'be', 'by', 'can', 'do', 'does', 'for', 'from',
@@ -111,7 +123,36 @@ final class GraphRetriever implements RetrieverInterface
                 ?: ($b['kw'] <=> $a['kw']);
         });
 
-        return array_map(static fn(array $row): Passage => $row['passage'], array_slice($scored, 0, max(1, $k)));
+        if ($scored === []) {
+            return [];
+        }
+
+        // Relevance gate: keep only passages whose keyword overlap is within
+        // SCORE_MARGIN of the strongest match in the candidate set and clears
+        // SCORE_FLOOR, instead of padding to a fixed k. Because the threshold
+        // comes from the strongest keyword match (regardless of closeness), a
+        // weak broader page is dropped next to a strong local answer (the
+        // housing case), and a weak local match is dropped next to a strongly
+        // relevant broader page (e.g. a treaty question, where the dedicated
+        // explainer wins over an incidental mention). Cross-community reach to a
+        // genuinely relevant related entity (the shared project) survives because
+        // it scores high. If nothing clears the floor, return nothing so the
+        // controller refuses clearly. Ordering is unchanged (topic, then
+        // closeness, then proximity), so the kept set stays best-first.
+        $maxKw = 0.0;
+        foreach ($scored as $row) {
+            $maxKw = max($maxKw, $row['kw']);
+        }
+        $threshold = max($maxKw * self::SCORE_MARGIN, self::SCORE_FLOOR);
+
+        $kept = [];
+        foreach ($scored as $row) {
+            if ($row['kw'] >= $threshold) {
+                $kept[] = $row;
+            }
+        }
+
+        return array_map(static fn(array $row): Passage => $row['passage'], array_slice($kept, 0, max(1, $k)));
     }
 
     /**
