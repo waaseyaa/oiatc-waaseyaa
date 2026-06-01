@@ -87,4 +87,48 @@ final class PublicPagesTest extends TestCase
         $this->assertSame(301, $response->getStatusCode());
         $this->assertSame('/', $response->getTargetUrl());
     }
+
+    #[Test]
+    public function sagamok_resources_route_is_registered(): void
+    {
+        $router = new WaaseyaaRouter();
+        new AppServiceProvider()->routes($router);
+
+        $this->assertSame('resources.sagamok', $router->match('/resources/sagamok')['_route'] ?? null);
+    }
+
+    #[Test]
+    public function sagamok_resources_page_renders_tabs_search_and_corrected_content(): void
+    {
+        $response = new HomeController()->sagamokResources();
+        $html = (string) $response->getContent();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString('Sagamok member resources', $html);
+
+        // Tabbed + search interaction is present.
+        $this->assertStringContainsString('id="r-q"', $html, 'search input');
+        $this->assertStringContainsString('data-panel="nav"', $html);
+        $this->assertStringContainsString('data-panel="prog"', $html);
+        $this->assertStringContainsString('data-panel="council"', $html);
+        $this->assertStringContainsString('data-go="nav"', $html, 'programs -> navigator cross-link');
+
+        // Independence note and official Sagamok links retained.
+        $this->assertStringContainsString('Independent of Sagamok Chief and Council', $html);
+        $this->assertStringContainsString('sagamokanishnawbek.com/meeting-minutes', $html);
+        $this->assertStringContainsString('koognaasewin.com', $html);
+
+        // Member transactions point at the band (Membership/Finance), not the online forms.
+        $this->assertStringContainsString('rather than relying on the online forms', $html);
+
+        // Content corrections from the port brief.
+        $this->assertStringContainsString('705-501-8950', $html, 'Lifelong Learning Centre direct line');
+        $this->assertStringNotContainsString('ISETS', $html, 'no specific ISETS program name asserted');
+        $this->assertStringContainsString('Nogdawindamin', $html, 'CFAU framed as a prevention service re Nogdawindamin');
+        $this->assertStringContainsString('reclaim jurisdiction over child welfare', $html, 'Koognaasewin reframed as a North Shore initiative');
+        $this->assertStringContainsString('not a Sagamok service you apply to', $html);
+
+        // Rendered through Twig; no raw template tags leaked.
+        $this->assertStringNotContainsString('{%', $html);
+    }
 }
