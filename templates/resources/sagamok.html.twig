@@ -74,8 +74,10 @@
 {% endblock %}
 
 {% block content %}
-<section class="sec">
-  <div class="r-wrap">
+{# Single utility page: a plain .r-wrap container, not section.sec (whose
+   --section-y 120px top padding is for stacked home-page sections and would
+   stack with .r-wrap's own top padding into a screenful-tall gap). #}
+<div class="r-wrap">
 
     <div class="eyebrow">OIATC · Resources · Sagamok Anishnawbek</div>
     <h1 class="display">Sagamok member resources</h1>
@@ -323,8 +325,7 @@
 
     <p class="r-note">A community resource from OIATC, the Ontario Indigenous AI and Technology Council. Independent of Sagamok Chief and Council and its administration, and of the partner organizations named. It describes and links to Sagamok's own programs and record; it does not provide, decide, or reproduce any of them. Main band line: (705) 865-2421.</p>
 
-  </div>
-</section>
+</div>
 {% endblock %}
 
 {% block scripts_extra %}
