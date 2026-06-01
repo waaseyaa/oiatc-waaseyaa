@@ -94,3 +94,59 @@ notes.
 - **Symptom:** With no policy registered for an entity type, `EntityAccessHandler::check($entity, 'view', $account)` aggregates to `Neutral`, and `JsonApiController` requires `isAllowed()`. For the **single-entity GET** that means `403`, but for the **collection GET** (`/api/{type}`) the controller filters each row by `isAllowed()` (`JsonApiController:85`), so the endpoint returns **`200` with `data: []`** — an empty list, no error, no warning. A freshly-registered content type therefore looks "publicly readable but empty" rather than "not yet authorized," which reads as a data bug, not an access decision. (This is what made the read surface look "open but empty" during the audit.)
 - **Workaround:** Add an explicit `AccessPolicy` that returns `allowed()` for `view` (here: published rows public, drafts gated). See `src/Access/NewsPostAccessPolicy.php`.
 - **Likely upstream fix:** Fail-closed is the right default, but the **silent** empty collection is a footgun. Options: (a) when a list is filtered down by access, include a JSON:API `meta` note or emit a `debug`-level log ("N rows hidden by access policy"); (b) document prominently that a new content entity needs a view-granting policy to be API-readable; (c) optionally surface a boot-time/dev-mode notice when a registered entity type has no policy at all. Any of these turns a confusing empty list into an obvious "you haven't authorized this yet."
+
+## 010 — ai-vector ships no service provider; embedding is not wired even when installed
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Phase 2 AI-layer assessment — checking which AI packages actually boot in this app.
+- **Symptom:** `ai-agent`, `ai-tools`, `ai-observability`, and `ai-pipeline` each declare `extra.waaseyaa.providers` and auto-boot (the `agent_run` table exists, the 8 stock tools register, etc.). **`ai-vector` and `ai-schema` declare no providers at all**, so nothing is wired by installing them: the `EntityEmbeddingListener` is not subscribed, no `EmbeddingStorageInterface` / `EmbeddingProviderInterface` is bound, and the `embeddings` table is never created. The package looks "installed and ready" but is inert until the app writes its own service provider to subscribe the listener and bind a storage + provider. Easy to assume vector search works because the package is present.
+- **Workaround:** App-owned service provider that binds `EmbeddingStorageInterface` (e.g. `SqliteEmbeddingStorage`), an `EmbeddingProviderInterface` (via `EmbeddingProviderFactory::fromConfig`), and subscribes `EntityEmbeddingListener` to `EntityEvent::POST_SAVE`.
+- **Likely upstream fix:** Ship an `AiVectorServiceProvider` (declared in `ai-vector/composer.json` `extra.waaseyaa.providers`) that wires storage + provider + listeners from the existing `ai.embedding_provider` config, no-opping cleanly when the provider is empty — matching how the other ai-* packages self-wire.
+
+## 011 — The vector store keeps only vectors, and embedding is entity-driven; RAG over non-entity content needs synthesized chunk records
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Scoping RAG over the app's resource/explainer content.
+- **Symptom:** Two coupled constraints. (1) `EmbeddingStorageInterface::store(entityType, id, vector)` persists only the float vector keyed by `(entity_type, entity_id)`; `findSimilar()` returns `{id, score}`. The store is **not** a document store — it holds no source text, so grounding a model requires the app to keep the chunk text itself elsewhere and join on the returned id. (2) Embedding generation is **entity-driven**: `EntityEmbeddingListener` embeds configured `embedding_fields` on `EntityEvent::POST_SAVE`. Content that is not an entity — here the resource/explainer pages are Twig templates, and the only entity (`news_post`) isn't even in `embedding_fields` — cannot be embedded without first turning it into entity/chunk records.
+- **Workaround:** Introduce a `doc_chunk` record (entity or a `DatabaseInterface` table) holding `{id, source_url, title, text}`; embed each chunk into the vector store under a synthetic `entity_type='doc_chunk'`; at query time, search → ids → load chunk text → ground the model.
+- **Likely upstream fix:** Offer a first-class "passage/chunk" source (text + metadata + vector in one record) and a non-entity ingestion path, plus optional text-chunking, so RAG over static/site content doesn't require every app to reinvent a chunk table.
+
+## 012 — Tool-calling works only with AnthropicProvider; the OpenAI-compatible provider is text-only
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Designing a retrieval-tool RAG agent.
+- **Symptom:** `AgentExecutor`'s tool loop (provider returns tool-use blocks → executor invokes `AgentToolInterface` → feeds results back) is implemented for `AnthropicProvider` (SSE, tool blocks). `OpenAiCompatibleProvider` is text-in/text-out with no tool-call support, so an `#[AsAgentDefinition]` that lists `tools:` will not actually call them under OpenAI. A retrieval-**tool** agent therefore requires Anthropic; with an OpenAI-compatible model you must inline retrieved passages into the prompt instead of exposing a tool.
+- **Workaround:** Use `AnthropicProvider` for tool-using agents, or skip the tool loop and build a retrieve-then-prompt RAG controller that puts passages in the system/user message.
+- **Likely upstream fix:** Implement OpenAI function-calling in `OpenAiCompatibleProvider` (the Chat Completions `tools`/`tool_calls` shape), or document clearly that tool loops are Anthropic-only at alpha.188.
+
+## 013 — No chat ProviderInterface binding; NullLlmProvider returns a placeholder that looks like success
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Tracing what the shipped `/api/ai/agent/run` endpoint actually does out of the box.
+- **Symptom:** `MessagingServiceProvider` binds `ProviderInterface` to `NullLlmProvider` by default, and the framework never reads an `ANTHROPIC_API_KEY` (Anthropic is entirely app-wired; only `OPENAI_API_KEY` is read, and only for embeddings). So a fresh app's agent runs "succeed" but return the literal placeholder `"[LLM unavailable in this environment ...]"`. Combined with the agent run being async (dispatched to a Messenger handler, needs a worker/sync transport) and `BroadcastStorage` being unbound ([#006]), the shipped agent HTTP/SSE surface returns no real, streamed answer until the app binds a provider, a worker, and broadcast storage.
+- **Workaround:** App service provider binds `ProviderInterface` to `AnthropicProvider(getenv('ANTHROPIC_API_KEY'), model)`, binds `BroadcastStorage` (see [#006]), and runs a queue worker (or a sync transport for the `RunAgent` message).
+- **Likely upstream fix:** Keep `NullLlmProvider` as the default but make it loud — log a `warning` once at boot when the active chat provider is Null, and/or have the agent endpoint surface a clear "no model configured" error rather than a success-shaped placeholder. Document the provider + worker + broadcast prerequisites for the agent endpoint in one place.
+
+## 014 — No CLI or queue handler to build embeddings; the index must be warmed by hand
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Looking for how to populate the vector index.
+- **Symptom:** `SemanticIndexWarmer` (batch embed) is a service with **no `bin/waaseyaa` command** exposed, and `EntityEmbeddingListener` can dispatch a `GenericMessage(type: 'ai_vector.embed_entity')` for which **no handler ships**. So there is no out-of-the-box way to (re)build embeddings; the app must wire its own CLI command or message handler.
+- **Workaround:** App-owned CLI command (or a one-off script) that calls `SemanticIndexWarmer::warm([...types])`, or a registered handler for the `ai_vector.embed_entity` message.
+- **Likely upstream fix:** Ship a `bin/waaseyaa ai:embed[:warm]` command and a default handler for the `ai_vector.embed_entity` message in `ai-vector`, so populating the index is a documented one-liner.
+
+## 015 — `#[ContentEntityType]` does not auto-register an entity; you must also list it in config/entity-types.php
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Adding a `doc_chunk` content entity, following the attribute-first pattern the docs/UPGRADING.md promote (`#[ContentEntityType]` + `#[Field]` on typed properties).
+- **Symptom:** The `#[ContentEntityType(id: 'doc_chunk')]` attribute on the entity class is **not** what registers the type. `optimize:manifest` reports `0 attribute entity types` even with `news_post` and `doc_chunk` both carrying the attribute; registration happens only because `config/entity-types.php` returns `new EntityType(id, label, class, keys)` for each. So the attribute drives field discovery/metadata, but the type is invisible to `EntityTypeManager` (and `getRepository('doc_chunk')` throws / the table is never created) until you also hand-register it in config. The two-place requirement is easy to miss given the docs lead with attribute-first.
+- **Workaround:** Define the entity attribute-first **and** add a matching `new EntityType(...)` row to `config/entity-types.php`.
+- **Likely upstream fix:** Either scan the app's `src/` for `#[ContentEntityType]` and auto-register (so the attribute is sufficient), or document clearly that attribute-first defines *shape* while `config/entity-types.php` (or `EntityType::fromClass()` in a provider) still does the *registration*. At minimum, make `optimize:manifest`'s "0 attribute entity types" line explain that app entities register via config.
+
+## 016 — findBy() criteria only match key columns, not custom `#[Field]`s (which live in the _data blob)
+
+- **Date / version:** 2026-05-31 · waaseyaa/framework alpha.188
+- **Doing:** Trying to upsert `doc_chunk` rows by a stable `source_url` / `chunk_key` field.
+- **Symptom:** Custom `#[Field]` values are stored as JSON inside the `_data` column (only the entity-key fields — id, uuid, bundle, label, langcode — get real columns). `SqlStorageDriver::findBy(['source_url' => $url])` builds a SQL condition on a column that doesn't exist for blob fields, so filtering by a custom field does not work as written (the `NewsController` already sidesteps this by loading all rows and filtering in PHP). There's no error that says "you can't filter on a blob field" — it just won't behave like a normal query.
+- **Workaround:** Load all rows (`findBy([])`) and index/filter in PHP (fine at our scale), as `IngestDocsCommand::syncChunks` does; or promote a field to a key/indexed column if it must be queryable.
+- **Likely upstream fix:** Support `findBy()` predicates against `_data` fields via SQLite `json_extract` (and document which fields are query-capable), or make the storage reject/raise on criteria that reference non-column fields instead of silently not filtering.
