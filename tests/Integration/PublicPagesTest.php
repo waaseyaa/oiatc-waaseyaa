@@ -177,6 +177,18 @@ final class PublicPagesTest extends TestCase
     }
 
     #[Test]
+    public function massey_resources_module_lists_the_full_explainer_cluster(): void
+    {
+        $massey = (string) new AnokiiController()->massey()->getContent();
+
+        // All four cluster links, including the climate and environment companion.
+        $this->assertStringContainsString('href="/explainers/massey-solar-project">The Massey Solar Project in 2026, a guide</a>', $massey);
+        $this->assertStringContainsString('href="/explainers/massey-solar-project-what-youve-heard">What you\'ve heard, checked against the record</a>', $massey);
+        $this->assertStringContainsString('href="/explainers/massey-solar-project-voices">Voices from the community</a>', $massey);
+        $this->assertStringContainsString('href="/explainers/massey-solar-project/climate-and-environment">The climate and environment context</a>', $massey);
+    }
+
+    #[Test]
     public function data_sovereignty_explainer_route_is_registered(): void
     {
         $router = new WaaseyaaRouter();
