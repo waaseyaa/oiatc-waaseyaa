@@ -152,6 +152,25 @@ final class GraphRetriever implements RetrieverInterface
             }
         }
 
+        // Topic-confidence precision. The keyword gate alone still lets a clearly
+        // off-topic page clear the bar on incidental term overlap (e.g. an
+        // Ontario Works question matching "apply"/"Ontario" in the treaty page or
+        // the Massey Solar project). So once the question has a confident on-topic
+        // answer (the inferred topic is shared by at least one kept passage), drop
+        // every passage that does not share that topic, from both the grounding
+        // context and the Sources line. This is closeness-agnostic: it removes an
+        // off-topic broader/general page AND an off-topic shared project, while
+        // keeping on-topic region and province-wide services (cross-community
+        // reach). When there is no confident topic match (no inferred topic, or it
+        // is matched only by general content), the keyword-gated set is kept as-is
+        // so broader OIATC content stays answerable.
+        if ($inferredTopic !== null) {
+            $onTopic = array_values(array_filter($kept, static fn(array $row): bool => $row['topicMatch'] === 1));
+            if ($onTopic !== []) {
+                $kept = $onTopic;
+            }
+        }
+
         return array_map(static fn(array $row): Passage => $row['passage'], array_slice($kept, 0, max(1, $k)));
     }
 

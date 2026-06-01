@@ -93,6 +93,34 @@ final class GraphRetrieverTest extends TestCase
     }
 
     #[Test]
+    public function an_income_support_question_cites_only_the_on_topic_services_not_broader_pages(): void
+    {
+        // The treaty (general) page clears the keyword gate on incidental overlap
+        // ("apply", "Ontario Works", "income support"), and the solar project is a
+        // related shared project; both are off topic. With a confident
+        // income-support match (the District Services Boards), neither may be
+        // grounded on or cited.
+        $top = $this->retriever()->retrieve('How do I apply for Ontario Works income support?', 'sagamok', 6);
+
+        self::assertNotSame([], $top);
+
+        $urls = array_map(static fn(Passage $p): string => $p->sourceUrl, $top);
+        sort($urls);
+        self::assertSame(
+            ['https://www.adsab.on.ca/en/about-us/', 'https://www.msdsb.net/'],
+            array_values(array_unique($urls)),
+            'only the on-topic District Services Boards are cited',
+        );
+        self::assertNotContains('/explainers/massey-solar-project', $urls, 'off-topic shared project must not be cited');
+        self::assertNotContains('/explainers/robinson-huron-treaty', $urls, 'off-topic treaty page must not be cited');
+
+        // Cross-community reach is intact: both region DSBs are present and labelled.
+        $labels = array_map(static fn(Passage $p): string => $p->relationship, $top);
+        self::assertContains('Espanola (region)', $labels);
+        self::assertContains('Elliot Lake (region, about 45 minutes by road)', $labels);
+    }
+
+    #[Test]
     public function off_corpus_question_returns_nothing(): void
     {
         self::assertSame([], $this->retriever()->retrieve('xylophone zebra quasar', 'sagamok'));
@@ -137,9 +165,10 @@ final class GraphRetrieverTest extends TestCase
         $this->place($db, 'Serpent River First Nation', ['slug' => 'serpent-river', 'lat' => '46.2021', 'lng' => '-82.4681', 'travel_note' => '']);
         $this->place($db, 'Elliot Lake', ['slug' => 'elliot-lake', 'lat' => '46.3833', 'lng' => '-82.6500', 'travel_note' => 'about 45 minutes by road']);
         $this->place($db, 'Sault Ste. Marie', ['slug' => 'sault-ste-marie', 'lat' => '46.5168', 'lng' => '-84.3333', 'travel_note' => '']);
+        $this->place($db, 'Espanola', ['slug' => 'espanola', 'lat' => '46.2584', 'lng' => '-81.7665', 'travel_note' => '']);
 
-        $this->row($db, 'community', 'Sagamok', ['slug' => 'sagamok', 'located_at' => 'sagamok', 'region' => json_encode(['massey', 'serpent-river', 'elliot-lake', 'sault-ste-marie'])]);
-        $this->row($db, 'community', 'Massey', ['slug' => 'massey', 'located_at' => 'massey', 'region' => json_encode(['sagamok', 'serpent-river', 'elliot-lake', 'sault-ste-marie'])]);
+        $this->row($db, 'community', 'Sagamok', ['slug' => 'sagamok', 'located_at' => 'sagamok', 'region' => json_encode(['massey', 'serpent-river', 'elliot-lake', 'espanola', 'sault-ste-marie'])]);
+        $this->row($db, 'community', 'Massey', ['slug' => 'massey', 'located_at' => 'massey', 'region' => json_encode(['sagamok', 'serpent-river', 'elliot-lake', 'espanola', 'sault-ste-marie'])]);
 
         // Sagamok's own services: primary care and mental health both point at the
         // Sagamok page, plus housing.
@@ -151,6 +180,9 @@ final class GraphRetrieverTest extends TestCase
         $this->row($db, 'service', 'Maamwesying Mental Wellness and Addictions', ['slug' => 'maamwesying-mental-wellness', 'located_at' => 'serpent-river', 'has_topic' => 'mental-health-addictions']);
         // Province-wide helpline: empty located_at.
         $this->row($db, 'service', 'Talk4Healing helpline', ['slug' => 'talk4healing-helpline', 'located_at' => '', 'has_topic' => 'mental-health-addictions']);
+        // Income-support region services (District Services Boards).
+        $this->row($db, 'service', 'Manitoulin-Sudbury DSB Ontario Works', ['slug' => 'msdsb-ow', 'located_at' => 'espanola', 'has_topic' => 'income-support']);
+        $this->row($db, 'service', 'Algoma DSAB Ontario Works', ['slug' => 'adsab-ow', 'located_at' => 'elliot-lake', 'has_topic' => 'income-support']);
 
         $this->row($db, 'project', 'Massey Solar Project', ['slug' => 'massey-solar', 'located_at' => 'massey', 'has_topic' => 'energy-solar', 'relates_to' => json_encode(['sagamok', 'massey'])]);
 
@@ -166,8 +198,16 @@ final class GraphRetrieverTest extends TestCase
         $this->chunk($db, 'The project itself', 'The Massey Solar Project is a solar energy and battery storage project near treaty lands.', '/explainers/massey-solar-project', 'project', 'massey-solar');
         // Two general OIATC pages that weakly overlap the housing query (they
         // contain "apply" but not "housing"); the relevance gate must drop them.
-        $this->chunk($db, 'The annuity', 'The Robinson Huron Treaty annuity case concerns the treaty. Members can apply for the distribution.', '/explainers/robinson-huron-treaty', '', '');
+        // The treaty page also mentions Ontario Works terms in passing here, so it
+        // clears the keyword gate for an Ontario Works question; being a general
+        // page (no topic), the topic gate must drop it from that answer while it
+        // still wins a genuine treaty question.
+        $this->chunk($db, 'The annuity', 'The Robinson Huron Treaty annuity case concerns the treaty. Members can apply for the Ontario Works distribution and income support.', '/explainers/robinson-huron-treaty', '', '');
         $this->chunk($db, 'Where your data lives', 'Where your community data actually lives. You can apply data-sovereignty principles.', '/explainers/where-your-data-lives', '', '');
+        // Income-support region services (District Services Boards) that answer an
+        // Ontario Works question on topic.
+        $this->chunk($db, 'Ontario Works', 'The Manitoulin-Sudbury District Services Board delivers Ontario Works income support. You can apply for Ontario Works income support.', 'https://www.msdsb.net/', 'service', 'msdsb-ow');
+        $this->chunk($db, 'Ontario Works', 'The Algoma District Services Administration Board delivers Ontario Works income support. Apply for Ontario Works income support.', 'https://www.adsab.on.ca/en/about-us/', 'service', 'adsab-ow');
 
         return new GraphRetriever($db);
     }
