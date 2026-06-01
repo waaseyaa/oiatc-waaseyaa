@@ -191,6 +191,36 @@ Set `WAASEYAA_GOLDEN_SHA` or add `.waaseyaa-golden-sha` for CI drift gates (see 
 
 **Per-site convergence audits:** follow [per-site-convergence-audit.md](https://github.com/waaseyaa/framework/blob/main/docs/specs/per-site-convergence-audit.md) in the Waaseyaa monorepo; record findings under `docs/audits/` per that spec.
 
+## Operations: deploy, Pi access, secrets
+
+oiatc.ca runs on a Raspberry Pi managed entirely through the **private**
+`waaseyaa-infra` repo. **Do not re-derive any of this each session, and do not
+ask the human to SSH or to run Pi commands** — they have never SSHed in and
+won't. A Claude agent set the Pi up; agents administer it. You already have the
+access; use it.
+
+- **Deploy app code:** commit + push `main`, then bump `OIATC_REF` in
+  `waaseyaa-infra` `compose/docker-compose.yml` to the new SHA and push — GitHub
+  Actions rebuilds + restarts the container on the Pi over Tailscale. You do not
+  build on the Pi by hand.
+- **Pi access:** SSH as the `oiatc` user with the agent key on this workstation
+  (the deploy also reaches the Pi from CI). Exact host/key are in the private
+  runbook below — never put them or any secret in this (public) repo.
+- **Secrets:** the **ansible vault** in `waaseyaa-infra` is the source of truth.
+  `ANTHROPIC_API_KEY` is delivered to the Pi by the ansible playbook (or, when
+  ansible isn't available, an SSH apply that pipes the value on stdin). It is
+  **server-side only — never echo it into chat, logs, the transcript, or a
+  rendered page.** Locally it lives in `.env` (gitignored); the vault password,
+  when present, is `.vault-pass` (gitignored). Never commit or print either.
+- **Anokii data:** after a deploy, `bin/waaseyaa app:ingest-docs` then
+  `app:seed-graph` (idempotent) build the chunk + graph data on the Pi's storage
+  volume; the curated region place-lists and coordinates live in
+  `src/Command/SeedGraphCommand.php`.
+
+> **Full, authoritative procedure (host, SSH key, vault, apply commands, gaps):**
+> `waaseyaa-infra/runbooks/05-oiatc-deploy-and-secrets.md` (private repo). That
+> runbook is the canonical reference — read it before any deploy or secret work.
+
 ## Codified Context
 
 This app uses a three-tier codified context system inherited from Waaseyaa:
