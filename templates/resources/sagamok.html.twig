@@ -5,21 +5,10 @@
 {% block body_class %}route-resources-sagamok{% endblock %}
 {% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
 
-{% block head_meta %}
-  <meta name="robots" content="index,follow">
-  <link rel="canonical" href="https://oiatc.ca/resources/sagamok">
-  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://oiatc.ca/resources/sagamok">
-  <meta property="og:title" content="Sagamok member resources">
-  <meta property="og:description" content="How to get something done with the band, the programs you can access, and how Council works. A community resource from OIATC.">
-  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Sagamok member resources">
-  <meta name="twitter:description" content="How to get something done with the band, the programs you can access, and how Council works.">
-  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
-{% endblock %}
+{# Canonical / og:* / twitter:* and the per-page OG card come from base defaults.
+   Override og_description for a shorter, hookier social blurb than the full
+   meta description. #}
+{% block og_description %}How to get something done with the band, the programs you can access, and how Council works. A community resource from OIATC.{% endblock %}
 
 {% block head_styles %}
   <style>

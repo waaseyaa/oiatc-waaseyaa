@@ -4,19 +4,15 @@
 {% block description %}A council of two working to improve the digital systems that deliver services to First Nations. Governance framework, the Waaseyaa technical framework, and the Minoo community platform.{% endblock %}
 {% block body_class %}route-home{% endblock %}
 
-{% block head_meta %}
-  <link rel="canonical" href="https://oiatc.ca/">
-  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://oiatc.ca/">
-  <meta property="og:title" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:description" content="A council of two working to improve the digital systems that deliver services to First Nations.">
-  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta name="twitter:description" content="A council of two working to improve the digital systems that deliver services to First Nations.">
-  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+{# Canonical / og:* / twitter:* are provided by base.html.twig defaults using
+   the page blocks above and the auto-rendered OG card at /images/og/home.png.
+   Home is a website-type root, not an article — override og_type. The shorter
+   og_description trims the framework/platform names so the social preview
+   reads as a single hook. JSON-LD lives in its own block, separate from meta. #}
+{% block og_type %}website{% endblock %}
+{% block og_description %}A council of two working to improve the digital systems that deliver services to First Nations.{% endblock %}
+
+{% block schema_jsonld %}
   <script type="application/ld+json">
   {
     "@context": "https://schema.org",
