@@ -171,6 +171,15 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'explainers.massey-solar-project.climate-and-environment',
+            RouteBuilder::create('/explainers/massey-solar-project/climate-and-environment')
+                ->controller(fn() => $controller->masseySolarProjectClimateAndEnvironment())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
             'practice.ai-in-coursework',
             RouteBuilder::create('/practice/ai-in-coursework')
                 ->controller(fn() => $controller->practiceAiInCoursework())

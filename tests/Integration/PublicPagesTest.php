@@ -197,4 +197,43 @@ final class PublicPagesTest extends TestCase
 
         $this->assertStringContainsString('/explainers/where-your-data-lives', $html, 'Disclosure must link to the companion explainer.');
     }
+
+    #[Test]
+    public function massey_climate_companion_route_is_registered_and_linked_from_the_main_explainer(): void
+    {
+        $router = new WaaseyaaRouter();
+        new AppServiceProvider()->routes($router);
+
+        $this->assertSame(
+            'explainers.massey-solar-project.climate-and-environment',
+            $router->match('/explainers/massey-solar-project/climate-and-environment')['_route'] ?? null,
+        );
+
+        // The main explainer carries the companion nav card and the one-line pointer.
+        $main = (string) new HomeController()->masseySolarProjectExplainer()->getContent();
+        $this->assertStringContainsString('/explainers/massey-solar-project/climate-and-environment', $main);
+    }
+
+    #[Test]
+    public function massey_climate_companion_renders_neutral_sourced_content_indexable_and_without_em_dashes(): void
+    {
+        $response = new HomeController()->masseySolarProjectClimateAndEnvironment();
+        $html = (string) $response->getContent();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString('Climate and environment context', $html);
+        // Public and indexable (unlike the unlisted demo).
+        $this->assertStringContainsString('content="index, follow"', $html);
+        // Neutral framing and sourcing retained.
+        $this->assertStringContainsString('does not take a position', $html);
+        $this->assertStringContainsString('Renewable Energy Approval', $html);
+        $this->assertStringContainsString('ieso.ca', $html);
+        // In-text references to the main explainer link to it.
+        $this->assertStringContainsString('href="/explainers/massey-solar-project"', $html);
+        // Standard cluster byline/footer.
+        $this->assertStringContainsString('Chi-miigwech for reading.', $html);
+        // No em dashes anywhere on this page.
+        $this->assertStringNotContainsString("\u{2014}", $html, 'No em dashes on the climate companion.');
+        $this->assertStringNotContainsString('{%', $html, 'No raw Twig tags leaked.');
+    }
 }

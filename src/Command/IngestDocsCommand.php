@@ -40,6 +40,11 @@ final class IngestDocsCommand
         '/explainers/massey-solar-project' => 'explainers/massey-solar-project.html.twig',
         '/explainers/massey-solar-project-voices' => 'explainers/massey-solar-project-voices.html.twig',
         '/explainers/massey-solar-project-what-youve-heard' => 'explainers/massey-solar-project-what-youve-heard.html.twig',
+        // Neutral climate/environment companion. Slash source_url matches its live
+        // route and canonical, and still starts with /explainers/massey-solar-project
+        // so app:seed-graph links its chunks to the shared Massey Solar project
+        // (reachable from the Massey vantage).
+        '/explainers/massey-solar-project/climate-and-environment' => 'explainers/massey-solar-project-climate-and-environment.html.twig',
         '/explainers/where-your-data-lives' => 'explainers/where-your-data-lives.html.twig',
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',

@@ -50,6 +50,11 @@ final class HomeController
         return $this->renderTemplate('explainers/massey-solar-project-voices.html.twig');
     }
 
+    public function masseySolarProjectClimateAndEnvironment(): Response
+    {
+        return $this->renderTemplate('explainers/massey-solar-project-climate-and-environment.html.twig');
+    }
+
     public function practiceAiInCoursework(): Response
     {
         return $this->renderTemplate('practice/ai-in-coursework.html.twig');
