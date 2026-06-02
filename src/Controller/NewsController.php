@@ -219,6 +219,60 @@ final class NewsController
     {
         return [
             [
+                'title' => 'A member resource on the Robinson Huron Treaty',
+                'slug' => 'robinson-huron-treaty-explainer',
+                'body' => '<p>OIATC has published a plain-language explainer on the Robinson Huron Treaty, the annuity settlement, and what it means for members. It is a living resource, updated as the picture changes.</p>',
+                // 2026-05-14 00:00:00 UTC
+                'published_at' => 1778716800,
+                'related_explainer' => 'robinson-huron-treaty',
+                'status' => true,
+            ],
+            [
+                'title' => 'Our position on counter-disinformation',
+                'slug' => 'counter-disinformation-position',
+                'body' => '<p>OIATC has published its position on countering disinformation in and about First Nations communities. It sets out the stance and the principles behind it.</p>',
+                // 2026-05-28 00:00:00 UTC
+                'published_at' => 1779926400,
+                'related_explainer' => 'counter-disinformation',
+                'status' => true,
+            ],
+            [
+                'title' => 'A responsible disclosure on the Sagamok members portal',
+                'slug' => 'sagamok-portal-disclosure',
+                'body' => '<p>OIATC has published a responsible disclosure. The Sagamok members-only portal serves member content to anyone, because the login gate is client-side only. The public page carries no URLs, passwords, or member content.</p>',
+                // 2026-05-31 00:00:00 UTC
+                'published_at' => 1780185600,
+                'related_explainer' => 'sagamok-portal',
+                'status' => true,
+            ],
+            [
+                'title' => "Where does your community's data actually live?",
+                'slug' => 'where-your-data-lives-explainer',
+                'body' => '<p>A new explainer maps where community data physically goes, from origin servers to global copies, and what the US CLOUD Act and OCAP mean for it. It is a companion to the Sagamok portal disclosure.</p>',
+                // 2026-05-31 01:00:00 UTC (after the disclosure post on the same day)
+                'published_at' => 1780189200,
+                'related_explainer' => 'where-your-data-lives',
+                'status' => true,
+            ],
+            [
+                'title' => 'Anokii is live on oiatc.ca',
+                'slug' => 'anokii-launch',
+                'body' => '<p>OIATC has launched Anokii, a geography-aware resource instance with a grounded, cited assistant. Communities are vantage points on one shared map, not silos. It is live for Sagamok and Massey.</p>',
+                // 2026-06-01 00:00:00 UTC
+                'published_at' => 1780272000,
+                'related_explainer' => 'anokii',
+                'status' => true,
+            ],
+            [
+                'title' => 'Potentia responds on the record to our Massey questions',
+                'slug' => 'potentia-responds-massey',
+                'body' => '<p>The Massey Solar developer has answered OIATC\'s questions in writing. Massey Solar Inc. is 51% owned through subsidiaries of Wahnapitae and Atikameksheng and 49% by a private fund, with Potentia as developer, and Potentia confirms it has been in economic-benefit discussions with Sagamok since fall 2025. The explainer is updated.</p>',
+                // 2026-06-02 00:00:00 UTC
+                'published_at' => 1780358400,
+                'related_explainer' => 'massey-solar-project',
+                'status' => true,
+            ],
+            [
                 'title' => 'A $300-million lesson in who governs the system',
                 'slug' => 'prescribeit-governance-failure',
                 'body' => '<p>Ottawa has shut down PrescribeIT, the federal "axe the fax" e-prescribing program, after spending nearly $300-million for use that never passed five per cent of prescriptions. <a href="/positions/prescribeit">Our new position</a> reads the failure as one of governance, not technology, and asks the question OIATC keeps asking: who chose this system, and who can change it.</p>',

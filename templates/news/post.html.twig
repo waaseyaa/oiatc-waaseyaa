@@ -13,10 +13,24 @@
 
     <div class="post-body">{{ post.body|raw }}</div>
 
-    {% set position_slugs = ['prescribeit'] %}
-    {% set is_position = post.related_explainer in position_slugs %}
-    <a class="explainer-cta" href="{{ (is_position ? '/positions/' : '/explainers/') ~ post.related_explainer }}">
-      <span class="explainer-cta__k">{{ is_position ? 'Read the OIATC position' : 'Read the full explainer' }}</span>
+    {% set positions = ['prescribeit', 'counter-disinformation'] %}
+    {% set disclosures = ['sagamok-portal'] %}
+    {% set anokii_pages = ['anokii'] %}
+    {% if post.related_explainer in anokii_pages %}
+      {% set rel_href = '/' ~ post.related_explainer %}
+      {% set rel_label = 'Explore Anokii' %}
+    {% elseif post.related_explainer in positions %}
+      {% set rel_href = '/positions/' ~ post.related_explainer %}
+      {% set rel_label = 'Read the OIATC position' %}
+    {% elseif post.related_explainer in disclosures %}
+      {% set rel_href = '/disclosure/' ~ post.related_explainer %}
+      {% set rel_label = 'Read the disclosure' %}
+    {% else %}
+      {% set rel_href = '/explainers/' ~ post.related_explainer %}
+      {% set rel_label = 'Read the full explainer' %}
+    {% endif %}
+    <a class="explainer-cta" href="{{ rel_href }}">
+      <span class="explainer-cta__k">{{ rel_label }}</span>
       <span class="explainer-cta__t">{{ post.related_explainer|replace({'-': ' '})|title }} →</span>
     </a>
   </article>

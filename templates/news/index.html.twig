@@ -26,7 +26,16 @@
         <span class="post-date">{{ post.published_at|date('F j, Y') }}</span>
         <h2 class="post-title"><a href="/news/{{ post.slug }}">{{ post.title }}</a></h2>
         <p class="post-summary">{{ post.summary }}{% if post.body|length > 200 %}…{% endif %}</p>
-        <span class="post-tag">On: <a href="{{ (post.related_explainer in ['prescribeit'] ? '/positions/' : '/explainers/') ~ post.related_explainer }}">{{ post.related_explainer|replace({'-': ' '})|title }}</a></span>
+        {% if post.related_explainer in ['anokii'] %}
+          {% set rel_href = '/' ~ post.related_explainer %}
+        {% elseif post.related_explainer in ['prescribeit', 'counter-disinformation'] %}
+          {% set rel_href = '/positions/' ~ post.related_explainer %}
+        {% elseif post.related_explainer in ['sagamok-portal'] %}
+          {% set rel_href = '/disclosure/' ~ post.related_explainer %}
+        {% else %}
+          {% set rel_href = '/explainers/' ~ post.related_explainer %}
+        {% endif %}
+        <span class="post-tag">On: <a href="{{ rel_href }}">{{ post.related_explainer|replace({'-': ' '})|title }}</a></span>
       </li>
     {% else %}
       <li class="empty">No posts yet.</li>

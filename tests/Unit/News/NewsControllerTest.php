@@ -14,26 +14,61 @@ use Waaseyaa\Entity\Repository\EntityRepositoryInterface;
 
 final class NewsControllerTest extends TestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        $provider = new \Waaseyaa\SSR\SsrServiceProvider();
+        $provider->setKernelContext(dirname(__DIR__, 3), [], []);
+        $provider->boot();
+    }
+
+    #[Test]
+    public function news_index_resolves_section_back_links_for_each_section(): void
+    {
+        $html = (string) new NewsController($this->repository([]))->index(Request::create('/news'))->getContent();
+
+        // The ensured announcements link to four different sections; each back-link
+        // resolves to the right base path, never to /explainers/ for a non-explainer.
+        self::assertStringContainsString('href="/disclosure/sagamok-portal"', $html);
+        self::assertStringContainsString('href="/anokii"', $html);
+        self::assertStringContainsString('href="/positions/counter-disinformation"', $html);
+        self::assertStringContainsString('href="/explainers/robinson-huron-treaty"', $html);
+        self::assertStringNotContainsString('href="/explainers/sagamok-portal"', $html);
+        self::assertStringNotContainsString('href="/explainers/anokii"', $html);
+        self::assertStringNotContainsString('href="/anokii/anokii"', $html);
+    }
+
+    #[Test]
+    public function a_disclosure_post_page_links_back_to_the_disclosure_section(): void
+    {
+        $html = (string) new NewsController($this->repository([]))->show('sagamok-portal-disclosure')->getContent();
+
+        self::assertStringContainsString('href="/disclosure/sagamok-portal"', $html);
+        self::assertStringContainsString('Read the disclosure', $html);
+        self::assertStringNotContainsString('href="/explainers/sagamok-portal"', $html);
+    }
+
     #[Test]
     public function explainer_updates_returns_newest_three_published_posts_for_that_explainer(): void
     {
+        // Use a synthetic explainer slug so the always-ensured product
+        // announcements (which target real sections) do not enter this fixture.
         $controller = new NewsController($this->repository([
-            $this->post('Old massey', 'old-massey', 'massey-solar-project', 100),
-            $this->post('New massey', 'new-massey', 'massey-solar-project', 400),
-            $this->post('Mid massey', 'mid-massey', 'massey-solar-project', 300),
-            $this->post('Oldest massey', 'oldest-massey', 'massey-solar-project', 50),
+            $this->post('Old demo', 'old-demo', 'demo-explainer', 100),
+            $this->post('New demo', 'new-demo', 'demo-explainer', 400),
+            $this->post('Mid demo', 'mid-demo', 'demo-explainer', 300),
+            $this->post('Oldest demo', 'oldest-demo', 'demo-explainer', 50),
             $this->post('RHT post', 'rht-post', 'robinson-huron-treaty', 500),
-            $this->post('Unpublished massey', 'hidden', 'massey-solar-project', 999, false),
+            $this->post('Unpublished demo', 'hidden', 'demo-explainer', 999, false),
         ]));
 
-        $response = $controller->explainerUpdates(Request::create('/api/explainer-updates?explainer=massey-solar-project'));
+        $response = $controller->explainerUpdates(Request::create('/api/explainer-updates?explainer=demo-explainer'));
         $data = json_decode($response->getContent(), true);
 
         $slugs = array_column($data['posts'], 'slug');
 
         self::assertSame(200, $response->getStatusCode());
         self::assertCount(3, $data['posts'], 'capped at three');
-        self::assertSame(['new-massey', 'mid-massey', 'old-massey'], $slugs, 'newest first, excludes other explainer and unpublished');
+        self::assertSame(['new-demo', 'mid-demo', 'old-demo'], $slugs, 'newest first, excludes other explainer and unpublished');
     }
 
     #[Test]
@@ -43,7 +78,7 @@ final class NewsControllerTest extends TestCase
             $this->post('RHT', 'rht', 'robinson-huron-treaty', 100),
         ]));
 
-        $response = $controller->explainerUpdates(Request::create('/api/explainer-updates?explainer=massey-solar-project'));
+        $response = $controller->explainerUpdates(Request::create('/api/explainer-updates?explainer=no-such-explainer'));
 
         self::assertSame(['posts' => []], json_decode($response->getContent(), true));
     }
