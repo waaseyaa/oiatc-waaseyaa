@@ -38,6 +38,36 @@ final class NewsControllerTest extends TestCase
     }
 
     #[Test]
+    public function the_potentia_post_renders_long_form_and_reconciles_an_existing_row(): void
+    {
+        // A pre-existing short row, as ensure-by-slug first created it.
+        $short = new NewsPost([
+            'title' => 'Potentia responds on the record to our Massey questions',
+            'slug' => 'potentia-responds-massey',
+            'body' => '<p>Short prior body that must be replaced.</p>',
+            'published_at' => 1780358400,
+            'related_explainer' => 'massey-solar-project',
+            'status' => true,
+        ]);
+        $repo = $this->repository([$short]);
+
+        $html = (string) new NewsController($repo)->show('potentia-responds-massey')->getContent();
+
+        // Long-form: multiple paragraphs with bolded section labels.
+        self::assertStringContainsString('<strong>Ownership.</strong>', $html);
+        self::assertStringContainsString('<strong>Sagamok.</strong>', $html);
+        self::assertStringContainsString('<strong>Timeline.</strong>', $html);
+        self::assertStringContainsString('community drop-in sessions', $html);
+        // The stored short row was reconciled in place, not left stale.
+        self::assertStringNotContainsString('Short prior body', $html);
+        // The explainer back-link CTA is preserved.
+        self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
+        self::assertStringContainsString('Read the full explainer', $html);
+        // No em dashes anywhere in the rendered post.
+        self::assertStringNotContainsString("\u{2014}", $html);
+    }
+
+    #[Test]
     public function the_legacy_example_post_is_replaced_in_place_with_real_copy(): void
     {
         $legacy = new NewsPost([

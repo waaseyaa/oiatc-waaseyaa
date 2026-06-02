@@ -121,6 +121,7 @@ final class NewsController
     {
         $entities = $this->repository->findBy([]);
         $changed = $this->healLegacyExample($entities);
+        $changed = $this->reconcileManagedPost($entities, $this->potentiaPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -132,11 +133,14 @@ final class NewsController
                 continue;
             }
             $body = $entity->getBody();
+            $plain = trim(strip_tags($body));
             $posts[] = [
                 'title' => $entity->getTitle(),
                 'slug' => $entity->getSlug(),
                 'body' => $body,
-                'summary' => mb_substr(trim(strip_tags($body)), 0, 200),
+                // List excerpt: a short truncation. Meta description: one sentence.
+                'summary' => mb_substr($plain, 0, 200),
+                'meta_description' => $this->firstSentence($plain),
                 'published_at' => $entity->getPublishedAt(),
                 'related_explainer' => $entity->getRelatedExplainer(),
             ];
@@ -208,6 +212,69 @@ final class NewsController
             'related_explainer' => 'massey-solar-project',
             'status' => true,
         ];
+    }
+
+    /**
+     * The comprehensive, self-contained Potentia response post (long-form).
+     * Body is HTML so it renders as paragraphs through {{ post.body|raw }}.
+     *
+     * @return array<string, mixed>
+     */
+    private function potentiaPost(): array
+    {
+        return [
+            'title' => 'Potentia responds on the record to our Massey questions',
+            'slug' => 'potentia-responds-massey',
+            'body' => '<p>Potentia Renewables has answered OIATC\'s five questions about the Massey Solar Project in writing, on the record. Patrick Russell, the project\'s manager, sent the response on June 2, 2026. Here is what it says.</p>'
+                . '<p><strong>Ownership.</strong> Massey Solar Inc. is an Ontario corporation. 51 per cent is held collectively, through subsidiaries of Wahnapitae First Nation and Atikameksheng Anishnawbek. 49 per cent is held through subsidiaries of Power Sustainable Energy Infrastructure Partnership (PSEIP), a private renewable energy fund. Potentia is an affiliate of PSEIP and acts as the developer and construction-services provider, not the 49 per cent owner. The split between the two First Nations inside the 51 per cent was not disclosed. This corrects the common framing of Massey Solar as a "Power Corporation project": the equity in the project company is majority First Nations held.</p>'
+                . '<p><strong>Why these two Nations.</strong> Potentia says Atikameksheng and Wahnapitae were chosen as Robinson Huron Treaty signatories for the treaty area where the project sits.</p>'
+                . '<p><strong>Sagamok.</strong> Potentia says it has been in discussions with Sagamok Anishnawbek since the fall of 2025 about economic benefit opportunities, and intends to continue through the approval process. These are economic-benefit talks, not equity. Sagamok\'s reserve and territory sit closer to the site than either equity partner\'s.</p>'
+                . '<p><strong>The environmental review.</strong> Specialist consultants have begun the studies required for the Renewable Energy Approval: natural environment surveys, species-at-risk screening, wetland confirmation, noise modelling, water and drainage assessments, and archaeological and cultural heritage work. The application itself has not been filed.</p>'
+                . '<p><strong>On local concerns.</strong> Potentia says it will run a detailed hydrogeological study, that panel materials are non-hazardous, and that solar facilities pose minimal risk to drinking water. It says vegetation will be managed mainly by mechanical methods such as mowing and trimming, with low-impact approaches that may include native plantings and managed grazing. This is a stated preference for mechanical methods, not a commitment to never use herbicide.</p>'
+                . '<p><strong>Timeline.</strong> Studies run through 2026 into 2027, permitting to 2028, construction beginning in 2028, and operation in 2029, if all approvals are received.</p>'
+                . '<p>Potentia declined a live interview for now, but welcomed talking with OIATC at the upcoming community drop-in sessions.</p>',
+            // 2026-06-02 00:00:00 UTC
+            'published_at' => 1780358400,
+            'related_explainer' => 'massey-solar-project',
+            'status' => true,
+        ];
+    }
+
+    /**
+     * Update a managed post in place when its stored body differs from the
+     * canonical definition. ensure-by-slug will not overwrite an existing row,
+     * so this is how a definition change reaches a live row on next read.
+     *
+     * @param list<EntityInterface> $entities
+     * @param array<string, mixed> $canonical
+     */
+    private function reconcileManagedPost(array $entities, array $canonical): bool
+    {
+        foreach ($entities as $entity) {
+            if ($entity instanceof NewsPost
+                && $entity->getSlug() === (string) $canonical['slug']
+                && $entity->getBody() !== (string) $canonical['body']
+            ) {
+                foreach ($canonical as $field => $value) {
+                    $entity->set($field, $value);
+                }
+                $this->repository->save($entity);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The first sentence of a plain-text string, for a one-line meta description.
+     */
+    private function firstSentence(string $plain): string
+    {
+        $end = mb_strpos($plain, '. ');
+
+        return $end !== false ? mb_substr($plain, 0, $end + 1) : $plain;
     }
 
     /**
@@ -292,15 +359,7 @@ final class NewsController
                 'related_explainer' => 'anokii',
                 'status' => true,
             ],
-            [
-                'title' => 'Potentia responds on the record to our Massey questions',
-                'slug' => 'potentia-responds-massey',
-                'body' => '<p>The Massey Solar developer has answered OIATC\'s questions in writing. Massey Solar Inc. is 51% owned through subsidiaries of Wahnapitae and Atikameksheng and 49% by a private fund, with Potentia as developer, and Potentia confirms it has been in economic-benefit discussions with Sagamok since fall 2025. The explainer is updated.</p>',
-                // 2026-06-02 00:00:00 UTC
-                'published_at' => 1780358400,
-                'related_explainer' => 'massey-solar-project',
-                'status' => true,
-            ],
+            $this->potentiaPost(),
             [
                 'title' => 'A $300-million lesson in who governs the system',
                 'slug' => 'prescribeit-governance-failure',
