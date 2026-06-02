@@ -85,6 +85,9 @@ final class NewsControllerTest extends TestCase
         self::assertStringContainsString('<h1>Potentia responds to our Massey questions</h1>', $html);
         self::assertStringContainsString('<title>Potentia responds to our Massey questions ', $html);
         self::assertStringContainsString('<meta property="og:title" content="Potentia responds to our Massey questions">', $html);
+        // A social card image is present (the branded default).
+        self::assertStringContainsString('<meta property="og:image" content="https://oiatc.ca/images/og-default.png">', $html);
+        self::assertStringContainsString('<meta name="twitter:card" content="summary_large_image">', $html);
         self::assertStringNotContainsString('responds on the record', $html);
         // No em dashes anywhere in the rendered post.
         self::assertStringNotContainsString("\u{2014}", $html);
