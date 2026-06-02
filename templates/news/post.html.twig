@@ -30,7 +30,7 @@
       {% set rel_label = 'Read the full explainer' %}
     {% endif %}
     <a class="explainer-cta" href="{{ rel_href }}">
-      <span class="explainer-cta__k">{{ rel_label }}</span>
+      <span class="explainer-cta__k">{{ rel_label }}</span><br>
       <span class="explainer-cta__t">{{ post.related_explainer|replace({'-': ' '})|title }} →</span>
     </a>
   </article>

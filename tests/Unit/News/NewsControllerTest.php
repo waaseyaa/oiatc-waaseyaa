@@ -58,11 +58,17 @@ final class NewsControllerTest extends TestCase
         self::assertStringContainsString('<strong>Sagamok.</strong>', $html);
         self::assertStringContainsString('<strong>Timeline.</strong>', $html);
         self::assertStringContainsString('community drop-in sessions', $html);
+        // Corrected copy: the perspective version of the Power Corporation point.
+        self::assertStringContainsString('puts the common "Power Corporation project" description in perspective', $html);
+        self::assertStringContainsString('wholly owned subsidiary of Power Corporation of Canada', $html);
+        // The new "not addressed" paragraph is present.
+        self::assertStringContainsString('A few things were not addressed', $html);
         // The stored short row was reconciled in place, not left stale.
         self::assertStringNotContainsString('Short prior body', $html);
-        // The explainer back-link CTA is preserved.
+        // The explainer back-link CTA is preserved, with the label and title
+        // separated (not run together as "explainerMassey").
         self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
-        self::assertStringContainsString('Read the full explainer', $html);
+        self::assertStringContainsString('>Read the full explainer</span><br>', $html);
         // No em dashes anywhere in the rendered post.
         self::assertStringNotContainsString("\u{2014}", $html);
     }
