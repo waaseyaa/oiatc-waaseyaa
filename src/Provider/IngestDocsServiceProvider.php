@@ -82,5 +82,18 @@ final class IngestDocsServiceProvider extends ServiceProvider implements HasNati
                 return new SeedGraphCommand($repos)->run($io);
             },
         );
+
+        yield new CommandDefinition(
+            name: 'app:news-og-manifest',
+            description: 'Print published news posts as JSON (slug, title, meta description) for the OG card generator.',
+            options: [],
+            handler: function (CliIO $io): int {
+                $entityTypeManager = $this->resolve(EntityTypeManager::class);
+                $controller = new \App\Controller\NewsController($entityTypeManager->getRepository('news_post'));
+                $io->writeln(json_encode($controller->publishedList(), \JSON_PRETTY_PRINT | \JSON_UNESCAPED_SLASHES | \JSON_UNESCAPED_UNICODE));
+
+                return 0;
+            },
+        );
     }
 }

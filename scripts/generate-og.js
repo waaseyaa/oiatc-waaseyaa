@@ -17,6 +17,7 @@
 // Run: node scripts/generate-og.js
 
 const { chromium } = require('playwright');
+const { execSync } = require('child_process');
 const fs = require('fs');
 const path = require('path');
 
@@ -191,7 +192,30 @@ async function main() {
       console.log('auto:        ', path.relative(projectRoot, outPath), `(${p.title.slice(0, 50)}${p.title.length > 50 ? '…' : ''})`);
     }
 
-    if (pages.length === 0 && Object.keys(overrides).length === 0) {
+    // 3. Per-post news cards. News posts are dynamic entities, not static
+    //    templates, so the list comes from the app (app:news-og-manifest) and
+    //    each post gets a card at og/news/<slug>.png.
+    const newsTemplate = fs.readFileSync(path.join(scriptDir, 'og-template-news.html'), 'utf-8');
+    let newsPosts = [];
+    try {
+      const raw = execSync('php bin/waaseyaa app:news-og-manifest', { cwd: projectRoot, encoding: 'utf-8' });
+      const start = raw.indexOf('[');
+      const end = raw.lastIndexOf(']');
+      newsPosts = start !== -1 && end !== -1 ? JSON.parse(raw.slice(start, end + 1)) : [];
+    } catch (err) {
+      console.warn('news manifest unavailable, skipping per-post cards:', err.message);
+    }
+    for (const post of newsPosts) {
+      const html = newsTemplate
+        .replace('{{TITLE}}', htmlEscape(post.title || ''))
+        .replace('{{DESCRIPTION}}', htmlEscape(post.meta_description || ''))
+        .replace('{{URL}}', htmlEscape('oiatc.ca/news/' + post.slug));
+      const outPath = path.join(imagesDir, 'og', 'news', post.slug + '.png');
+      await renderTemplateString(page, html, outPath);
+      console.log('news:        ', path.relative(projectRoot, outPath), `(${(post.title || '').slice(0, 50)})`);
+    }
+
+    if (pages.length === 0 && newsPosts.length === 0 && Object.keys(overrides).length === 0) {
       console.warn('No cards rendered. Check that templates/ has base-extending pages or that overrides is populated.');
     }
   } finally {
