@@ -122,6 +122,7 @@ final class NewsController
         $entities = $this->repository->findBy([]);
         $changed = $this->healLegacyExample($entities);
         $changed = $this->reconcileManagedPost($entities, $this->potentiaPost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->prescribeitPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -138,9 +139,11 @@ final class NewsController
                 'title' => $entity->getTitle(),
                 'slug' => $entity->getSlug(),
                 'body' => $body,
-                // List excerpt: a short truncation. Meta description: one sentence.
+                // List excerpt: a short truncation. Meta description: an explicit
+                // short sentence where a managed post sets one, else the first
+                // sentence (length-guarded).
                 'summary' => mb_substr($plain, 0, 200),
-                'meta_description' => $this->metaDescription($plain),
+                'meta_description' => $this->explicitMeta($entity->getSlug()) ?? $this->metaDescription($plain),
                 'og_image' => $this->ogImageFor($entity->getSlug()),
                 'published_at' => $entity->getPublishedAt(),
                 'related_explainer' => $entity->getRelatedExplainer(),
@@ -243,6 +246,32 @@ final class NewsController
     }
 
     /**
+     * The comprehensive, self-contained PrescribeIT post (long-form). Body is
+     * HTML so it renders as paragraphs through {{ post.body|raw }}.
+     *
+     * @return array<string, mixed>
+     */
+    private function prescribeitPost(): array
+    {
+        return [
+            'title' => 'Ottawa shut down its $298-million e-prescribing program',
+            'slug' => 'prescribeit-governance-failure',
+            'body' => '<p>Ottawa has shut down PrescribeIT, the federal "axe the fax" program built to replace fax machines for sending prescriptions between doctors and pharmacies, after spending close to $300-million on a service that never carried more than five per cent of the country\'s prescriptions. Here is what happened, and how OIATC reads it.</p>'
+                . '<p><strong>The program.</strong> PrescribeIT was run by Canada Health Infoway, a government-funded non-profit, from 2017, and built by Telus Health. It went offline on May 29, 2026. Adoption never arrived: fewer than five per cent of prescriptions in Canada were sent through it. A fee of twenty cents per prescription, introduced in 2025 to help fund the service, pushed some pharmacists to drop it.</p>'
+                . '<p><strong>The money.</strong> Early estimates put federal spending around $250-million. Health Canada told a House of Commons committee the actual figure was more than $298-million, of which about $98-million went to Telus.</p>'
+                . '<p><strong>The intellectual property.</strong> A Telus executive said the company kept about 85 per cent of the intellectual property behind PrescribeIT and is considering relaunching it. Health Canada confirmed the government holds no intellectual property in the program it paid to build.</p>'
+                . '<p><strong>The fallout.</strong> The executive who led Canada Health Infoway was later removed from the role, and Conservative MPs asked the Auditor General to investigate the spending. Ottawa said PrescribeIT will be replaced by a national e-prescribing standard it hopes private health-technology companies will adopt.</p>'
+                . '<p><strong>The First Nations layer.</strong> Canada Health Infoway\'s own Indigenous health program listed First Nations-led deployment of PrescribeIT among its partnership lines. So a system chosen federally, built by a vendor that kept the rights, and switched off from the centre was, in part, being deployed into First Nations settings.</p>'
+                . '<p><strong>How OIATC reads it.</strong> OIATC has published a <a href="/positions/prescribeit">position</a> arguing the failure was one of governance, not technology. Adoption was assumed and mandated from outside rather than grown from the people who had to use it, a pricing change made in Ottawa drove users away, and the rights to a public investment ended up in private hands. The question OIATC keeps asking is who chose the system, and who can change it.</p>'
+                . '<p>What replaces PrescribeIT, and whether the communities a system serves get any say in choosing and governing it, is the thing to watch.</p>',
+            // 2026-06-02 00:00:00 UTC
+            'published_at' => 1780358400,
+            'related_explainer' => 'prescribeit',
+            'status' => true,
+        ];
+    }
+
+    /**
      * Update a managed post in place when its stored body differs from the
      * canonical definition. ensure-by-slug will not overwrite an existing row,
      * so this is how a definition change reaches a live row on next read.
@@ -296,6 +325,18 @@ final class NewsController
         $comma = mb_strpos($sentence, ', ');
 
         return $comma !== false ? mb_substr($sentence, 0, $comma) . '.' : mb_substr($sentence, 0, 157) . '...';
+    }
+
+    /**
+     * An explicit meta description for a managed post whose lead sentence does
+     * not make a good standalone description. Null means derive it instead.
+     */
+    private function explicitMeta(string $slug): ?string
+    {
+        return match ($slug) {
+            'prescribeit-governance-failure' => 'Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.',
+            default => null,
+        };
     }
 
     /**
@@ -412,15 +453,7 @@ final class NewsController
                 'status' => true,
             ],
             $this->potentiaPost(),
-            [
-                'title' => 'A $300-million lesson in who governs the system',
-                'slug' => 'prescribeit-governance-failure',
-                'body' => '<p>Ottawa has shut down PrescribeIT, the federal "axe the fax" e-prescribing program, after spending nearly $300-million for use that never passed five per cent of prescriptions. <a href="/positions/prescribeit">Our new position</a> reads the failure as one of governance, not technology, and asks the question OIATC keeps asking: who chose this system, and who can change it.</p>',
-                // 2026-06-02 00:00:00 UTC
-                'published_at' => 1780358400,
-                'related_explainer' => 'prescribeit',
-                'status' => true,
-            ],
+            $this->prescribeitPost(),
         ];
     }
 

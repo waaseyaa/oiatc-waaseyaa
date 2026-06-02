@@ -234,7 +234,7 @@ final class NewsControllerTest extends TestCase
         $controller = new NewsController($repo);
 
         $xml = (string) $controller->rss()->getContent();
-        self::assertStringContainsString('A $300-million lesson in who governs the system', $xml, 'announcement seeded into a non-empty section');
+        self::assertStringContainsString('Ottawa shut down its $298-million e-prescribing program', $xml, 'announcement seeded into a non-empty section');
 
         // Persisted, links to the position, and idempotent (a second pass does not duplicate it).
         $controller->rss();
@@ -246,6 +246,43 @@ final class NewsControllerTest extends TestCase
         }
         self::assertCount(1, $announcements, 'seeded once, not duplicated');
         self::assertStringContainsString('/positions/prescribeit', $announcements[0]->getBody(), 'body links to the position');
+    }
+
+    #[Test]
+    public function the_prescribeit_post_renders_long_form_and_reconciles_an_existing_row(): void
+    {
+        $short = new NewsPost([
+            'title' => 'A $300-million lesson in who governs the system',
+            'slug' => 'prescribeit-governance-failure',
+            'body' => '<p>Short prior prescribeit body.</p>',
+            'published_at' => 1780358400,
+            'related_explainer' => 'prescribeit',
+            'status' => true,
+        ]);
+        $repo = $this->repository([$short]);
+
+        $html = (string) new NewsController($repo)->show('prescribeit-governance-failure')->getContent();
+
+        // Long-form body with bolded section labels.
+        self::assertStringContainsString('<strong>The program.</strong>', $html);
+        self::assertStringContainsString('<strong>The money.</strong>', $html);
+        self::assertStringContainsString('<strong>The First Nations layer.</strong>', $html);
+        self::assertStringContainsString('<strong>How OIATC reads it.</strong>', $html);
+        // New headline in H1, <title>, og:title.
+        self::assertStringContainsString('<h1>Ottawa shut down its $298-million e-prescribing program</h1>', $html);
+        self::assertStringContainsString('<title>Ottawa shut down its $298-million e-prescribing program ', $html);
+        self::assertStringContainsString('<meta property="og:title" content="Ottawa shut down its $298-million e-prescribing program">', $html);
+        // The short body and old title were reconciled away.
+        self::assertStringNotContainsString('Short prior prescribeit body', $html);
+        self::assertStringNotContainsString('A $300-million lesson in who governs the system', $html);
+        // CTA to the position.
+        self::assertStringContainsString('href="/positions/prescribeit"', $html);
+        self::assertStringContainsString('Read the OIATC position', $html);
+        // Meta description is the explicit short sentence (not the long lead).
+        self::assertStringContainsString('name="description" content="Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.">', $html);
+        // Past tense, no "on the record", no em dashes.
+        self::assertStringNotContainsString('on the record', $html);
+        self::assertStringNotContainsString("\u{2014}", $html);
     }
 
     private function post(string $title, string $slug, string $explainer, int $publishedAt, bool $published = true): NewsPost
