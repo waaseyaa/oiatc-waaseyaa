@@ -285,6 +285,29 @@ final class NewsControllerTest extends TestCase
         self::assertStringNotContainsString("\u{2014}", $html);
     }
 
+    #[Test]
+    public function the_massey_consultation_post_renders_and_links_to_the_explainer(): void
+    {
+        $html = (string) new NewsController($this->repository([]))->show('massey-solar-open-houses-paused')->getContent();
+
+        // Title in H1, <title>, og:title (apostrophe is HTML-escaped on render).
+        self::assertStringContainsString('<h1>Massey Solar&#039;s first public open houses are paused over the venue</h1>', $html);
+        self::assertStringContainsString('<title>Massey Solar&#039;s first public open houses are paused over the venue ', $html);
+        self::assertStringContainsString('<meta property="og:title" content="Massey Solar&#039;s first public open houses are paused over the venue">', $html);
+        // Body content (flowing paragraphs, no bold labels).
+        self::assertStringContainsString('June 10 and 11 at the Massey Public Library', $html);
+        self::assertStringContainsString('paused while the company looks for a new venue', $html);
+        self::assertStringContainsString('As reported by Rosalind Russell', $html);
+        // CTA to the explainer.
+        self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
+        self::assertStringContainsString('Read the full explainer', $html);
+        // Explicit short meta description.
+        self::assertStringContainsString('name="description" content="Potentia&#039;s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.">', $html);
+        // Per-post OG card and no em dashes.
+        self::assertStringContainsString('<meta property="og:image" content="https://oiatc.ca/images/og/news/massey-solar-open-houses-paused.png">', $html);
+        self::assertStringNotContainsString("\u{2014}", $html);
+    }
+
     private function post(string $title, string $slug, string $explainer, int $publishedAt, bool $published = true): NewsPost
     {
         return new NewsPost([

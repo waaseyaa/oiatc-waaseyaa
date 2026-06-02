@@ -123,6 +123,7 @@ final class NewsController
         $changed = $this->healLegacyExample($entities);
         $changed = $this->reconcileManagedPost($entities, $this->potentiaPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->prescribeitPost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->masseyConsultationPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -272,6 +273,29 @@ final class NewsController
     }
 
     /**
+     * The Massey Solar consultation venue pause post (long-form, flowing
+     * paragraphs). Body is HTML so it renders through {{ post.body|raw }}.
+     *
+     * @return array<string, mixed>
+     */
+    private function masseyConsultationPost(): array
+    {
+        return [
+            'title' => 'Massey Solar\'s first public open houses are paused over the venue',
+            'slug' => 'massey-solar-open-houses-paused',
+            'body' => '<p>The public consultation for the Massey Solar Project was set to begin this month, and its first step is already on hold. Potentia Renewables scheduled two open houses, on June 10 and 11 at the Massey Public Library, as the start of public consultation for the proposed 141-megawatt solar farm near Massey. Those sessions have been paused while the company looks for a new venue.</p>'
+                . '<p>As reported by Rosalind Russell, the library was considered an unsuitable location because the sessions could disrupt library services, and Potentia is now seeking another venue.</p>'
+                . '<p>The open houses are part of the Renewable Energy Approval, the provincial environmental review that OIATC\'s explainer has pointed to as the stage where the groundwater, wildlife, and consultation questions are formally studied. The project holds a 20-year provincial electricity contract but still needs that approval before it can be built.</p>'
+                . '<p>Opposition has been steady. The Massey Wildlife Conservation Committee says it gathered more than 2,000 signatures asking the township to withdraw its support, and the Ontario Federation of Agriculture, the Manitoulin North Shore Federation of Agriculture, and the Massey Agricultural Society have raised concerns. Council voted in March against rescinding its support. Some residents have also questioned why the library was chosen in the first place, reading it as a way to manage the setting; the reported reason for the pause is the disruption to library services.</p>'
+                . '<p>OIATC will keep tracking the consultation as it proceeds.</p>',
+            // 2026-06-02 00:00:00 UTC
+            'published_at' => 1780358400,
+            'related_explainer' => 'massey-solar-project',
+            'status' => true,
+        ];
+    }
+
+    /**
      * Update a managed post in place when its stored body differs from the
      * canonical definition. ensure-by-slug will not overwrite an existing row,
      * so this is how a definition change reaches a live row on next read.
@@ -335,6 +359,7 @@ final class NewsController
     {
         return match ($slug) {
             'prescribeit-governance-failure' => 'Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.',
+            'massey-solar-open-houses-paused' => 'Potentia\'s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.',
             default => null,
         };
     }
@@ -454,6 +479,7 @@ final class NewsController
             ],
             $this->potentiaPost(),
             $this->prescribeitPost(),
+            $this->masseyConsultationPost(),
         ];
     }
 
