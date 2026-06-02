@@ -61,7 +61,8 @@ final class NewsControllerTest extends TestCase
         // Corrected copy: the perspective version of the Power Corporation point.
         self::assertStringContainsString('puts the common "Power Corporation project" description in perspective', $html);
         self::assertStringContainsString('wholly owned subsidiary of Power Corporation of Canada', $html);
-        // Lead includes the one-sentence recap of the five questions.
+        // Lead now describes the project, then recaps the five questions.
+        self::assertStringContainsString('a proposed 141-megawatt solar farm about 8 kilometres northeast of Massey', $html);
         self::assertStringContainsString('The questions covered ownership and equity', $html);
         // Reported speech ("said"), and the "on the record" phrasing is gone.
         self::assertStringContainsString('Here is what the company said', $html);

@@ -140,7 +140,7 @@ final class NewsController
                 'body' => $body,
                 // List excerpt: a short truncation. Meta description: one sentence.
                 'summary' => mb_substr($plain, 0, 200),
-                'meta_description' => $this->firstSentence($plain),
+                'meta_description' => $this->metaDescription($plain),
                 'published_at' => $entity->getPublishedAt(),
                 'related_explainer' => $entity->getRelatedExplainer(),
             ];
@@ -225,7 +225,7 @@ final class NewsController
         return [
             'title' => 'Potentia responds to our Massey questions',
             'slug' => 'potentia-responds-massey',
-            'body' => '<p>Potentia Renewables responded in writing to OIATC\'s five questions about the Massey Solar Project. The questions covered ownership and equity, how the two First Nation partners were chosen and whether Sagamok was approached, the consultation plan for the provincial review, the response to local water and wildlife concerns, and the construction timeline. Patrick Russell, a project manager at Potentia, sent the response on June 2, 2026. Here is what the company said.</p>'
+            'body' => '<p>Potentia Renewables responded in writing to OIATC\'s five questions about the Massey Solar Project, a proposed 141-megawatt solar farm about 8 kilometres northeast of Massey that holds a 20-year provincial electricity contract but still needs Ontario\'s environmental approval before construction. The questions covered ownership and equity, how the two First Nation partners were chosen and whether Sagamok was approached, the consultation plan for the provincial review, the response to local water and wildlife concerns, and the construction timeline. Patrick Russell, a project manager at Potentia, sent the response on June 2, 2026. Here is what the company said.</p>'
                 . '<p><strong>Ownership.</strong> Massey Solar Inc. is an Ontario corporation. 51 per cent is held collectively through subsidiaries of Wahnapitae First Nation and Atikameksheng Anishnawbek. 49 per cent is held through subsidiaries of Power Sustainable Energy Infrastructure Partnership (PSEIP), a private renewable energy fund. Potentia is an affiliate of PSEIP and acts as the developer and construction-services provider, not the 49 per cent owner. The split between the two First Nations inside the 51 per cent was not disclosed. This puts the common "Power Corporation project" description in perspective. The project company is majority First Nations held, while the 49 per cent minority sits with PSEIP, which is managed by Power Sustainable, a wholly owned subsidiary of Power Corporation of Canada.</p>'
                 . '<p><strong>Why these two Nations.</strong> Potentia said Atikameksheng and Wahnapitae were chosen as Robinson Huron Treaty signatories for the treaty area where the project sits.</p>'
                 . '<p><strong>Sagamok.</strong> Potentia said it has been in discussions with Sagamok Anishnawbek since the fall of 2025 about economic benefit opportunities, and intends to continue through the approval process. These are economic-benefit talks, not equity. Sagamok\'s reserve and territory sit closer to the site than either equity partner\'s.</p>'
@@ -277,6 +277,24 @@ final class NewsController
         $end = mb_strpos($plain, '. ');
 
         return $end !== false ? mb_substr($plain, 0, $end + 1) : $plain;
+    }
+
+    /**
+     * A meta description: the first sentence, but if that sentence runs long
+     * (over 160 characters) fall back to its first clause so the description
+     * stays short. Keeps the description usable when a lead sentence carries a
+     * long trailing qualifier.
+     */
+    private function metaDescription(string $plain): string
+    {
+        $sentence = $this->firstSentence($plain);
+        if (mb_strlen($sentence) <= 160) {
+            return $sentence;
+        }
+
+        $comma = mb_strpos($sentence, ', ');
+
+        return $comma !== false ? mb_substr($sentence, 0, $comma) . '.' : mb_substr($sentence, 0, 157) . '...';
     }
 
     /**
