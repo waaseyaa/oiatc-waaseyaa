@@ -52,8 +52,11 @@ Two ways, no code or deploy needed for a new post.
 - It enters the RSS feed at `/news/rss.xml`.
 - The three newest posts for an explainer appear in that explainer's "Latest updates" block (injected by `/js/oiatc-analytics.js`, fed by `/api/explainer-updates?explainer={slug}`).
 
-## The example post
+## Seeded editorial posts
 
-If the section is empty, one example post tagged to `massey-solar-project` is
-seeded on first visit so the pages are not blank. Delete it or replace it once
-real posts exist.
+There is no empty-section bootstrap example. A fixed set of editorial posts is
+ensured by slug on `/news` read (see `NewsController::announcementPosts()`):
+missing ones are created, existing rows are left as the admin last saved them.
+The retired placeholder example (slug `massey-solar-ieso-contract-awarded`) is
+healed in place to its real copy by `NewsController::healLegacyExample()` where
+that old row still exists.

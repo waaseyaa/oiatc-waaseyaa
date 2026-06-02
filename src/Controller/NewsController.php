@@ -111,19 +111,18 @@ final class NewsController
     }
 
     /**
-     * All published posts, newest first, as plain arrays. Seeds the example
-     * post on first access if the section is empty.
+     * All published posts, newest first, as plain arrays. Posts are managed
+     * through the admin or the ensured editorial set below; there is no
+     * empty-section bootstrap example.
      *
      * @return list<array{title:string, slug:string, body:string, published_at:int, related_explainer:string}>
      */
     private function publishedPosts(): array
     {
         $entities = $this->repository->findBy([]);
-        if ($entities === []) {
-            $this->seedExample();
-            $entities = $this->repository->findBy([]);
-        }
-        if ($this->ensureAnnouncements($entities)) {
+        $changed = $this->healLegacyExample($entities);
+        $changed = $this->ensureAnnouncements($entities) || $changed;
+        if ($changed) {
             $entities = $this->repository->findBy([]);
         }
 
@@ -168,18 +167,47 @@ final class NewsController
         return $out;
     }
 
-    private function seedExample(): void
+    /**
+     * One-time, self-healing replacement of the retired bootstrap example post.
+     * The old row shares the massey-solar-ieso-contract-awarded slug, which the
+     * ensure-by-slug pass will not overwrite, so where that placeholder row still
+     * exists we update it in place to the real, permanent copy. After this runs
+     * once the placeholder is gone and the check is a no-op.
+     *
+     * @param list<EntityInterface> $entities
+     */
+    private function healLegacyExample(array $entities): bool
     {
-        $post = new NewsPost([
-            'title' => 'Massey Solar Project clears its IESO contract milestone',
+        foreach ($entities as $entity) {
+            if ($entity instanceof NewsPost && str_contains($entity->getBody(), 'This is an example news post')) {
+                foreach ($this->masseyContractPost() as $field => $value) {
+                    $entity->set($field, $value);
+                }
+                $this->repository->save($entity);
+
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * The real, permanent Massey IESO contract post (stable slug).
+     *
+     * @return array<string, mixed>
+     */
+    private function masseyContractPost(): array
+    {
+        return [
+            'title' => 'Massey Solar clears its IESO contract milestone',
             'slug' => 'massey-solar-ieso-contract-awarded',
-            'body' => '<p>This is an example news post. The Massey Solar Project was awarded a 20 year IESO contract on April 10, 2026, moving it from a proposal to a financed project. The environmental review under Regulation 359/09 has not started yet, so the consultation questions are still open.</p><p>Replace this post through the admin, or delete it. See the explainer for the full picture.</p>',
-            'published_at' => time(),
+            'body' => '<p>The Massey Solar Project was awarded a 20-year IESO contract on April 10, 2026, moving it from a proposal to a financed project. The environmental review under Regulation 359/09 still has to happen before construction can begin.</p>',
+            // 2026-04-10 00:00:00 UTC
+            'published_at' => 1775779200,
             'related_explainer' => 'massey-solar-project',
             'status' => true,
-        ]);
-
-        $this->repository->save($post);
+        ];
     }
 
     /**
@@ -218,6 +246,7 @@ final class NewsController
     private function announcementPosts(): array
     {
         return [
+            $this->masseyContractPost(),
             [
                 'title' => 'A member resource on the Robinson Huron Treaty',
                 'slug' => 'robinson-huron-treaty-explainer',

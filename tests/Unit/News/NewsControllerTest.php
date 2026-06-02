@@ -38,6 +38,34 @@ final class NewsControllerTest extends TestCase
     }
 
     #[Test]
+    public function the_legacy_example_post_is_replaced_in_place_with_real_copy(): void
+    {
+        $legacy = new NewsPost([
+            'title' => 'Massey Solar Project clears its IESO contract milestone',
+            'slug' => 'massey-solar-ieso-contract-awarded',
+            'body' => '<p>This is an example news post. Replace this post through the admin, or delete it.</p>',
+            'published_at' => 100,
+            'related_explainer' => 'massey-solar-project',
+            'status' => true,
+        ]);
+        $repo = $this->repository([$legacy]);
+
+        new NewsController($repo)->rss();
+
+        $found = null;
+        foreach ($repo->findBy([]) as $entity) {
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'massey-solar-ieso-contract-awarded') {
+                $found = $entity;
+            }
+        }
+        self::assertNotNull($found);
+        self::assertSame('Massey Solar clears its IESO contract milestone', $found->getTitle());
+        self::assertStringNotContainsString('example', $found->getBody());
+        self::assertStringContainsString('20-year IESO contract on April 10, 2026', $found->getBody());
+        self::assertSame(1775779200, $found->getPublishedAt());
+    }
+
+    #[Test]
     public function a_disclosure_post_page_links_back_to_the_disclosure_section(): void
     {
         $html = (string) new NewsController($this->repository([]))->show('sagamok-portal-disclosure')->getContent();
