@@ -61,8 +61,19 @@ final class NewsControllerTest extends TestCase
         // Corrected copy: the perspective version of the Power Corporation point.
         self::assertStringContainsString('puts the common "Power Corporation project" description in perspective', $html);
         self::assertStringContainsString('wholly owned subsidiary of Power Corporation of Canada', $html);
-        // The new "not addressed" paragraph is present.
+        // Lead includes the one-sentence recap of the five questions.
+        self::assertStringContainsString('The questions covered ownership and equity', $html);
+        // Reported speech ("said"), and the "on the record" phrasing is gone.
+        self::assertStringContainsString('Here is what the company said', $html);
+        self::assertStringNotContainsString('Potentia says', $html);
+        // The body no longer carries the "on the record" phrasing (the title,
+        // unchanged, still does, hence the body-specific check).
+        self::assertStringNotContainsString(', on the record', $html);
+        // The new "not addressed" paragraph and the Sagamok-no-position line.
         self::assertStringContainsString('A few things were not addressed', $html);
+        self::assertStringContainsString('Sagamok has not published a formal public position', $html);
+        // Meta description is the first sentence only (not the recap).
+        self::assertStringContainsString('name="description" content="Potentia Renewables responded in writing to OIATC&#039;s five questions about the Massey Solar Project.">', $html);
         // The stored short row was reconciled in place, not left stale.
         self::assertStringNotContainsString('Short prior body', $html);
         // The explainer back-link CTA is preserved, with the label and title

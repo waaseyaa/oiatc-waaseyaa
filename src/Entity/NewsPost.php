@@ -12,16 +12,17 @@ use Waaseyaa\Entity\Hydration\HydratableFromStorageInterface;
 use Waaseyaa\Entity\Hydration\HydrationContext;
 
 /**
- * A short, time-stamped news update tied to one explainer.
+ * A short, time-stamped news update from across OIATC's work.
  *
- * News posts age; explainers stay canonical. Defining this entity gives us
- * storage, validation, a JSON:API CRUD surface (/api/news_post), and admin
- * authoring for free — the public /news pages and RSS are themed separately.
+ * A post may relate to an explainer, a position, the disclosure, or Anokii.
+ * Defining this entity gives us storage, validation, a JSON:API CRUD surface
+ * (/api/news_post), and admin authoring for free; the public /news pages and
+ * RSS are themed separately.
  *
  * Field values live in the ContentEntityBase value bag (read via get()/set());
  * the typed properties below exist so the #[Field] attributes are discovered.
  */
-#[ContentEntityType(id: 'news_post', label: 'News post', description: 'Short, time-stamped updates tied to an explainer.')]
+#[ContentEntityType(id: 'news_post', label: 'News post', description: 'Short, time-stamped updates from OIATC.')]
 #[ContentEntityKeys(id: 'id', uuid: 'uuid', label: 'title')]
 final class NewsPost extends ContentEntityBase implements HydratableFromStorageInterface
 {
