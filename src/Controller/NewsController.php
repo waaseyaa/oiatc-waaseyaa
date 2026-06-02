@@ -7,6 +7,7 @@ namespace App\Controller;
 use App\Entity\NewsPost;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
+use Waaseyaa\Entity\EntityInterface;
 use Waaseyaa\Entity\Repository\EntityRepositoryInterface;
 use Waaseyaa\SSR\SsrServiceProvider;
 
@@ -122,6 +123,9 @@ final class NewsController
             $this->seedExample();
             $entities = $this->repository->findBy([]);
         }
+        if ($this->ensureAnnouncements($entities)) {
+            $entities = $this->repository->findBy([]);
+        }
 
         $posts = [];
         foreach ($entities as $entity) {
@@ -176,6 +180,54 @@ final class NewsController
         ]);
 
         $this->repository->save($post);
+    }
+
+    /**
+     * Ensure the editorial announcement posts exist, seeding any whose slug is
+     * absent. Unlike the bootstrap example (seeded only when the section is
+     * empty), these are real posts published from the repo, so they are ensured
+     * by slug even when other posts already exist.
+     *
+     * @param list<EntityInterface> $entities
+     */
+    private function ensureAnnouncements(array $entities): bool
+    {
+        $have = [];
+        foreach ($entities as $entity) {
+            if ($entity instanceof NewsPost) {
+                $have[$entity->getSlug()] = true;
+            }
+        }
+
+        $saved = false;
+        foreach ($this->announcementPosts() as $row) {
+            if (!isset($have[(string) $row['slug']])) {
+                $this->repository->save(new NewsPost($row));
+                $saved = true;
+            }
+        }
+
+        return $saved;
+    }
+
+    /**
+     * Editorial announcement posts published from the repo.
+     *
+     * @return list<array<string, mixed>>
+     */
+    private function announcementPosts(): array
+    {
+        return [
+            [
+                'title' => 'A $300-million lesson in who governs the system',
+                'slug' => 'prescribeit-governance-failure',
+                'body' => '<p>Ottawa has shut down PrescribeIT, the federal "axe the fax" e-prescribing program, after spending nearly $300-million for use that never passed five per cent of prescriptions. <a href="/positions/prescribeit">Our new position</a> reads the failure as one of governance, not technology, and asks the question OIATC keeps asking: who chose this system, and who can change it.</p>',
+                // 2026-06-02 00:00:00 UTC
+                'published_at' => 1780358400,
+                'related_explainer' => 'prescribeit',
+                'status' => true,
+            ],
+        ];
     }
 
     /**

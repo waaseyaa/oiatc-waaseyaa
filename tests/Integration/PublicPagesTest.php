@@ -234,6 +234,33 @@ final class PublicPagesTest extends TestCase
     }
 
     #[Test]
+    public function prescribeit_position_is_registered_and_renders_the_approved_copy(): void
+    {
+        $router = new WaaseyaaRouter();
+        new AppServiceProvider()->routes($router);
+        $this->assertSame(
+            'positions.prescribeit',
+            $router->match('/positions/prescribeit')['_route'] ?? null,
+        );
+
+        $response = new HomeController()->prescribeitPosition();
+        $html = (string) $response->getContent();
+
+        $this->assertSame(200, $response->getStatusCode());
+        $this->assertStringContainsString('When the system is chosen for you', $html);
+        // Standard byline and the requested Last updated line.
+        $this->assertStringContainsString('Russell Jones on behalf of OIATC, independent of the bodies named here. Corrections welcome.', $html);
+        $this->assertStringContainsString('Last updated 2026-06-02', $html);
+        // Approved section headings present.
+        $this->assertStringContainsString('The short version', $html);
+        $this->assertStringContainsString('The First Nations layer', $html);
+        $this->assertStringContainsString('What OIATC takes from it', $html);
+        // No em dashes anywhere in the published prose.
+        $this->assertStringNotContainsString("\u{2014}", $html, 'No em dashes on the position page.');
+        $this->assertStringNotContainsString('{%', $html, 'No raw Twig tags leaked.');
+    }
+
+    #[Test]
     public function massey_climate_companion_route_is_registered_and_linked_from_the_main_explainer(): void
     {
         $router = new WaaseyaaRouter();

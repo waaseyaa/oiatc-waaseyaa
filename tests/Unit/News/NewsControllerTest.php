@@ -58,12 +58,37 @@ final class NewsControllerTest extends TestCase
         ]));
 
         $response = $controller->rss();
-        $xml = $response->getContent();
+        $xml = (string) $response->getContent();
 
         self::assertStringContainsString('application/rss+xml', (string) $response->headers->get('Content-Type'));
-        self::assertSame(2, substr_count($xml, '<item>'), 'only published posts');
+        // The controller always ensures the editorial announcement exists, so the
+        // feed carries the two published fixtures plus that announcement (the
+        // unpublished fixture is still excluded).
+        self::assertStringNotContainsString('<title>Hidden</title>', $xml, 'unpublished excluded');
         self::assertStringContainsString('Tom &amp; Jerry', $xml, 'XML-escaped title');
+        self::assertStringContainsString('<title>Older</title>', $xml);
         self::assertLessThan(strpos($xml, 'Older'), strpos($xml, 'Tom'), 'newest first');
+    }
+
+    #[Test]
+    public function the_prescribeit_announcement_is_ensured_by_slug_even_when_other_posts_exist(): void
+    {
+        $repo = $this->repository([$this->post('Existing', 'existing', 'massey-solar-project', 100)]);
+        $controller = new NewsController($repo);
+
+        $xml = (string) $controller->rss()->getContent();
+        self::assertStringContainsString('A $300-million lesson in who governs the system', $xml, 'announcement seeded into a non-empty section');
+
+        // Persisted, links to the position, and idempotent (a second pass does not duplicate it).
+        $controller->rss();
+        $announcements = [];
+        foreach ($repo->findBy([]) as $entity) {
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'prescribeit-governance-failure') {
+                $announcements[] = $entity;
+            }
+        }
+        self::assertCount(1, $announcements, 'seeded once, not duplicated');
+        self::assertStringContainsString('/positions/prescribeit', $announcements[0]->getBody(), 'body links to the position');
     }
 
     private function post(string $title, string $slug, string $explainer, int $publishedAt, bool $published = true): NewsPost

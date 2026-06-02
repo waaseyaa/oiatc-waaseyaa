@@ -47,6 +47,7 @@ final class IngestDocsCommand
         '/explainers/massey-solar-project/climate-and-environment' => 'explainers/massey-solar-project-climate-and-environment.html.twig',
         '/explainers/where-your-data-lives' => 'explainers/where-your-data-lives.html.twig',
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
+        '/positions/prescribeit' => 'positions/prescribeit.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',
     ];
 

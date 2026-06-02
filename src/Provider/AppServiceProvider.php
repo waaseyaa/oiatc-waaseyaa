@@ -126,6 +126,15 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'positions.prescribeit',
+            RouteBuilder::create('/positions/prescribeit')
+                ->controller(fn() => $controller->prescribeitPosition())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
             'explainers.robinson-huron-treaty',
             RouteBuilder::create('/explainers/robinson-huron-treaty')
                 ->controller(fn() => $controller->robinsonHuronTreatyExplainer())

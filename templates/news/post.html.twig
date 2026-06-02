@@ -13,8 +13,10 @@
 
     <div class="post-body">{{ post.body|raw }}</div>
 
-    <a class="explainer-cta" href="/explainers/{{ post.related_explainer }}">
-      <span class="explainer-cta__k">Read the full explainer</span>
+    {% set position_slugs = ['prescribeit'] %}
+    {% set is_position = post.related_explainer in position_slugs %}
+    <a class="explainer-cta" href="{{ (is_position ? '/positions/' : '/explainers/') ~ post.related_explainer }}">
+      <span class="explainer-cta__k">{{ is_position ? 'Read the OIATC position' : 'Read the full explainer' }}</span>
       <span class="explainer-cta__t">{{ post.related_explainer|replace({'-': ' '})|title }} →</span>
     </a>
   </article>

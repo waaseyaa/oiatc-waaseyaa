@@ -1,0 +1,421 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>When the system is chosen for you: the PrescribeIT lesson · OIATC</title>
+  <meta name="description" content="An OIATC position on the shutdown of PrescribeIT, the federal e-prescribing program. The failure was one of governance, not technology: who chooses, governs, and can end the systems communities depend on.">
+  <link rel="canonical" href="https://oiatc.ca/positions/prescribeit">
+  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
+  <meta property="og:locale" content="en_CA">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://oiatc.ca/positions/prescribeit">
+  <meta property="og:title" content="When the system is chosen for you: the PrescribeIT lesson">
+  <meta property="og:description" content="An OIATC position on the PrescribeIT shutdown. The failure was one of governance, not technology: who chooses, governs, and can end the systems communities depend on.">
+  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="When the system is chosen for you: the PrescribeIT lesson">
+  <meta name="twitter:description" content="An OIATC position on the PrescribeIT shutdown: a governance failure, not a technology one.">
+  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
+  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
+  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+  <link rel="icon" href="/favicon.ico" sizes="32x32">
+  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
+  <script defer src="/js/oiatc-analytics.js?v=3"></script>
+  <style>
+    :root {
+      --bg: #f8f5ef;
+      --surface: #fffefb;
+      --ink: #0d1420;
+      --ink-soft: #2b3340;
+      --ink-mute: #5b6473;
+      --rule: #d9d2c2;
+      --rule-soft: #ebe6d8;
+      --accent: #6a3a1f;
+      --accent-soft: #b88a5a;
+      --highlight: #f1ebd6;
+      --serif: "Source Serif 4", Georgia, serif;
+      --sans: "Inter", system-ui, sans-serif;
+      --mono: "JetBrains Mono", ui-monospace, monospace;
+      --content: 720px;
+      --gap-1: 4px;
+      --gap-2: 8px;
+      --gap-3: 12px;
+      --gap-4: 20px;
+      --gap-5: 32px;
+      --gap-6: 56px;
+      --gap-7: 96px;
+    }
+
+    * { box-sizing: border-box; }
+    html { -webkit-text-size-adjust: 100%; }
+
+    body {
+      margin: 0;
+      background: var(--bg);
+      color: var(--ink);
+      font-family: var(--serif);
+      font-size: 17px;
+      line-height: 1.65;
+      font-feature-settings: "ss01", "ss02";
+      -webkit-font-smoothing: antialiased;
+      text-rendering: optimizeLegibility;
+    }
+
+    .page {
+      max-width: 880px;
+      margin: 0 auto;
+      padding: 64px 48px 96px;
+    }
+
+    .top {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      padding: 24px 48px;
+      max-width: 880px;
+      margin: 0 auto;
+      border-bottom: 1px solid var(--rule);
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink-mute);
+      letter-spacing: 0.02em;
+    }
+    .top__brand {
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+    }
+    .top__brand a {
+      color: inherit;
+      text-decoration: none;
+    }
+    .top__meta { font-variant-numeric: tabular-nums; }
+
+    .cover {
+      padding: 80px 0 96px;
+      border-bottom: 1px solid var(--rule);
+    }
+    .cover__eyebrow {
+      font-family: var(--sans);
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 28px;
+    }
+    .cover__title {
+      font-size: clamp(36px, 5.5vw, 60px);
+      line-height: 1.05;
+      font-weight: 400;
+      letter-spacing: -0.015em;
+      margin: 0 0 32px;
+      max-width: 18ch;
+    }
+    .cover__title em {
+      font-style: italic;
+      color: var(--accent);
+    }
+    .cover__lede {
+      font-size: 20px;
+      line-height: 1.55;
+      max-width: 56ch;
+      color: var(--ink-soft);
+      margin: 0;
+    }
+
+    .sec {
+      padding: 64px 0;
+      border-bottom: 1px solid var(--rule-soft);
+    }
+    .sec:last-of-type { border-bottom: none; }
+
+    .sec__head {
+      display: grid;
+      grid-template-columns: 120px 1fr;
+      gap: var(--gap-5);
+      margin-bottom: var(--gap-5);
+      align-items: baseline;
+    }
+    .sec__num {
+      font-family: var(--mono);
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      font-weight: 500;
+      padding-top: 8px;
+    }
+    .sec__title {
+      font-size: clamp(24px, 3.2vw, 34px);
+      line-height: 1.2;
+      font-weight: 400;
+      letter-spacing: -0.01em;
+      margin: 0;
+      max-width: 22ch;
+    }
+
+    .sec__body {
+      grid-column: 2;
+      max-width: var(--content);
+    }
+
+    .sec p { margin: 0 0 var(--gap-4); }
+    .sec p:last-child { margin-bottom: 0; }
+
+    .sec ul {
+      margin: 0 0 var(--gap-4);
+      padding-left: 1.4em;
+    }
+    .sec ul li {
+      margin-bottom: var(--gap-3);
+      padding-left: 4px;
+    }
+    .sec ul li::marker {
+      color: var(--accent-soft);
+    }
+
+    .lede {
+      font-size: 20px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+
+    .principles {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: var(--gap-4);
+      margin-top: var(--gap-5);
+    }
+    .principle {
+      background: var(--surface);
+      border: 1px solid var(--rule);
+      padding: 24px;
+      border-radius: 4px;
+    }
+    .principle__num {
+      font-family: var(--mono);
+      font-size: 12px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+      margin-bottom: 14px;
+    }
+    .principle h4 {
+      font-family: var(--serif);
+      font-size: 22px;
+      font-weight: 500;
+      margin: 0 0 12px;
+      letter-spacing: -0.01em;
+    }
+    .principle p {
+      font-size: 15px;
+      line-height: 1.55;
+      margin: 0;
+      color: var(--ink-soft);
+    }
+
+    .statement {
+      background: var(--highlight);
+      padding: 32px 40px;
+      border-left: 3px solid var(--accent);
+      margin: var(--gap-5) 0;
+      max-width: var(--content);
+    }
+    .statement p {
+      font-size: 19px;
+      line-height: 1.5;
+      margin: 0;
+      color: var(--ink);
+      font-style: italic;
+    }
+
+    .sources {
+      font-family: var(--sans);
+      font-size: 14px;
+      line-height: 1.55;
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .sources li {
+      padding: 14px 0;
+      border-bottom: 1px solid var(--rule-soft);
+      color: var(--ink-soft);
+    }
+    .sources li:last-child { border-bottom: none; }
+    .sources a { word-break: break-word; }
+
+    .end {
+      padding: 64px 0 0;
+      font-family: var(--sans);
+      font-size: 13px;
+      color: var(--ink-mute);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: var(--gap-3);
+    }
+    .end a {
+      color: var(--accent);
+      text-decoration: none;
+      border-bottom: 1px solid var(--accent-soft);
+    }
+
+    a { color: var(--accent); }
+
+    @media (max-width: 720px) {
+      .top, .page { padding-left: 24px; padding-right: 24px; }
+      .sec__head { grid-template-columns: 1fr; gap: var(--gap-2); }
+      .sec__body { grid-column: 1; }
+      .sec__num { padding-top: 0; }
+      .principles { grid-template-columns: 1fr; }
+      .statement { padding: 24px 28px; }
+    }
+
+    @media print {
+      :root { --bg: #ffffff; --surface: #ffffff; --highlight: #f6f1e3; }
+      body { font-size: 11pt; }
+      .top { display: none; }
+      .page { padding: 0; max-width: none; }
+      .sec { page-break-inside: avoid; padding: 28pt 0; border-bottom: none; }
+      .cover { padding: 0 0 28pt; }
+      .cover__title { font-size: 32pt; }
+      .principles, .sources { break-inside: avoid; }
+      a { color: var(--ink); border-bottom: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="top">
+    <span class="top__brand"><a href="/">OIATC</a></span>
+    <span class="top__meta">Position &middot; June 2026</span>
+  </header>
+
+  <div class="page">
+
+    <section class="cover">
+      <div class="cover__eyebrow">Position &middot; PrescribeIT</div>
+      <h1 class="cover__title">When the system is chosen for you: <em>the PrescribeIT lesson</em></h1>
+      <p class="cover__lede">An OIATC position. Russell Jones on behalf of OIATC, independent of the bodies named here. Corrections welcome. Last updated 2026-06-02.</p>
+    </section>
+
+    <section class="sec" id="short-version">
+      <div class="sec__head">
+        <div class="sec__num">00</div>
+        <h2 class="sec__title">The short version</h2>
+      </div>
+      <div class="sec__body">
+        <p>Ottawa spent more than a quarter of a billion dollars on a national e-prescribing system, then shut it off after fewer than five in a hundred prescriptions ever ran through it. The technology was not the problem. The system was chosen at the top, built by a vendor that kept the rights to it, and pushed down toward the people who were supposed to use it, including First Nations communities, who had no hand in choosing it and no say in ending it. That is the failure OIATC exists to name, and the principle we hold against it: protocol before product, consent before architecture.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="what-happened">
+      <div class="sec__head">
+        <div class="sec__num">01</div>
+        <h2 class="sec__title">What happened</h2>
+      </div>
+      <div class="sec__body">
+        <p>PrescribeIT was a federal "axe the fax" program meant to replace fax machines for sending prescriptions from doctors to pharmacies. Canada Health Infoway, a government-funded non-profit, launched it in 2017 and ran it until 2026. Telus Health won the build contract and supplied the underlying technology.</p>
+        <p>Canada Health Infoway announced the program would go offline on May 29, 2026. The reasons given were plain. Adoption never arrived: fewer than five per cent of prescriptions in Canada were sent through it. Starting in 2025, the government began charging pharmacies twenty cents per prescription to help fund the service, and some pharmacists abandoned it rather than pay.</p>
+        <p>The money grew as the story did. The early figure was about $250-million. At a House of Commons hearing, Health Canada officials put actual spending at more than $298-million, of which roughly $98-million went to Telus Health. A Telus executive said the company kept about 85 per cent of the intellectual property behind PrescribeIT and is considering relaunching it. Health Canada confirmed the government holds no intellectual property in the program it paid to build. The executive who led the agency was later removed from the role, and Conservative MPs have asked the Auditor General to investigate the spending.</p>
+        <p>The stated path forward is a "national e-prescribing standard" that Ottawa hopes private health-technology companies will adopt.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="first-nations-layer">
+      <div class="sec__head">
+        <div class="sec__num">02</div>
+        <h2 class="sec__title">The First Nations layer</h2>
+      </div>
+      <div class="sec__body">
+        <p>This is not a story that happened next to Indigenous communities. It happened to them.</p>
+        <p>Canada Health Infoway's own Indigenous health program lists First Nations-led deployment of PrescribeIT as one of its partnership lines, alongside Indigenous electronic medical record systems. Even where the local rollout was First Nations-led, the system itself was not. It was selected federally, built by a vendor that retained the rights, and switched off from the centre. A community can lead a deployment and still hold no authority over the architecture, the data, or the off-switch. The communities served by the system were never the communities governing it. When it was cancelled, that decision arrived the same way the system did: from above.</p>
+        <p>There is a well-established field that already names the underlying right here. Indigenous data sovereignty, the principle that Indigenous Peoples govern their own data, is treated in the medical and policy literature as essential to self-determination and to better health outcomes. The First Nations principles of Ownership, Control, Access, and Possession (OCAP®) are the recognized standard, and the First Nations Information Governance Centre maintains a national data governance strategy that Infoway itself has partnered on.</p>
+        <p>OIATC does not restate that work and does not speak for those bodies. We point to it because it shows the principle is mainstream, not fringe, and because it sets the line OIATC adds to: not only who owns the data, but who chooses, governs, and can end the systems that the data moves through.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="oiatc-matter">
+      <div class="sec__head">
+        <div class="sec__num">03</div>
+        <h2 class="sec__title">Why this is an OIATC matter</h2>
+      </div>
+      <div class="sec__body">
+        <p>The headline invites the wrong lesson. The wrong lesson is that fax machines won, or that digital health is too hard, or that one vendor charged too much. None of those is the real failure.</p>
+        <p>The failure is one of governance. Nearly $300-million bought a system that fewer than five per cent of prescriptions ever used, because adoption was assumed instead of earned, and mandated from outside instead of grown from the people who had to live with it. A pricing change made in Ottawa drove users away. The rights to the public investment ended up in private hands. And the communities the system was meant to serve were treated as recipients of a decision, not authors of one.</p>
+        <p>That is the same diagnosis behind OIATC's work at the community scale. The pattern that fails a single Nation's portal is the pattern that fails a national program. It just costs more at the top.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="what-oiatc-takes">
+      <div class="sec__head">
+        <div class="sec__num">04</div>
+        <h2 class="sec__title">What OIATC takes from it</h2>
+      </div>
+      <div class="sec__body">
+        <p>Three things, each a way of stating the same conviction.</p>
+        <div class="principles">
+          <article class="principle">
+            <div class="principle__num">01</div>
+            <h4>A system imposed is a system unused.</h4>
+            <p>Adoption is not a marketing problem to be solved after launch. It is a governance outcome that is decided before the first line of code, by whether the people who must use the system had real authority over choosing it.</p>
+          </article>
+          <article class="principle">
+            <div class="principle__num">02</div>
+            <h4>Public money should buy public control.</h4>
+            <p>When governments fund the build, the communities served should hold the rights, the data, and the off-switch. A program the public paid for should not leave the public holding none of the intellectual property.</p>
+          </article>
+          <article class="principle">
+            <div class="principle__num">03</div>
+            <h4>A standard is not a substitute for consent.</h4>
+            <p>Replacing a cancelled product with a national standard is reasonable, but a standard adopted by vendors is still a decision made above the communities it reaches. The question OIATC keeps asking does not change: who chose this, and who can change it.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="sec" id="not-saying">
+      <div class="sec__head">
+        <div class="sec__num">05</div>
+        <h2 class="sec__title">What we are not saying</h2>
+      </div>
+      <div class="sec__body">
+        <p>We are not saying any individual acted in bad faith. This memo names a structure, not a person. We are not saying electronic prescribing is wrong; clinicians have real reasons to want off the fax. We are not speaking for the First Nations Information Governance Centre or for any community. We are saying that when systems are chosen for communities rather than by them, they fail, and that the cost of that failure is paid first by the communities with the least say.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="sources">
+      <div class="sec__head">
+        <div class="sec__num">06</div>
+        <h2 class="sec__title">Sources</h2>
+      </div>
+      <div class="sec__body">
+        <ul class="sources">
+          <li>The Globe and Mail, "Doctors are still faxing prescriptions in 2026. Ottawa's $250-million program to change that was just shut down." <a href="https://www.theglobeandmail.com/business/economy/article-federal-axe-the-fax-e-prescribing-service-built-with-telus-health-to/" target="_blank" rel="noopener">https://www.theglobeandmail.com/business/economy/article-federal-axe-the-fax-e-prescribing-service-built-with-telus-health-to/</a></li>
+          <li>The Globe and Mail, "Ottawa says digital prescription tool cancelled because it failed to replace fax machines." <a href="https://www.theglobeandmail.com/business/economy/article-digital-prescription-tool-cancelled-failed-to-replace-fax-machines/" target="_blank" rel="noopener">https://www.theglobeandmail.com/business/economy/article-digital-prescription-tool-cancelled-failed-to-replace-fax-machines/</a></li>
+          <li>The Globe and Mail, "MPs press official on why $250-million 'axe the fax' digital prescribing program failed." <a href="https://www.theglobeandmail.com/business/economy/article-mps-press-official-on-why-250-million-axe-the-fax-digital-prescribing/" target="_blank" rel="noopener">https://www.theglobeandmail.com/business/economy/article-mps-press-official-on-why-250-million-axe-the-fax-digital-prescribing/</a></li>
+          <li>CBC News, "Conservatives call on auditor general to investigate $250M PrescribeIT program." <a href="https://www.cbc.ca/news/politics/conservatives-auditor-general-request-prescribeit-9.7179223" target="_blank" rel="noopener">https://www.cbc.ca/news/politics/conservatives-auditor-general-request-prescribeit-9.7179223</a></li>
+          <li>Canadian Healthcare Technology, "Infoway pulls the plug on PrescribeIT." <a href="https://www.canhealth.com/2026/02/18/infoway-pulls-the-plug-on-prescribeit/" target="_blank" rel="noopener">https://www.canhealth.com/2026/02/18/infoway-pulls-the-plug-on-prescribeit/</a></li>
+          <li>Canada Health Infoway, "Indigenous Peoples." <a href="https://accelero.infoway-inforoute.ca/en/partners/indigenous-peoples" target="_blank" rel="noopener">https://accelero.infoway-inforoute.ca/en/partners/indigenous-peoples</a></li>
+          <li>npj Digital Medicine, "Competing interests: digital health and indigenous data sovereignty." <a href="https://www.nature.com/articles/s41746-024-01171-z" target="_blank" rel="noopener">https://www.nature.com/articles/s41746-024-01171-z</a></li>
+          <li>The Lancet Regional Health - Americas, "The right to health: indigenous data sovereignty in Canada during and beyond the COVID-19 pandemic." <a href="https://www.thelancet.com/journals/lanam/article/PIIS2667-193X(25)00346-1/fulltext" target="_blank" rel="noopener">https://www.thelancet.com/journals/lanam/article/PIIS2667-193X(25)00346-1/fulltext</a></li>
+        </ul>
+      </div>
+    </section>
+
+    <footer class="end">
+      <div>OIATC &middot; Ontario Indigenous AI &amp; Technology Council</div>
+      <div><a href="/">oiatc.ca</a></div>
+    </footer>
+
+  </div>
+
+</body>
+</html>

@@ -26,7 +26,7 @@
         <span class="post-date">{{ post.published_at|date('F j, Y') }}</span>
         <h2 class="post-title"><a href="/news/{{ post.slug }}">{{ post.title }}</a></h2>
         <p class="post-summary">{{ post.summary }}{% if post.body|length > 200 %}…{% endif %}</p>
-        <span class="post-tag">On: <a href="/explainers/{{ post.related_explainer }}">{{ post.related_explainer|replace({'-': ' '})|title }}</a></span>
+        <span class="post-tag">On: <a href="{{ (post.related_explainer in ['prescribeit'] ? '/positions/' : '/explainers/') ~ post.related_explainer }}">{{ post.related_explainer|replace({'-': ' '})|title }}</a></span>
       </li>
     {% else %}
       <li class="empty">No posts yet.</li>
