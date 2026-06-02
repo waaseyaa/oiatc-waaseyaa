@@ -2,7 +2,7 @@
 
 {% block title %}{{ post.title }} · OIATC News{% endblock %}
 {% block description %}{{ post.meta_description }}{% endblock %}
-{% block head_extra %}<link rel="canonical" href="https://oiatc.ca/news/{{ post.slug }}">{% endblock %}
+{% block head_extra %}<link rel="canonical" href="https://oiatc.ca/news/{{ post.slug }}"><meta property="og:title" content="{{ post.title }}"><meta property="og:type" content="article"><meta property="og:url" content="https://oiatc.ca/news/{{ post.slug }}">{% endblock %}
 
 {% block content %}
   <p class="backnav"><a href="/news">← All news</a></p>

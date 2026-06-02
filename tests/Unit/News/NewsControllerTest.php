@@ -66,9 +66,8 @@ final class NewsControllerTest extends TestCase
         // Reported speech ("said"), and the "on the record" phrasing is gone.
         self::assertStringContainsString('Here is what the company said', $html);
         self::assertStringNotContainsString('Potentia says', $html);
-        // The body no longer carries the "on the record" phrasing (the title,
-        // unchanged, still does, hence the body-specific check).
-        self::assertStringNotContainsString(', on the record', $html);
+        // "on the record" is gone from both the title and the body now.
+        self::assertStringNotContainsString('on the record', $html);
         // The new "not addressed" paragraph and the Sagamok-no-position line.
         self::assertStringContainsString('A few things were not addressed', $html);
         self::assertStringContainsString('Sagamok has not published a formal public position', $html);
@@ -80,8 +79,40 @@ final class NewsControllerTest extends TestCase
         // separated (not run together as "explainerMassey").
         self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
         self::assertStringContainsString('>Read the full explainer</span><br>', $html);
+        // The new headline reads in the H1, the <title>, and og:title; the stale
+        // old title was reconciled away.
+        self::assertStringContainsString('<h1>Potentia responds to our Massey questions</h1>', $html);
+        self::assertStringContainsString('<title>Potentia responds to our Massey questions ', $html);
+        self::assertStringContainsString('<meta property="og:title" content="Potentia responds to our Massey questions">', $html);
+        self::assertStringNotContainsString('responds on the record', $html);
         // No em dashes anywhere in the rendered post.
         self::assertStringNotContainsString("\u{2014}", $html);
+    }
+
+    #[Test]
+    public function reconcile_updates_the_title_in_place_when_only_the_title_differs(): void
+    {
+        // Seed the canonical post, then simulate a live row that has the current
+        // body but the old title (the body-only reconcile check would miss this).
+        $repo = $this->repository([]);
+        $controller = new NewsController($repo);
+        $controller->rss();
+        foreach ($repo->findBy([]) as $entity) {
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'potentia-responds-massey') {
+                $entity->set('title', 'Potentia responds on the record to our Massey questions');
+            }
+        }
+
+        $controller->rss();
+
+        $titles = [];
+        foreach ($repo->findBy([]) as $entity) {
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'potentia-responds-massey') {
+                $titles[] = $entity->getTitle();
+            }
+        }
+        self::assertContains('Potentia responds to our Massey questions', $titles);
+        self::assertNotContains('Potentia responds on the record to our Massey questions', $titles);
     }
 
     #[Test]

@@ -223,7 +223,7 @@ final class NewsController
     private function potentiaPost(): array
     {
         return [
-            'title' => 'Potentia responds on the record to our Massey questions',
+            'title' => 'Potentia responds to our Massey questions',
             'slug' => 'potentia-responds-massey',
             'body' => '<p>Potentia Renewables responded in writing to OIATC\'s five questions about the Massey Solar Project. The questions covered ownership and equity, how the two First Nation partners were chosen and whether Sagamok was approached, the consultation plan for the provincial review, the response to local water and wildlife concerns, and the construction timeline. Patrick Russell, a project manager at Potentia, sent the response on June 2, 2026. Here is what the company said.</p>'
                 . '<p><strong>Ownership.</strong> Massey Solar Inc. is an Ontario corporation. 51 per cent is held collectively through subsidiaries of Wahnapitae First Nation and Atikameksheng Anishnawbek. 49 per cent is held through subsidiaries of Power Sustainable Energy Infrastructure Partnership (PSEIP), a private renewable energy fund. Potentia is an affiliate of PSEIP and acts as the developer and construction-services provider, not the 49 per cent owner. The split between the two First Nations inside the 51 per cent was not disclosed. This puts the common "Power Corporation project" description in perspective. The project company is majority First Nations held, while the 49 per cent minority sits with PSEIP, which is managed by Power Sustainable, a wholly owned subsidiary of Power Corporation of Canada.</p>'
@@ -254,7 +254,8 @@ final class NewsController
         foreach ($entities as $entity) {
             if ($entity instanceof NewsPost
                 && $entity->getSlug() === (string) $canonical['slug']
-                && $entity->getBody() !== (string) $canonical['body']
+                && ($entity->getBody() !== (string) $canonical['body']
+                    || $entity->getTitle() !== (string) $canonical['title'])
             ) {
                 foreach ($canonical as $field => $value) {
                     $entity->set($field, $value);
