@@ -72,6 +72,11 @@ final class NewsControllerTest extends TestCase
         // The new "not addressed" paragraph and the Sagamok-no-position line.
         self::assertStringContainsString('A few things were not addressed', $html);
         self::assertStringContainsString('Sagamok has not published a formal public position', $html);
+        // Corrected source characterizations: equity is possible, herbicides not intended.
+        self::assertStringContainsString('which can include equity in the project', $html);
+        self::assertStringContainsString('does not intend to use herbicides at the site', $html);
+        self::assertStringNotContainsString('not equity', $html);
+        self::assertStringNotContainsString('not a commitment to never use herbicide', $html);
         // Meta description is the first sentence only (not the recap).
         self::assertStringContainsString('name="description" content="Potentia Renewables responded in writing to OIATC&#039;s five questions about the Massey Solar Project.">', $html);
         // The stored short row was reconciled in place, not left stale.
