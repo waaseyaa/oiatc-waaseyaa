@@ -62,7 +62,7 @@ final class NewsControllerTest extends TestCase
         self::assertStringContainsString('puts the common "Power Corporation project" description in perspective', $html);
         self::assertStringContainsString('wholly owned subsidiary of Power Corporation of Canada', $html);
         // Lead now describes the project, then recaps the five questions.
-        self::assertStringContainsString('a proposed 141-megawatt solar farm about 8 kilometres northeast of Massey', $html);
+        self::assertStringContainsString('a proposed 141-megawatt solar farm about 14 kilometres from Massey', $html);
         self::assertStringContainsString('The questions covered ownership and equity', $html);
         // Reported speech ("said"), and the "on the record" phrasing is gone.
         self::assertStringContainsString('Here is what the company said', $html);
@@ -297,7 +297,7 @@ final class NewsControllerTest extends TestCase
         // Body content (flowing paragraphs, no bold labels).
         self::assertStringContainsString('June 10 and 11 at the Massey Public Library', $html);
         self::assertStringContainsString('paused while the company looks for a new venue', $html);
-        self::assertStringContainsString('As reported by Rosalind Russell', $html);
+        self::assertStringContainsString('As reported by <a href="https://www.myespanolanow.com/author/rosalind/" target="_blank" rel="noopener">Rosalind Russell</a>', $html);
         // CTA to the explainer.
         self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
         self::assertStringContainsString('Read the full explainer', $html);
