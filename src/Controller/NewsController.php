@@ -358,6 +358,7 @@ final class NewsController
     private function explicitMeta(string $slug): ?string
     {
         return match ($slug) {
+            'add-your-voice' => 'OIATC has built a simple way for members to weigh in on the questions that matter. The first one: where our data actually lives.',
             'prescribeit-governance-failure' => 'Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.',
             'massey-solar-open-houses-paused' => 'Potentia\'s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.',
             default => null,
@@ -480,6 +481,18 @@ final class NewsController
             $this->potentiaPost(),
             $this->prescribeitPost(),
             $this->masseyConsultationPost(),
+            [
+                'title' => 'Add your voice, and a tool built to keep your data home',
+                'slug' => 'add-your-voice',
+                'body' => '<p>Understanding how a community is run is the first step. Acting on it is the next. OIATC has built a simple way for members to do that: add your voice to a question and have it counted.</p>'
+                    . '<p>The first campaign is the one that prompted the tool, our own data. When you sign up to a community website, where does your information actually go, whose laws can reach it, and who controls it? Our plain-language explainer walks through <a href="/explainers/where-your-data-lives">where your data lives</a>.</p>'
+                    . '<p>The tool itself is built the way that explainer argues data should be handled. It runs on OIATC\'s own server, in Canada, under our control, and it asks for the least it can. No US platform sits in the middle, and nothing tracks you. The data stays home.</p>'
+                    . '<p>Read the explainer, and when you are ready, <a href="/explainers/where-your-data-lives">add your voice</a>.</p>',
+                // 2026-06-04 00:00:00 UTC
+                'published_at' => 1780531200,
+                'related_explainer' => 'where-your-data-lives',
+                'status' => true,
+            ],
         ];
     }
 

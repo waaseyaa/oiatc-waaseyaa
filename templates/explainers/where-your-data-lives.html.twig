@@ -17,7 +17,10 @@
        custom "specimen" visuals (the CDN URL anatomy and the data map) rendered
        on the site's native dark statement surface so their original colours read.
        Namespaced .dsv-* so nothing collides with site.css. */
-    .dsv-wrap { max-width: 800px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+    .dsv-wrap { max-width: 1180px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+    /* Wide explainer frame: the dark specimens (URL anatomy, data map) and the
+       embedded signup use the full width; running prose stays at a readable measure. */
+    .dsv-wrap > h1, .dsv-wrap > h2, .dsv-wrap > p, .dsv-wrap > ul { max-width: 74ch; }
     .dsv-wrap h1 { font-family: var(--font-serif); font-size: clamp(28px, 4.2vw, 38px); line-height: 1.15; letter-spacing: -0.01em; font-weight: 400; margin: 0 0 var(--gap-3); }
     .dsv-wrap h2 { font-family: var(--font-serif); font-size: 22px; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; margin: var(--gap-7) 0 var(--gap-3); }
     .dsv-wrap p { margin: 0 0 var(--gap-3); }
@@ -60,17 +63,19 @@
   <p class="eyebrow">OIATC · Explainer</p>
   <h1>Where does your community's data actually live?</h1>
   <p class="lede">Most First Nations and small municipal websites run on the same few tools, owned by companies in another country, on clouds the community does not control. So a simple question turns out to be hard: when you put your information into your community's website, where does it go, who can reach it, and whose laws decide? Here it is in plain terms, using the Sagamok members portal as the example.</p>
-  <p class="dsv-byline">From Russell Jones, a Sagamok member, for OIATC. This explains how the technology works and is not legal advice. May 2026.</p>
+  <p class="dsv-byline">From Russell Jones, a Sagamok member, for OIATC. This explains how the technology works and is not legal advice. June 2026.</p>
 
   <h2>The pieces, in plain words</h2>
   <p>A site like this is not one thing. It is a stack of services, each owned by a different company:</p>
   <ul>
     <li><strong>The website builder.</strong> Sagamok's site runs on <strong>Webflow</strong>, a US company that publishes the pages and stores the content.</li>
     <li><strong>The login layer.</strong> The members area uses <strong>Memberstack</strong>, another US company. It runs in your browser and keeps member account details, including fields like a band registration number, in its own database.</li>
+    <li><strong>The email tool.</strong> Member newsletters and notices go out through <strong>Mailchimp</strong>, a US company owned by Intuit, of Atlanta, which keeps member names and email addresses on its own servers.</li>
+    <li><strong>The trackers.</strong> The site also loads <strong>Google Analytics</strong>, which reports who looked at which page back to Google in the US.</li>
     <li><strong>The delivery network.</strong> The pages and files are pushed out through a global content delivery network, or CDN, so they load fast everywhere. Webflow has used Amazon Web Services and Fastly, and now uses <strong>Cloudflare</strong>.</li>
     <li><strong>The cloud underneath.</strong> All of it ultimately runs on large US cloud infrastructure, chiefly Amazon Web Services.</li>
   </ul>
-  <p>None of these are bad tools. The point is that <span class="dsv-hl">four different outside companies, all US-based, touch your community's data</span> before it reaches a member.</p>
+  <p>None of these are bad tools. The point is that <span class="dsv-hl">a single page load reaches several US companies: Webflow, Memberstack, Mailchimp, and Google Analytics</span>.</p>
 
   <h2>That long link you have seen: what it is</h2>
   <p>If you have ever opened a file on a Webflow site, you have seen a web address like this. People see it constantly and have no idea what it is. Here is what each part means (the community-specific parts are blacked out, so this is not a working link):</p>
@@ -153,6 +158,7 @@
 
   <h2>What this means for you</h2>
   <p>When the platform, the servers, and the laws all sit outside the community, the community cannot fully answer the basic question: <span class="dsv-hlw">is our data safe, and who can see it.</span> Not because anyone did wrong, but because the answer is in other people's hands. That is the gap between <strong>data residency</strong>, where a file happens to sit, and <strong>data sovereignty</strong>, who actually governs it.</p>
+  <p>This is not abstract. <span class="dsv-hl">Exposed names, band registration numbers, and contact details are exactly what fuel the targeted fraud and phishing</span> that some members are already experiencing.</p>
   <p class="dsv-pull">Your data is the community's. Deciding how it is kept, and being able to check that yourself, is part of sovereignty.</p>
 
   <h2>What a member or council can ask</h2>
@@ -163,6 +169,8 @@
     <li>Do we have our own qualified people who can verify how it is protected?</li>
     <li>What would it take to move the most sensitive data onto infrastructure we control?</li>
   </ul>
+
+  {% include 'partials/add-your-voice.html.twig' with { campaign_slug: 'sagamok-data-governance' } %}
 
   <h2>Sources</h2>
   <ul>
