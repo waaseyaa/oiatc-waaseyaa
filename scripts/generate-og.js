@@ -27,6 +27,20 @@ const scriptDir = __dirname;
 const imagesDir = path.join(projectRoot, 'public', 'images');
 const autoOutDir = path.join(imagesDir, 'og');
 
+// --only-missing (or OG_ONLY_MISSING=1): render only cards whose PNG does not
+// already exist, leaving existing cards byte-for-byte untouched. This is the
+// mode CI runs so a push never churns every card — it only fills gaps for new
+// pages. Run without the flag locally to deliberately refresh existing cards.
+const onlyMissing = process.argv.includes('--only-missing') || process.env.OG_ONLY_MISSING === '1';
+
+function skipBecauseExists(outputAbs, label) {
+  if (onlyMissing && fs.existsSync(outputAbs)) {
+    console.log('skip (exists): ', path.relative(projectRoot, outputAbs), label ? `(${label})` : '');
+    return true;
+  }
+  return false;
+}
+
 // Hand-crafted overrides, keyed by the template path they belong to (relative
 // to templates/). Auto-discovery skips these. Output paths are relative to
 // public/images/.
@@ -179,6 +193,7 @@ async function main() {
     for (const [key, { template, output }] of Object.entries(overrides)) {
       const tplPath = path.join(scriptDir, template);
       const outPath = path.join(imagesDir, output);
+      if (skipBecauseExists(outPath, key === '__default__' ? 'default' : key)) continue;
       const html = fs.readFileSync(tplPath, 'utf-8');
       await renderTemplateString(page, html, outPath);
       console.log('hand-crafted:', path.relative(projectRoot, outPath), key === '__default__' ? '(default)' : `(for ${key})`);
@@ -188,11 +203,12 @@ async function main() {
     const autoTemplate = fs.readFileSync(path.join(scriptDir, 'og-template-auto.html'), 'utf-8');
     const pages = discoverAutoPages();
     for (const p of pages) {
+      const outPath = path.join(imagesDir, p.output);
+      if (skipBecauseExists(outPath, p.title.slice(0, 40))) continue;
       const html = autoTemplate
         .replace('{{TITLE}}', htmlEscape(p.title))
         .replace('{{DESCRIPTION}}', htmlEscape(p.description))
         .replace('{{URL}}', htmlEscape(p.url));
-      const outPath = path.join(imagesDir, p.output);
       await renderTemplateString(page, html, outPath);
       console.log('auto:        ', path.relative(projectRoot, outPath), `(${p.title.slice(0, 50)}${p.title.length > 50 ? '…' : ''})`);
     }
@@ -211,11 +227,12 @@ async function main() {
       console.warn('news manifest unavailable, skipping per-post cards:', err.message);
     }
     for (const post of newsPosts) {
+      const outPath = path.join(imagesDir, 'og', 'news', post.slug + '.png');
+      if (skipBecauseExists(outPath, post.slug)) continue;
       const html = newsTemplate
         .replace('{{TITLE}}', htmlEscape(post.title || ''))
         .replace('{{DESCRIPTION}}', htmlEscape(post.meta_description || ''))
         .replace('{{URL}}', htmlEscape('oiatc.ca/news/' + post.slug));
-      const outPath = path.join(imagesDir, 'og', 'news', post.slug + '.png');
       await renderTemplateString(page, html, outPath);
       console.log('news:        ', path.relative(projectRoot, outPath), `(${(post.title || '').slice(0, 50)})`);
     }
