@@ -67,7 +67,12 @@ function listTwigTemplates(dir, base = dir) {
     if (entry.isDirectory()) {
       out.push(...listTwigTemplates(full, base));
     } else if (entry.isFile() && entry.name.endsWith('.html.twig')) {
-      out.push(path.relative(base, full));
+      // Normalise to forward slashes so the slug/url/override logic (which all
+      // assume '/') works on Windows too, where path.relative yields '\'.
+      // Without this, slugForTemplate leaves the separator in and cards are
+      // written to og/<dir>/<name>.png — a path PHP's flat, dash-joined slug
+      // (og/<dir>-<name>.png) never looks up, so the card silently 404s.
+      out.push(path.relative(base, full).split(path.sep).join('/'));
     }
   }
   return out;
