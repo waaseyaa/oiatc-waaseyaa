@@ -255,6 +255,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'explainers.how-sagamok-is-organized',
+            RouteBuilder::create('/explainers/how-sagamok-is-organized')
+                ->controller(fn() => $controller->howSagamokIsOrganized())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         // Unlisted static demo bundle (Sheguiandah clickable prototype). Served
         // verbatim from resources/ via DemoController, noindex,nofollow, not in
         // the sitemap, and not linked from any nav. Reachable only by direct link

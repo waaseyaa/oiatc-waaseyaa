@@ -46,6 +46,7 @@ final class IngestDocsCommand
         // (reachable from the Massey vantage).
         '/explainers/massey-solar-project/climate-and-environment' => 'explainers/massey-solar-project-climate-and-environment.html.twig',
         '/explainers/where-your-data-lives' => 'explainers/where-your-data-lives.html.twig',
+        '/explainers/how-sagamok-is-organized' => 'explainers/how-sagamok-is-organized.html.twig',
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
         '/positions/prescribeit' => 'positions/prescribeit.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',
