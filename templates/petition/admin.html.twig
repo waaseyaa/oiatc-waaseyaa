@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Petition admin · OIATC</title>
+  <style>
+    :root { --bg:#0d1420; --panel:#131d2c; --border:#243349; --fg:#e7ecf3; --muted:#9aa7b6; --accent:#e0b15a; --ok:#7fb38a; }
+    * { box-sizing: border-box; }
+    body { margin:0; background:var(--bg); color:var(--fg); font:15px/1.6 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; }
+    .wrap { max-width: 1000px; margin: 0 auto; padding: 32px 20px 80px; }
+    h1 { font-size: 24px; margin: 0 0 4px; }
+    .sub { color: var(--muted); margin: 0 0 28px; font-size: 14px; }
+    table { border-collapse: collapse; width: 100%; margin: 0 0 12px; font-size: 14px; }
+    th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--border); vertical-align: top; }
+    th { color: var(--muted); font-size: 12px; text-transform: uppercase; letter-spacing: .04em; }
+    td .ask { color: var(--muted); font-size: 13px; }
+    .count { font-variant-numeric: tabular-nums; font-weight: 700; }
+    .pill { display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:999px; }
+    .pill.on { background: rgba(127,179,138,.18); color: var(--ok); }
+    .pill.off { background: rgba(154,167,182,.18); color: var(--muted); }
+    .actions { display: flex; gap: 8px; flex-wrap: wrap; }
+    a.btn, button.btn { display:inline-block; cursor:pointer; font:inherit; font-size:13px; text-decoration:none; padding:6px 12px; border-radius:8px; border:1px solid var(--border); background:var(--panel); color:var(--fg); }
+    a.btn:hover, button.btn:hover { border-color: var(--accent); }
+    .card { background: var(--panel); border:1px solid var(--border); border-radius:12px; padding:20px; margin-top:28px; }
+    .card h2 { font-size:16px; margin:0 0 14px; }
+    .field { margin: 0 0 12px; }
+    label { display:block; font-size:13px; color:var(--muted); margin:0 0 4px; }
+    input, textarea { width:100%; background:var(--bg); color:var(--fg); border:1px solid var(--border); border-radius:8px; padding:9px 11px; font:inherit; }
+    .submit { background: var(--accent); color:#24180a; border:none; font-weight:700; padding:10px 18px; border-radius:8px; cursor:pointer; }
+    .empty { color: var(--muted); padding: 16px 0; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Petition admin</h1>
+    <p class="sub">Signatures are stored in OIATC's own database. Export holds personal data: handle the CSV carefully.</p>
+
+    <table>
+      <thead>
+        <tr><th>Campaign</th><th>Recipient</th><th>Signatures</th><th>Status</th><th>Actions</th></tr>
+      </thead>
+      <tbody>
+        {% for c in campaigns %}
+          <tr>
+            <td>
+              <strong>{{ c.title }}</strong><br>
+              <span class="ask">/{{ c.slug }} — {{ c.the_ask }}</span>
+            </td>
+            <td>{{ c.recipient }}</td>
+            <td class="count">{{ c.verified_count }}</td>
+            <td>
+              {% if c.active == 1 %}<span class="pill on">active</span>{% else %}<span class="pill off">inactive</span>{% endif %}
+            </td>
+            <td>
+              <div class="actions">
+                <a class="btn" href="/admin/petitions/{{ c.slug }}/export.csv">Export CSV</a>
+                <form method="post" action="/admin/petitions/{{ c.slug }}/active" style="margin:0">
+                  <input type="hidden" name="active" value="{{ c.active == 1 ? '0' : '1' }}">
+                  <button class="btn" type="submit">{{ c.active == 1 ? 'Deactivate' : 'Activate' }}</button>
+                </form>
+              </div>
+            </td>
+          </tr>
+        {% else %}
+          <tr><td colspan="5" class="empty">No campaigns yet. Create one below.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+
+    <div class="card">
+      <h2>Create a campaign</h2>
+      <form method="post" action="/admin/petitions">
+        <div class="field"><label for="f-slug">Slug (URL id)</label><input id="f-slug" name="slug" placeholder="sagamok-data-governance" required></div>
+        <div class="field"><label for="f-title">Title</label><input id="f-title" name="title" required></div>
+        <div class="field"><label for="f-ask">The ask (one line)</label><textarea id="f-ask" name="the_ask" rows="2" required></textarea></div>
+        <div class="field"><label for="f-recip">Recipient</label><input id="f-recip" name="recipient" placeholder="Sagamok Chief and Council" required></div>
+        <button class="submit" type="submit">Create campaign</button>
+      </form>
+    </div>
+  </div>
+</body>
+</html>
