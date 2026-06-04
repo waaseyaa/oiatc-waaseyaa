@@ -130,16 +130,19 @@ When changing the palette, update both the `:root` (light) and `[data-theme="dar
 
 ### OG image
 
-`public/images/og-default.png` — 1200×630 social card rendered from `scripts/og-template.html` via Playwright.
+1200×630 social cards live in `public/images/og/` (per page, named `<slug>.png` where `slug` is the template path with `/`→`-`, no extension) plus the hand-crafted `og-default.png` / `og-massey-solar-project.png` / `og-sagamok-portal.png`. `HomeController::socialContext()` serves the per-page card if present, else falls back to `og-default.png`. `scripts/generate-og.js` auto-discovers any `base.html.twig`-extending page and renders a card from `scripts/og-template-auto.html`.
 
-To regenerate after palette changes:
+**A new page gets its card automatically.** The `.github/workflows/og-cards.yml` workflow runs on push to `main` (templates/generator changes), renders only the *missing* cards (`generate-og.js --only-missing`, no churn) on a hosted runner, and commits them back. Chromium never runs on the Pi.
+
+> **Deploy note:** because the card is committed by a follow-up CI commit, bump `OIATC_REF` to the **main tip after the "OG cards" workflow finishes** (not your code commit), so the image build includes the card.
+
+Manual use (refreshing an existing card after a title/palette change, which `--only-missing` won't do; `package.json` is gitignored so install Playwright directly):
 ```bash
-npm install playwright
-npx playwright install chromium
-node scripts/generate-og.js
+npm install playwright && npx playwright install chromium
+node scripts/generate-og.js                  # regenerate all
+node scripts/generate-og.js --only-missing   # gaps only (what CI runs)
 ```
-
-Colors in `og-template.html` are hardcoded (not CSS variables). When updating the palette, sync `og-template.html` manually.
+Colors in the `og-template*.html` files are hardcoded (not CSS variables). When updating the palette, sync them manually.
 
 ### Scroll reveal
 
