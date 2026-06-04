@@ -1,39 +1,56 @@
-{% extends 'news/_layout.html.twig' %}
+{% extends 'base.html.twig' %}
 
 {% block title %}{{ post.title }} · OIATC News{% endblock %}
 {% block description %}{{ post.meta_description }}{% endblock %}
+{% block og_title %}{{ post.title }}{% endblock %}
 {% block og_image %}{{ post.og_image }}{% endblock %}
-{% block twitter_image %}{{ post.og_image }}{% endblock %}
-{% block head_extra %}<link rel="canonical" href="https://oiatc.ca/news/{{ post.slug }}"><meta property="og:title" content="{{ post.title }}"><meta property="og:type" content="article"><meta property="og:url" content="https://oiatc.ca/news/{{ post.slug }}">{% endblock %}
+{% block canonical_url %}https://oiatc.ca/news/{{ post.slug }}{% endblock %}
+{% block body_class %}route-news-post{% endblock %}
+{% block topnav %}<a href="/news">&larr; All news</a>{% endblock %}
+
+{% block head_styles %}
+  <style>
+    /* Single news post on the site shell. Scoped .news-*. */
+    .news-post { max-width: 760px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+    .news-post .news-date { font-family: var(--font-mono); font-size: 12px; color: var(--accent-deep); letter-spacing: 0.04em; }
+    .news-post h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(28px, 4.4vw, 40px); line-height: 1.13; letter-spacing: -0.01em; margin: 8px 0 var(--gap-4); }
+    .news-body { font-size: 18px; line-height: 1.7; color: var(--ink); }
+    .news-body p { margin: 0 0 var(--gap-4); }
+    .news-body p:last-child { margin-bottom: 0; }
+    .news-body a { color: var(--accent-deep); }
+    .news-cta { display: block; margin-top: var(--gap-6); background: var(--paper-2); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: var(--radius-md); padding: 18px 22px; text-decoration: none; }
+    .news-cta:hover { border-color: var(--accent-soft); border-left-color: var(--accent); }
+    .news-cta__k { font-family: var(--font-sans); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-deep); }
+    .news-cta__t { display: block; font-family: var(--font-serif); font-size: 20px; font-weight: 500; color: var(--ink); margin-top: 6px; }
+  </style>
+{% endblock %}
 
 {% block content %}
-  <p class="backnav"><a href="/news">← All news</a></p>
+<article class="news-post">
+  <span class="news-date">{{ post.published_at|date('F j, Y') }}</span>
+  <h1>{{ post.title }}</h1>
 
-  <article>
-    <span class="post-date">{{ post.published_at|date('F j, Y') }}</span>
-    <h1>{{ post.title }}</h1>
+  <div class="news-body">{{ post.body|raw }}</div>
 
-    <div class="post-body">{{ post.body|raw }}</div>
-
-    {% set positions = ['prescribeit', 'counter-disinformation'] %}
-    {% set disclosures = ['sagamok-portal'] %}
-    {% set anokii_pages = ['anokii'] %}
-    {% if post.related_explainer in anokii_pages %}
-      {% set rel_href = '/' ~ post.related_explainer %}
-      {% set rel_label = 'Explore Anokii' %}
-    {% elseif post.related_explainer in positions %}
-      {% set rel_href = '/positions/' ~ post.related_explainer %}
-      {% set rel_label = 'Read the OIATC position' %}
-    {% elseif post.related_explainer in disclosures %}
-      {% set rel_href = '/disclosure/' ~ post.related_explainer %}
-      {% set rel_label = 'Read the disclosure' %}
-    {% else %}
-      {% set rel_href = '/explainers/' ~ post.related_explainer %}
-      {% set rel_label = 'Read the full explainer' %}
-    {% endif %}
-    <a class="explainer-cta" href="{{ rel_href }}">
-      <span class="explainer-cta__k">{{ rel_label }}</span><br>
-      <span class="explainer-cta__t">{{ post.related_explainer|replace({'-': ' '})|title }} →</span>
-    </a>
-  </article>
+  {% set positions = ['prescribeit', 'counter-disinformation'] %}
+  {% set disclosures = ['sagamok-portal'] %}
+  {% set anokii_pages = ['anokii'] %}
+  {% if post.related_explainer in anokii_pages %}
+    {% set rel_href = '/' ~ post.related_explainer %}
+    {% set rel_label = 'Explore Anokii' %}
+  {% elseif post.related_explainer in positions %}
+    {% set rel_href = '/positions/' ~ post.related_explainer %}
+    {% set rel_label = 'Read the OIATC position' %}
+  {% elseif post.related_explainer in disclosures %}
+    {% set rel_href = '/disclosure/' ~ post.related_explainer %}
+    {% set rel_label = 'Read the disclosure' %}
+  {% else %}
+    {% set rel_href = '/explainers/' ~ post.related_explainer %}
+    {% set rel_label = 'Read the full explainer' %}
+  {% endif %}
+  <a class="news-cta" href="{{ rel_href }}">
+    <span class="news-cta__k">{{ rel_label }}</span>
+    <span class="news-cta__t">{{ post.related_explainer|replace({'-': ' '})|title }} &rarr;</span>
+  </a>
+</article>
 {% endblock %}

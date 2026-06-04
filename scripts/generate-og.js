@@ -72,6 +72,11 @@ const ignoreTemplatePatterns = [
   /^_/,           // leading underscore = partial convention
   /^admin\//,     // admin views — internal, not socially shared
   /^_macros\//,
+  // News index/post extend base.html.twig but are not generic auto pages: the
+  // index has its own URL (/news) and the post template is a dynamic per-post
+  // shell whose {% block title %} is "{{ post.title }} ...". Per-post cards come
+  // from the news manifest path below, so skip the whole news/ dir here.
+  /^news\//,
 ];
 
 function listTwigTemplates(dir, base = dir) {
