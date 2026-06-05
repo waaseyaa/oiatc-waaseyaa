@@ -84,7 +84,7 @@ final class NewsControllerTest extends TestCase
         // The explainer back-link CTA is preserved, with the label and title
         // separated (not run together as "explainerMassey").
         self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
-        self::assertStringContainsString('>Read the full explainer</span><br>', $html);
+        self::assertStringContainsString('<span class="news-cta__k">Read the full explainer</span>', $html);
         // The new headline reads in the H1, the <title>, and og:title; the stale
         // old title was reconciled away.
         self::assertStringContainsString('<h1>Potentia responds to our Massey questions</h1>', $html);

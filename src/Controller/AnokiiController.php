@@ -77,6 +77,9 @@ final class AnokiiController
             'communityName' => self::COMMUNITIES[$community]['name'] ?? ucfirst($community),
             'communities' => self::COMMUNITIES,
             'suggestedPrompts' => self::SUGGESTED_PROMPTS[$community] ?? [],
+            // Mirrors the /api/chat wiring: when web research is enabled the chat
+            // disclaimer tells members answers may draw on public web sources.
+            'webResearch' => (getenv('ANOKII_WEB_RESEARCH') ?: '') === '1',
         ]);
     }
 

@@ -35,6 +35,20 @@ final class ChatController
     private const MAX_QUESTION_CHARS = 500;
     private const MAX_TOKENS = 700;
 
+    /** Higher ceiling when web research is on: room for a cited web section. */
+    private const MAX_TOKENS_WEB = 1100;
+
+    /**
+     * Anthropic's server-side web search tool. Capped so a single question can't
+     * fan out into an unbounded (and billed) crawl. Only attached when web
+     * research is enabled for this instance.
+     */
+    private const WEB_SEARCH_TOOL = [
+        'type' => 'web_search_20250305',
+        'name' => 'web_search',
+        'max_uses' => 4,
+    ];
+
     /** Known vantage communities; an unknown/missing value defaults to Sagamok. */
     private const COMMUNITIES = ['sagamok', 'massey'];
     public function __construct(
@@ -46,6 +60,11 @@ final class ChatController
         private readonly ChatQueryLogInterface $queryLog,
         private readonly TopicVocabulary $topics,
         private readonly bool $configured,
+        // When true (and configured), the model may call a web_search tool to add
+        // current detail on the question's topic. OIATC passages stay primary; web
+        // findings are presented separately. Off by default so the closed-corpus
+        // behavior is the safe fallback when the instance hasn't opted in.
+        private readonly bool $webResearch = false,
     ) {}
 
     public function handle(Request $request): Response
@@ -78,11 +97,17 @@ final class ChatController
 
         $passages = $this->retriever->retrieve($question, $community, self::TOP_K);
         if ($passages === []) {
-            // Off-corpus / outside this community's reach: deterministic refusal,
-            // no model call. The message points to the right place for the vantage.
-            $this->queryLog->record($community, $question, 'no_match', $topic, []);
+            // Nothing in this community's reach. With web research enabled we still
+            // answer questions that map to an allowed topic, letting the model
+            // research them on the web (the topic vocabulary stays the guardrail,
+            // so off-topic questions like "the weather tomorrow" never trigger a
+            // search). Otherwise it's a deterministic refusal with no model call,
+            // pointing to the right place for the vantage.
+            if (!$this->webResearch || $topic === null) {
+                $this->queryLog->record($community, $question, 'no_match', $topic, []);
 
-            return $this->streamMessageText($this->prompts->noAnswerFor($community), []);
+                return $this->streamMessageText($this->prompts->noAnswerFor($community), []);
+            }
         }
 
         return $this->streamAnswer($question, $community, $topic, $passages);
@@ -95,8 +120,9 @@ final class ChatController
     {
         $messageRequest = new MessageRequest(
             messages: [['role' => 'user', 'content' => $this->prompts->userMessage($question, $passages)]],
-            system: $this->prompts->system($community),
-            maxTokens: self::MAX_TOKENS,
+            system: $this->prompts->system($community, $this->webResearch),
+            tools: $this->webResearch ? [self::WEB_SEARCH_TOOL] : [],
+            maxTokens: $this->webResearch ? self::MAX_TOKENS_WEB : self::MAX_TOKENS,
         );
         $sources = $this->sources($passages);
         $sourceUrls = array_map(static fn(array $s): string => $s['source_url'], $sources);
@@ -105,8 +131,9 @@ final class ChatController
         $logger = $this->logger;
         $queryLog = $this->queryLog;
         $noAnswer = $this->prompts->noAnswerFor($community);
+        $webResearch = $this->webResearch;
 
-        return $this->sse(static function () use ($provider, $messageRequest, $sources, $sourceUrls, $prompts, $logger, $queryLog, $question, $community, $topic, $noAnswer): void {
+        return $this->sse(static function () use ($provider, $messageRequest, $sources, $sourceUrls, $prompts, $logger, $queryLog, $question, $community, $topic, $noAnswer, $webResearch): void {
             $answer = '';
             try {
                 if ($provider instanceof StreamingProviderInterface) {
@@ -146,6 +173,7 @@ final class ChatController
                     'question' => $question,
                     'outcome' => $outcome,
                     'topic' => $topic ?? 'none',
+                    'web_research' => $webResearch,
                     'input_tokens' => $usage['input_tokens'],
                     'output_tokens' => $usage['output_tokens'],
                     'stop_reason' => $response->stopReason,

@@ -5,7 +5,11 @@
   vantage community on the /api/chat body. Collects no personal information.
 #}
 <section class="ak-module is-active" data-module="cointelligence" aria-label="Co-Intelligence">
-  <p class="r-lead">Ask a plain-language question. Answers are drawn only from OIATC's public pages for {{ communityName }} and its surrounding region, with the source linked. It does not collect any personal information.</p>
+  {% if webResearch is defined and webResearch %}
+    <p class="r-lead">Ask a plain-language question. Answers lead with OIATC's public pages for {{ communityName }} and its surrounding region, with the source linked, and may add current detail from trusted public web sources, shown separately under "From the wider web." It does not collect any personal information.</p>
+  {% else %}
+    <p class="r-lead">Ask a plain-language question. Answers are drawn only from OIATC's public pages for {{ communityName }} and its surrounding region, with the source linked. It does not collect any personal information.</p>
+  {% endif %}
   <form class="r-ask__form" id="r-ask-form" data-community="{{ community }}">
     <input class="r-ask__input" id="r-ask-input" type="text" maxlength="500" autocomplete="off"
            placeholder="e.g. How do I apply for housing? Who do I call about per capita?" aria-label="Your question">
@@ -20,7 +24,11 @@
   {% endif %}
   <div class="r-ask__answer" id="r-ask-answer" aria-live="polite"></div>
   <div class="r-ask__sources" id="r-ask-sources"></div>
-  <p class="r-ask__hint">General information from public pages, not legal, medical, or financial advice, and not affiliated with or endorsed by the community. Always confirm with the community office. For emergencies, call 911.</p>
+  {% if webResearch is defined and webResearch %}
+    <p class="r-ask__hint">General information from public pages and trusted public web sources, not legal, medical, or financial advice, and not affiliated with or endorsed by the community. Always confirm with the community office. For emergencies, call 911.</p>
+  {% else %}
+    <p class="r-ask__hint">General information from public pages, not legal, medical, or financial advice, and not affiliated with or endorsed by the community. Always confirm with the community office. For emergencies, call 911.</p>
+  {% endif %}
   <p class="r-ask__hint">The questions asked here (not who asks them) are logged to improve these resources. Nothing identifying is stored.</p>
 
   <script>

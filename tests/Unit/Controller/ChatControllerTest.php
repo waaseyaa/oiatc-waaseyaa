@@ -136,6 +136,68 @@ final class ChatControllerTest extends TestCase
     }
 
     #[Test]
+    public function web_research_attaches_the_search_tool_and_a_higher_token_ceiling(): void
+    {
+        // Web research on, with grounded passages present: the model is still
+        // called, but now with the web_search tool available so it can supplement.
+        $provider = $this->provider(['From OIATC: contact Housing.']);
+        $response = $this->controller(retriever: $this->retriever([$this->passage()]), provider: $provider, configured: true, webResearch: true)
+            ->handle($this->request('How do I apply for housing?'));
+        $this->capture($response);
+
+        self::assertSame(1, $provider->calls);
+        self::assertNotNull($provider->lastRequest);
+        $tools = $provider->lastRequest->tools;
+        self::assertCount(1, $tools, 'The web_search tool is attached when web research is on.');
+        self::assertSame('web_search', $tools[0]['name']);
+        self::assertGreaterThan(700, $provider->lastRequest->maxTokens, 'Web research raises the token ceiling.');
+    }
+
+    #[Test]
+    public function web_research_omits_the_tool_when_disabled(): void
+    {
+        $provider = $this->provider(['The Housing Department handles applications.']);
+        $response = $this->controller(retriever: $this->retriever([$this->passage()]), provider: $provider, configured: true)
+            ->handle($this->request('How do I apply for housing?'));
+        $this->capture($response);
+
+        self::assertNotNull($provider->lastRequest);
+        self::assertSame([], $provider->lastRequest->tools, 'No tool is attached by default.');
+    }
+
+    #[Test]
+    public function web_research_answers_an_on_topic_no_match_by_calling_the_model(): void
+    {
+        // No passages, but the question maps to an allowed topic (housing). With
+        // web research on, the model is called so it can research, rather than the
+        // deterministic refusal.
+        $provider = $this->provider(['From the wider web: see ontario.ca.']);
+        $response = $this->controller(retriever: $this->retriever([]), provider: $provider, configured: true, webResearch: true)
+            ->handle($this->request('How do I apply for housing?'));
+        $out = $this->capture($response);
+
+        self::assertSame(1, $provider->calls, 'On-topic no-match calls the model when web research is on.');
+        self::assertStringContainsString('From the wider web', $out);
+        self::assertNotNull($provider->lastRequest);
+        self::assertCount(1, $provider->lastRequest->tools, 'The web_search tool is available on the no-match path.');
+    }
+
+    #[Test]
+    public function web_research_still_refuses_an_off_topic_no_match_without_calling_the_model(): void
+    {
+        // No passages and no allowed topic ("weather tomorrow" infers nothing):
+        // the topic vocabulary stays the guardrail, so this still refuses and never
+        // calls the model even with web research on.
+        $provider = $this->provider();
+        $response = $this->controller(retriever: $this->retriever([]), provider: $provider, configured: true, webResearch: true)
+            ->handle($this->request('what is the weather tomorrow'));
+        $out = $this->capture($response);
+
+        self::assertSame(0, $provider->calls, 'Off-topic no-match never searches the web.');
+        self::assertStringContainsString(ChatPromptBuilder::NO_ANSWER, $out);
+    }
+
+    #[Test]
     public function bad_request_without_a_question_is_rejected(): void
     {
         $response = $this->controller(retriever: $this->retriever([]), provider: $this->provider(), configured: true)
@@ -167,6 +229,7 @@ final class ChatControllerTest extends TestCase
         bool $configured,
         ?RateLimiterInterface $limiter = null,
         ?ChatQueryLogInterface $queryLog = null,
+        bool $webResearch = false,
     ): ChatController {
         return new ChatController(
             retriever: $retriever,
@@ -177,6 +240,7 @@ final class ChatControllerTest extends TestCase
             queryLog: $queryLog ?? $this->queryLog(),
             topics: new TopicVocabulary(),
             configured: $configured,
+            webResearch: $webResearch,
         );
     }
 
@@ -232,6 +296,7 @@ final class ChatControllerTest extends TestCase
     {
         return new class ($deltas) implements StreamingProviderInterface {
             public int $calls = 0;
+            public ?MessageRequest $lastRequest = null;
 
             /** @param list<string> $deltas */
             public function __construct(private array $deltas) {}
@@ -239,6 +304,7 @@ final class ChatControllerTest extends TestCase
             public function sendMessage(MessageRequest $request): MessageResponse
             {
                 $this->calls++;
+                $this->lastRequest = $request;
 
                 return new MessageResponse([['type' => 'text', 'text' => implode('', $this->deltas)]], 'end_turn', ['input_tokens' => 10, 'output_tokens' => 5]);
             }
@@ -246,6 +312,7 @@ final class ChatControllerTest extends TestCase
             public function streamMessage(MessageRequest $request, callable $onChunk): MessageResponse
             {
                 $this->calls++;
+                $this->lastRequest = $request;
                 foreach ($this->deltas as $delta) {
                     $onChunk(new StreamChunk('text_delta', $delta));
                 }

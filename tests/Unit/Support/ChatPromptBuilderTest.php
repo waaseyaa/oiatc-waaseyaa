@@ -40,6 +40,39 @@ final class ChatPromptBuilderTest extends TestCase
     }
 
     #[Test]
+    public function web_research_prompt_keeps_grounding_primary_and_separates_web_findings(): void
+    {
+        $system = new ChatPromptBuilder()->system('sagamok', webResearch: true);
+
+        // OIATC passages stay primary and still cite.
+        self::assertStringContainsString('Lead with', $system, 'OIATC passages remain primary.');
+        self::assertStringContainsString('source:', $system, 'Must still instruct OIATC citation.');
+        // Web findings are allowed but clearly separated and steered to trusted sources.
+        self::assertStringContainsString('web_search', $system, 'Must name the web search tool.');
+        self::assertStringContainsString('From the wider web:', $system, 'Web findings go in a separated section.');
+        self::assertStringContainsString('government', $system, 'Must steer toward trusted sources.');
+        // Safety rules survive unchanged.
+        self::assertStringContainsString('Never invent', $system);
+        self::assertStringContainsString('personal information', $system);
+        self::assertStringContainsString('911', $system);
+        self::assertStringContainsString(ChatPromptBuilder::NO_ANSWER, $system, 'Refusal text is still carried.');
+        // The prompt itself must still model no dashes.
+        self::assertStringNotContainsString("\u{2014}", $system);
+        self::assertStringNotContainsString("\u{2013}", $system);
+    }
+
+    #[Test]
+    public function web_research_prompt_is_off_by_default(): void
+    {
+        // The default (no flag) must remain the closed-corpus prompt.
+        $default = new ChatPromptBuilder()->system('sagamok');
+
+        self::assertStringContainsString('Answer ONLY from the passages', $default);
+        self::assertStringNotContainsString('From the wider web:', $default);
+        self::assertStringNotContainsString('web_search', $default);
+    }
+
+    #[Test]
     public function sanitize_dashes_strips_em_and_en_dashes_deterministically(): void
     {
         // Em dash with surrounding spaces collapses to a comma.
