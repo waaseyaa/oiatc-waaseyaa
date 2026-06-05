@@ -112,9 +112,11 @@
 
     <div class="ayv__field">
       <span class="ayv__label">I am a…</span>
+      {# Default to "Sagamok member" for Sagamok-related campaigns; a future
+         non-Sagamok use can pass member_default: 'supporter' to the include. #}
       <span class="ayv__seg" role="radiogroup" aria-label="Member or supporter">
-        <label><input type="radio" name="member_flag" value="member"><span>Sagamok member</span></label>
-        <label><input type="radio" name="member_flag" value="supporter" checked><span>Supporter</span></label>
+        <label><input type="radio" name="member_flag" value="member"{% if member_default|default('member') == 'member' %} checked{% endif %}><span>Sagamok member</span></label>
+        <label><input type="radio" name="member_flag" value="supporter"{% if member_default|default('member') != 'member' %} checked{% endif %}><span>Supporter</span></label>
       </span>
     </div>
 
