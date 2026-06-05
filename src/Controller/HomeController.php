@@ -85,6 +85,11 @@ final class HomeController
         return $this->renderTemplate('support/records-request.html.twig');
     }
 
+    public function recordsRequestLetter(): Response
+    {
+        return $this->renderTemplate('support/records-request-letter.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);

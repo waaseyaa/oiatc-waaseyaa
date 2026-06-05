@@ -312,6 +312,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'support.records-request-letter',
+            RouteBuilder::create('/support/records-request-letter')
+                ->controller(fn() => $controller->recordsRequestLetter())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         // Unlisted static demo bundle (Sheguiandah clickable prototype). Served
         // verbatim from resources/ via DemoController, noindex,nofollow, not in
         // the sitemap, and not linked from any nav. Reachable only by direct link
