@@ -112,22 +112,27 @@ final class PetitionRepository
         string $memberFlag,
         ?string $comment,
         bool $showNamePublicly,
+        bool $includeNameOnLetter,
         bool $consent,
         ?string $ip,
         ?string $userAgent,
     ): array {
         $token = bin2hex(random_bytes(32));
-        $existing = $this->findSignatureByEmail($campaignId, $email);
+
+        // Dedup by (campaign, email) only when an email is given. Email is
+        // optional on some campaigns; without one we cannot identify a prior
+        // row, so each signature is a fresh INSERT.
+        $existing = $email !== '' ? $this->findSignatureByEmail($campaignId, $email) : null;
 
         if ($existing !== null) {
             // Update in place: new token, restore from any soft-delete, refresh.
             $this->db->query(
                 'UPDATE ' . PetitionSchema::TABLE_SIGNATURE . ' SET'
-                . ' name = ?, member_flag = ?, comment = ?, show_name_publicly = ?, consent = ?,'
+                . ' name = ?, member_flag = ?, comment = ?, show_name_publicly = ?, include_name_on_letter = ?, consent = ?,'
                 . ' verified = 1, verify_token = ?, deleted_at = NULL, ip_hash = ?, user_agent_hash = ?'
                 . ' WHERE id = ?',
                 [
-                    $name, $memberFlag, $comment, $showNamePublicly ? 1 : 0, $consent ? 1 : 0,
+                    $name, $memberFlag, $comment, $showNamePublicly ? 1 : 0, $includeNameOnLetter ? 1 : 0, $consent ? 1 : 0,
                     $token, $this->hash($ip), $this->hash($userAgent), (int) $existing['id'],
                 ],
             );
@@ -137,11 +142,11 @@ final class PetitionRepository
 
         $this->db->query(
             'INSERT INTO ' . PetitionSchema::TABLE_SIGNATURE
-            . ' (campaign_id, name, email, member_flag, comment, show_name_publicly, consent,'
+            . ' (campaign_id, name, email, member_flag, comment, show_name_publicly, include_name_on_letter, consent,'
             . ' verified, verify_token, created_at, ip_hash, user_agent_hash)'
-            . ' VALUES (?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)',
+            . ' VALUES (?, ?, ?, ?, ?, ?, ?, ?, 1, ?, ?, ?, ?)',
             [
-                $campaignId, $name, $email, $memberFlag, $comment, $showNamePublicly ? 1 : 0,
+                $campaignId, $name, $email, $memberFlag, $comment, $showNamePublicly ? 1 : 0, $includeNameOnLetter ? 1 : 0,
                 $consent ? 1 : 0, $token, $this->now(), $this->hash($ip), $this->hash($userAgent),
             ],
         );
@@ -221,7 +226,7 @@ final class PetitionRepository
     {
         $out = [];
         foreach ($this->db->query(
-            'SELECT name, email, member_flag, comment, show_name_publicly, created_at'
+            'SELECT name, email, member_flag, comment, show_name_publicly, include_name_on_letter, created_at'
             . ' FROM ' . PetitionSchema::TABLE_SIGNATURE
             . ' WHERE campaign_id = ? AND verified = 1 AND deleted_at IS NULL ORDER BY id ASC',
             [$campaignId],

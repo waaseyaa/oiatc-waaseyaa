@@ -1,0 +1,252 @@
+{% extends 'base.html.twig' %}
+
+{# Set this once the full records request document is online; while empty the
+   page shows a "coming" note instead of a broken link. #}
+{% set full_request_url = '' %}
+
+{% block title %}Support the member records request · OIATC{% endblock %}
+{% block description %}Members of Sagamok Anishnawbek can add their name in support of the records request to Chief and Council: clear answers, on the record, on what the membership gains from the Nation's businesses and who they serve.{% endblock %}
+{% block body_class %}route-support-records-request{% endblock %}
+{% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
+{% block og_description %}Add your name in support of the member records request to Sagamok Chief and Council.{% endblock %}
+
+{% block head_styles %}
+  <style>
+    /* Standalone support page on the site shell (base + site.css tokens), so it
+       follows the light/dark theme. Scoped .rr-*. */
+    .rr-wrap { max-width: 760px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+    .rr-wrap h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(28px, 4.4vw, 40px); line-height: 1.13; letter-spacing: -0.01em; margin: var(--gap-3) 0 var(--gap-4); }
+    .rr-wrap p { margin: 0 0 var(--gap-4); }
+    .rr-wrap strong { color: var(--ink); font-weight: 600; }
+
+    .rr-statement { font-family: var(--font-serif); font-size: clamp(19px, 2vw, 23px); line-height: 1.5; color: var(--ink); border-left: 3px solid var(--accent); background: var(--accent-wash); padding: 18px 22px; border-radius: 0 var(--radius-md) var(--radius-md) 0; margin: 0 0 var(--gap-5); }
+    .rr-context { color: var(--ink-2); max-width: 68ch; }
+    .rr-link { margin: 0 0 var(--gap-6); }
+    .rr-link a { color: var(--accent-deep); font-weight: 600; }
+    .rr-link .coming { color: var(--ink-3); font-style: italic; }
+
+    /* Sign-on card */
+    .rr-card { background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius-lg); padding: 24px 24px 26px; }
+    .rr-card h2 { font-family: var(--font-serif); font-weight: 500; font-size: 22px; margin: 0 0 4px; color: var(--ink); }
+    .rr-count { display: flex; align-items: baseline; gap: 8px; margin: 0 0 18px; }
+    .rr-count b { font-family: var(--font-sans); font-size: 26px; font-weight: 700; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
+    .rr-count span { color: var(--ink-3); font-size: 14px; }
+
+    .rr-field { margin: 0 0 16px; }
+    .rr-label { display: block; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink); margin: 0 0 5px; }
+    .rr-label .opt { color: var(--ink-3); font-weight: 400; }
+    .rr-input, .rr-textarea { width: 100%; background: var(--paper); color: var(--ink); border: 1px solid var(--rule-strong); border-radius: 8px; padding: 10px 12px; font: inherit; }
+    .rr-textarea { min-height: 88px; resize: vertical; }
+    .rr-input:focus, .rr-textarea:focus { outline: 2px solid var(--accent); outline-offset: 1px; border-color: var(--accent); }
+
+    .rr-seg { display: inline-flex; flex-wrap: wrap; gap: 8px; }
+    .rr-choice { display: inline-flex; }
+    .rr-choice label { display: inline-block; padding: 8px 14px; font-size: 13.5px; cursor: pointer; color: var(--ink-2); border: 1px solid var(--rule-strong); border-radius: 999px; background: var(--paper); }
+    .rr-choice input { position: absolute; opacity: 0; pointer-events: none; }
+    .rr-choice label:has(input:checked) { background: var(--accent); border-color: var(--accent); color: var(--paper); font-weight: 600; }
+
+    .rr-consent { border: 1px solid var(--rule); border-radius: var(--radius-md); padding: 14px 16px; margin: 0 0 16px; }
+    .rr-consent .q { font-family: var(--font-sans); font-size: 13.5px; font-weight: 600; color: var(--ink); margin: 0 0 8px; }
+
+    .rr-honey { position: absolute; left: -9999px; width: 1px; height: 1px; overflow: hidden; }
+    .rr-submit { -webkit-appearance: none; appearance: none; border: none; cursor: pointer; background: var(--accent); color: var(--paper); font-family: var(--font-sans); font-size: 15px; font-weight: 700; padding: 12px 24px; border-radius: 999px; }
+    .rr-submit:disabled { opacity: 0.6; cursor: default; }
+    .rr-msg { margin: 12px 0 0; font-size: 13.5px; min-height: 1em; }
+    .rr-msg.is-error { color: oklch(0.55 0.16 25); }
+    .rr-fine { margin: 16px 0 0; padding-top: 14px; border-top: 1px solid var(--rule); font-size: 12.5px; color: var(--ink-3); line-height: 1.55; }
+
+    .rr-done { display: none; }
+    .rr-card.is-done .rr-form { display: none; }
+    .rr-card.is-done .rr-done { display: block; }
+    .rr-done h3 { font-family: var(--font-serif); font-size: 22px; font-weight: 500; color: var(--ink); margin: 0 0 8px; }
+    .rr-remove { color: var(--ink-3); font-size: 12.5px; }
+    .rr-remove a { color: var(--accent-deep); }
+
+    .rr-supporters { margin: var(--gap-5) 0 0; }
+    .rr-supporters h3 { font-family: var(--font-sans); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 10px; }
+    .rr-supporters ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+    .rr-supporters li { font-size: 13px; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; }
+  </style>
+{% endblock %}
+
+{% block content %}
+<article class="rr-wrap">
+  <p class="eyebrow">OIATC · Member support</p>
+  <h1>Support the member records request</h1>
+
+  <p class="rr-statement">We, the undersigned members of Sagamok Anishnawbek, support the records request submitted to Chief and Council. We want clear answers, on the record, to one question: when the Nation invests in businesses and ventures, what are the benefits to the membership, and who is being served? We ask Council to provide the records and respond to the membership.</p>
+
+  <p class="rr-context">Members have submitted a formal records request to Chief and Council. This page lets members and supporters add their name in support of it, so the strength of that support is visible and can be presented to Council. It is independent of Chief and Council; OIATC built and hosts it, and the names stay on OIATC's own servers in Canada.</p>
+
+  <p class="rr-link">
+    {% if full_request_url %}
+      <a href="{{ full_request_url }}">Read the full records request &rarr;</a>
+    {% else %}
+      <span class="coming">The full records request will be linked here once it is posted.</span>
+    {% endif %}
+  </p>
+
+  <section class="rr-card" data-rr aria-labelledby="rr-h">
+    <h2 id="rr-h">Add your name</h2>
+    <p class="rr-count" data-rr-countbox hidden><b data-rr-count>0</b><span>members and supporters have signed</span></p>
+
+    <form class="rr-form" data-rr-form novalidate>
+      <div class="rr-honey" aria-hidden="true"><label>Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
+
+      <div class="rr-field">
+        <label class="rr-label" for="rr-name">Your name</label>
+        <input class="rr-input" id="rr-name" name="name" type="text" autocomplete="name" maxlength="120" required>
+      </div>
+
+      <div class="rr-field">
+        <label class="rr-label" for="rr-email">Email <span class="opt">(optional)</span></label>
+        <input class="rr-input" id="rr-email" name="email" type="email" autocomplete="email" maxlength="255">
+      </div>
+
+      <div class="rr-field">
+        <span class="rr-label">I am a…</span>
+        <span class="rr-seg" role="radiogroup" aria-label="Member or supporter">
+          <span class="rr-choice"><label><input type="radio" name="member_flag" value="member">Sagamok member</label></span>
+          <span class="rr-choice"><label><input type="radio" name="member_flag" value="supporter" checked>Supporter</label></span>
+        </span>
+      </div>
+
+      <div class="rr-field">
+        <label class="rr-label" for="rr-comment">A concern, question, or experience you want included <span class="opt">(optional)</span></label>
+        <textarea class="rr-textarea" id="rr-comment" name="comment" maxlength="2000"></textarea>
+      </div>
+
+      <div class="rr-consent">
+        <p class="q">Include my name on the letter to Chief and Council</p>
+        <span class="rr-seg" role="radiogroup" aria-label="Include my name on the letter">
+          <span class="rr-choice"><label><input type="radio" name="include_name_on_letter" value="yes">Yes, include my name</label></span>
+          <span class="rr-choice"><label><input type="radio" name="include_name_on_letter" value="no" checked>Count me only, don't name me</label></span>
+        </span>
+      </div>
+
+      <div class="rr-consent">
+        <p class="q">Show my name publicly on this site</p>
+        <span class="rr-seg" role="radiogroup" aria-label="Show my name publicly">
+          <span class="rr-choice"><label><input type="radio" name="show_name_publicly" value="yes">Yes</label></span>
+          <span class="rr-choice"><label><input type="radio" name="show_name_publicly" value="no" checked>No</label></span>
+        </span>
+      </div>
+
+      <button class="rr-submit" type="submit" data-rr-submit>Add my name</button>
+      <p class="rr-msg" data-rr-msg role="status" aria-live="polite"></p>
+    </form>
+
+    <div class="rr-done" data-rr-done aria-live="polite">
+      <h3>Miigwech, your name has been added.</h3>
+      <p data-rr-donecount></p>
+      <p class="rr-remove" data-rr-removewrap hidden>Changed your mind? <a href="#" data-rr-remove>Remove my signature</a>. Keep this link private to you.</p>
+    </div>
+
+    <p class="rr-fine">By adding your name you consent to OIATC storing it to present this support to Chief and Council. Name only (plus your email if you choose to give one), on OIATC's own servers in Canada. No band numbers, no trackers. You can remove yours anytime.</p>
+  </section>
+
+  <div class="rr-supporters" data-rr-supporters hidden>
+    <h3>Supporters who chose to be named</h3>
+    <ul data-rr-supporters-list></ul>
+  </div>
+</article>
+{% endblock %}
+
+{% block scripts_extra %}
+<script>
+  (function () {
+    var card = document.querySelector('[data-rr]');
+    if (!card) return;
+    var SLUG = 'records-request-support';
+    var form = card.querySelector('[data-rr-form]');
+    var msg = card.querySelector('[data-rr-msg]');
+    var submit = card.querySelector('[data-rr-submit]');
+
+    function fmt(n) { try { return Number(n).toLocaleString(); } catch (e) { return String(n); } }
+
+    function setCount(n) {
+      if (n === null || n === undefined) return;
+      var box = card.querySelector('[data-rr-countbox]');
+      var el = card.querySelector('[data-rr-count]');
+      if (el) el.textContent = fmt(n);
+      if (box) box.hidden = false;
+    }
+
+    function renderSupporters(recent) {
+      if (!recent || !recent.length) return;
+      var wrap = document.querySelector('[data-rr-supporters]');
+      var list = document.querySelector('[data-rr-supporters-list]');
+      if (!wrap || !list) return;
+      list.innerHTML = '';
+      recent.forEach(function (s) {
+        var li = document.createElement('li');
+        li.textContent = s.name;
+        list.appendChild(li);
+      });
+      wrap.hidden = false;
+    }
+
+    function hydrate() {
+      fetch('/api/petition/' + SLUG, { headers: { 'Accept': 'application/json' } })
+        .then(function (r) { return r.ok ? r.json() : null; })
+        .then(function (d) { if (d && d.ok) { setCount(d.count); renderSupporters(d.recent); } })
+        .catch(function () {});
+    }
+
+    function checked(name) {
+      var el = form.querySelector('input[name="' + name + '"]:checked');
+      return el ? el.value : '';
+    }
+
+    form.addEventListener('submit', function (e) {
+      e.preventDefault();
+      if (msg) { msg.textContent = ''; msg.classList.remove('is-error'); }
+
+      var payload = {
+        campaign: SLUG,
+        name: (form.elements['name'] || {}).value || '',
+        email: (form.elements['email'] || {}).value || '',
+        member_flag: checked('member_flag') || 'supporter',
+        comment: (form.elements['comment'] || {}).value || '',
+        include_name_on_letter: checked('include_name_on_letter') === 'yes',
+        show_name_publicly: checked('show_name_publicly') === 'yes',
+        consent: true,
+        website: (form.elements['website'] || {}).value || ''
+      };
+
+      if (!payload.name.trim()) {
+        if (msg) { msg.textContent = 'Please enter your name.'; msg.classList.add('is-error'); }
+        return;
+      }
+      if (submit) { submit.disabled = true; submit.textContent = 'Adding…'; }
+
+      fetch('/api/petition/sign', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload)
+      })
+        .then(function (r) { return r.json().then(function (b) { return b; }); })
+        .then(function (res) {
+          if (!res || !res.ok) {
+            if (msg) { msg.textContent = (res && res.error) || 'Something went wrong. Please try again.'; msg.classList.add('is-error'); }
+            if (submit) { submit.disabled = false; submit.textContent = 'Add my name'; }
+            return;
+          }
+          card.classList.add('is-done');
+          setCount(res.count);
+          var dc = card.querySelector('[data-rr-donecount]');
+          if (dc && res.count != null) dc.textContent = 'You are one of ' + fmt(res.count) + ' so far.';
+          var rw = card.querySelector('[data-rr-removewrap]');
+          var rl = card.querySelector('[data-rr-remove]');
+          if (rw && rl && res.manage_url) { rl.setAttribute('href', res.manage_url); rw.hidden = false; }
+        })
+        .catch(function () {
+          if (msg) { msg.textContent = 'Could not reach the server. Please try again.'; msg.classList.add('is-error'); }
+          if (submit) { submit.disabled = false; submit.textContent = 'Add my name'; }
+        });
+    });
+
+    hydrate();
+  })();
+</script>
+{% endblock %}

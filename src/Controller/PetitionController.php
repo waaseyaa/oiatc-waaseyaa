@@ -22,7 +22,7 @@ final class PetitionController
 {
     private const MAX_BODY_BYTES = 4096;
     private const NAME_MAX = 120;
-    private const COMMENT_MAX = 500;
+    private const COMMENT_MAX = 2000;
 
     public function __construct(private readonly PetitionRepository $petitions) {}
 
@@ -58,16 +58,18 @@ final class PetitionController
         $memberFlag = ((string) ($data['member_flag'] ?? 'supporter')) === 'member' ? 'member' : 'supporter';
         $comment = trim((string) ($data['comment'] ?? ''));
         $showName = (bool) ($data['show_name_publicly'] ?? false);
+        $includeOnLetter = (bool) ($data['include_name_on_letter'] ?? false);
         $consent = (bool) ($data['consent'] ?? false);
 
         if ($name === '' || mb_strlen($name) > self::NAME_MAX) {
             return $this->fail('Please enter your name.');
         }
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            return $this->fail('Please enter a valid email address.');
+        // Email is optional; validate the format only when one is given.
+        if ($email !== '' && !filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $this->fail('Please enter a valid email address, or leave it blank.');
         }
         if (!$consent) {
-            return $this->fail('Please check the consent box to add your voice.');
+            return $this->fail('Please confirm your consent to add your voice.');
         }
         if (mb_strlen($comment) > self::COMMENT_MAX) {
             $comment = mb_substr($comment, 0, self::COMMENT_MAX);
@@ -84,6 +86,7 @@ final class PetitionController
             memberFlag: $memberFlag,
             comment: $comment !== '' ? $comment : null,
             showNamePublicly: $showName,
+            includeNameOnLetter: $includeOnLetter,
             consent: $consent,
             ip: $request->getClientIp(),
             userAgent: $request->headers->get('User-Agent'),
@@ -118,6 +121,9 @@ final class PetitionController
             'the_ask' => (string) $campaign['the_ask'],
             'recipient' => (string) $campaign['recipient'],
             'count' => $this->petitions->verifiedCount((int) $campaign['id']),
+            // Privacy-safe: only signers who chose "show my name publicly",
+            // as first name + last initial. Pages may or may not render these.
+            'recent' => $this->petitions->recentPublicSupporters((int) $campaign['id']),
         ]);
     }
 

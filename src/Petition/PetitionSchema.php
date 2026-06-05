@@ -38,6 +38,40 @@ final class PetitionSchema
     {
         $this->ensureCampaignTable();
         $this->ensureSignatureTable();
+        $this->ensureSignatureColumns();
+    }
+
+    /**
+     * Additive column migrations for the signature table (createTable only fires
+     * for a fresh DB; an existing prod table needs ALTER). Each step is guarded
+     * by PRAGMA table_info so it is idempotent and safe to run on every boot.
+     */
+    private function ensureSignatureColumns(): void
+    {
+        if (!$this->db->schema()->tableExists(self::TABLE_SIGNATURE)) {
+            return;
+        }
+
+        // Never let a migration hiccup take down app boot; a failure surfaces
+        // later at sign time (the INSERT references the column) rather than 500ing
+        // every page.
+        try {
+            $have = [];
+            foreach ($this->db->query('PRAGMA table_info(' . self::TABLE_SIGNATURE . ')') as $row) {
+                $have[(string) $row['name']] = true;
+            }
+
+            // "Include my name on the letter to Chief and Council" — separate from
+            // show_name_publicly (public display). Defaults to 0 (count me only).
+            if (!isset($have['include_name_on_letter'])) {
+                $this->db->query(
+                    'ALTER TABLE ' . self::TABLE_SIGNATURE
+                    . ' ADD COLUMN include_name_on_letter int NOT NULL DEFAULT 0',
+                );
+            }
+        } catch (\Throwable) {
+            // swallow — see note above
+        }
     }
 
     private function ensureCampaignTable(): void
@@ -84,6 +118,9 @@ final class PetitionSchema
                 'member_flag' => ['type' => 'varchar', 'length' => 16, 'not null' => true],
                 'comment' => ['type' => 'varchar', 'length' => 500],
                 'show_name_publicly' => ['type' => 'int', 'not null' => true, 'default' => 0],
+                // "Include my name on the letter to Chief and Council" (private
+                // to the letter / admin export; distinct from public display).
+                'include_name_on_letter' => ['type' => 'int', 'not null' => true, 'default' => 0],
                 'consent' => ['type' => 'int', 'not null' => true, 'default' => 0],
                 // Set to 1 on creation today (opt-in deferred); kept so a future
                 // mailer can gate counting on a confirmed email instead.

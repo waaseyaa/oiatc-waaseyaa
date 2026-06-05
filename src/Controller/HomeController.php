@@ -80,6 +80,11 @@ final class HomeController
         return $this->renderTemplate('explainers/how-sagamok-is-organized.html.twig');
     }
 
+    public function recordsRequestSupport(): Response
+    {
+        return $this->renderTemplate('support/records-request.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);

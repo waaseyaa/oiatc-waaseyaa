@@ -62,6 +62,12 @@ final class AppServiceProvider extends ServiceProvider
                 'Ask Sagamok Chief and Council to take up member data governance: acknowledge the exposure, notify members, and move our data onto infrastructure we control.',
                 'Sagamok Chief and Council',
             );
+            $this->petitionRepository()->ensureCampaign(
+                'records-request-support',
+                'Support the member records request',
+                'We, the undersigned members of Sagamok Anishnawbek, support the records request submitted to Chief and Council. We want clear answers, on the record, to one question: when the Nation invests in businesses and ventures, what are the benefits to the membership, and who is being served? We ask Council to provide the records and respond to the membership.',
+                'Sagamok Chief and Council',
+            );
         }
     }
 
@@ -297,6 +303,15 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'support.records-request',
+            RouteBuilder::create('/support/records-request')
+                ->controller(fn() => $controller->recordsRequestSupport())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         // Unlisted static demo bundle (Sheguiandah clickable prototype). Served
         // verbatim from resources/ via DemoController, noindex,nofollow, not in
         // the sitemap, and not linked from any nav. Reachable only by direct link
@@ -521,6 +536,11 @@ final class AppServiceProvider extends ServiceProvider
             // back the framework's NullLlmProvider default, not our binding (same
             // build-once/ephemeral issue as the DB — see upstream #018).
             $anthropicKey = getenv('ANTHROPIC_API_KEY') ?: '';
+            // Web research is opt-in per instance (ANOKII_WEB_RESEARCH=1) and only
+            // takes effect once a real provider is configured. Off by default so
+            // the closed-corpus, refuse-rather-than-reach-out behavior is the
+            // baseline until Russell deliberately turns it on.
+            $webResearch = (getenv('ANOKII_WEB_RESEARCH') ?: '') === '1' && $anthropicKey !== '';
             $chat = new ChatController(
                 retriever: new GraphRetriever($this->persistentDatabase()),
                 prompts: new ChatPromptBuilder(),
@@ -532,6 +552,7 @@ final class AppServiceProvider extends ServiceProvider
                 queryLog: new SqliteChatQueryLog($this->persistentDatabase()),
                 topics: new TopicVocabulary(),
                 configured: $anthropicKey !== '',
+                webResearch: $webResearch,
             );
             $router->addRoute(
                 'chat',

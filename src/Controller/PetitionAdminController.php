@@ -80,7 +80,7 @@ final class PetitionAdminController
         $rows = $this->petitions->exportRows((int) $campaign['id']);
 
         $out = fopen('php://temp', 'r+');
-        fputcsv($out, ['name', 'email', 'member_or_supporter', 'comment', 'show_name_publicly', 'signed_at_utc']);
+        fputcsv($out, ['name', 'email', 'member_or_supporter', 'comment', 'show_name_publicly', 'include_name_on_letter', 'signed_at_utc']);
         foreach ($rows as $r) {
             fputcsv($out, [
                 (string) $r['name'],
@@ -88,6 +88,7 @@ final class PetitionAdminController
                 (string) $r['member_flag'],
                 (string) ($r['comment'] ?? ''),
                 ((int) $r['show_name_publicly'] === 1) ? 'yes' : 'no',
+                ((int) ($r['include_name_on_letter'] ?? 0) === 1) ? 'yes' : 'no',
                 (string) $r['created_at'],
             ]);
         }
