@@ -68,17 +68,27 @@
   .status{border-left:3px solid var(--warn); background:var(--panel-2); padding:14px 18px; border-radius:0 10px 10px 0; color:#d8e0ea; font-size:16.5px}
   .tech{font-size:14.5px; color:var(--muted); background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:15px 18px; margin:20px 0 0; line-height:1.55}
   .tech b{color:#c6d2df}
+  .cta{background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--warn); border-radius:12px; padding:20px 24px; margin:30px 0 0}
+  .cta__h{font-size:18px; font-weight:700; color:#fff; margin:0 0 8px}
+  .cta p{color:#cdd6e1; margin:0 0 12px}
+  .cta__btn{display:inline-block; background:var(--warn); color:#241a08; font-weight:700; text-decoration:none; padding:11px 20px; border-radius:8px}
+  .cta__btn:hover{filter:brightness(1.06); color:#241a08}
   footer{margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:14px}
   .kicker{color:var(--muted)}
+  .d-toplink{display:flex; justify-content:flex-end; gap:18px; margin:0 0 14px; font-size:12.5px; letter-spacing:.08em; text-transform:uppercase}
+  .d-toplink a{color:var(--warn); font-weight:700}
+  .d-toplink a.home{color:var(--muted); font-weight:600}
 </style>
 </head>
 <body>
 <div class="wrap">
 
+  <nav class="d-toplink" aria-label="Site"><a class="home" href="/">oiatc.ca</a><a href="/support/records-request">Records request</a></nav>
+
   <p class="eyebrow">OIATC · For Sagamok members</p>
   <h1>Sagamok's members-only website has not been private</h1>
   <p class="lede">Our members-only documents, including Council minutes, have been <span class="hlw">readable by anyone on the internet, with no login</span>. Here is what that means, in plain terms, and how you can see it for yourself.</p>
-  <p class="byline">From Russell Jones, a Sagamok Anishnawbek member, for the Ontario Indigenous AI and Technology Council. <!--EDIT DATE-->May 31, 2026.</p>
+  <p class="byline">From Russell Jones, a Sagamok Anishnawbek member, for the Ontario Indigenous AI and Technology Council. May 31, 2026.</p>
 
   <div class="summary">
     <p class="h">In short</p>
@@ -163,10 +173,15 @@
   <p>The bigger lesson is the one that matters most. When the systems holding our information are run on outside platforms by people outside the community, and we do not have our own qualified people able to check them, we cannot answer a simple question: is our data safe, and who can see it. <strong>Our data is ours.</strong> Deciding how it is kept, and being able to check it ourselves, is part of our <span class="hl">sovereignty</span>.</p>
 
   <h2>What happens now</h2>
-  <!-- EDIT this line to match reality at publish time. -->
   <p class="status">I raised concerns about this system through the proper channels in 2023 and again in February 2026, and was told there was no problem. This time I am telling members directly rather than waiting on those channels again. The full technical detail is documented and available to Chief and Council and the IT office so it can be verified and fixed. Members are welcome to ask Chief and Council and the IT office directly whether their information was affected.</p>
 
   <p class="tech"><b>For anyone technical:</b> an anonymous web request, sent with no account and no password, returns these files directly with a normal success response, and the members index page returns its full contents the same way. The site's rules place no restriction on AI crawlers. The complete method and the captured proof are set out in a technical report available to Chief and Council. No member documents were downloaded to establish any of this; the proof is response information and the site's own public files.</p>
+
+  <div class="cta">
+    <p class="cta__h">Members are asking Council to show the records</p>
+    <p>Members have submitted a records request to Chief and Council asking, on the record, what the membership gains from the Nation's investments and who is being served. The most recent audit is clean and this alleges nothing. You can add your name in support.</p>
+    <a class="cta__btn" href="/support/records-request">Add your name &rarr;</a>
+  </div>
 
   <footer>
     <p>This is from Russell Jones, a Sagamok Anishnawbek member, on behalf of the Ontario Indigenous AI and Technology Council. It is independent of Sagamok Chief and Council and its administration. I have not shared any of the affected documents. Questions and corrections are welcome.</p>

@@ -28,9 +28,8 @@
     /* Sign-on card */
     .rr-card { background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius-lg); padding: 24px 24px 26px; }
     .rr-card h2 { font-family: var(--font-serif); font-weight: 500; font-size: 22px; margin: 0 0 4px; color: var(--ink); }
-    .rr-count { display: flex; align-items: baseline; gap: 8px; margin: 0 0 18px; }
-    .rr-count b { font-family: var(--font-sans); font-size: 26px; font-weight: 700; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
-    .rr-count span { color: var(--ink-3); font-size: 14px; }
+    .rr-count { margin: 0 0 18px; font-size: 15px; color: var(--ink-2); }
+    .rr-count b { font-family: var(--font-sans); font-size: 22px; font-weight: 700; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
 
     .rr-field { margin: 0 0 16px; }
     .rr-label { display: block; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink); margin: 0 0 5px; }
@@ -66,6 +65,20 @@
     .rr-supporters h3 { font-family: var(--font-sans); font-size: 12px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 10px; }
     .rr-supporters ul { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px; }
     .rr-supporters li { font-size: 13px; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule); border-radius: 999px; padding: 4px 12px; }
+
+    /* "Why members are asking" reason-to-sign block */
+    .rr-why { border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--paper-2); padding: 18px 22px; margin: 0 0 var(--gap-5); }
+    .rr-why h2 { font-family: var(--font-serif); font-weight: 600; font-size: 19px; color: var(--ink); margin: 0 0 8px; }
+    .rr-why p { margin: 0 0 10px; color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+    .rr-why ul { list-style: none; padding: 0; margin: 0 0 10px; }
+    .rr-why li { position: relative; padding-left: 20px; margin: 0 0 10px; color: var(--ink-2); font-size: 15px; line-height: 1.6; }
+    .rr-why li::before { content: ""; position: absolute; left: 4px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+    .rr-why .closer { color: var(--ink); }
+
+    /* Share-after-sign */
+    .rr-share { margin: 14px 0 0; font-size: 14px; color: var(--ink-2); }
+    .rr-copy { -webkit-appearance: none; appearance: none; cursor: pointer; border: 1px solid var(--accent-soft); background: var(--accent-wash); color: var(--accent-deep); font: inherit; font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 999px; margin-left: 4px; }
+    .rr-copy:hover { border-color: var(--accent); }
   </style>
 {% endblock %}
 
@@ -78,6 +91,17 @@
 
   <p class="rr-context">Members have submitted a formal records request to Chief and Council. This page lets members and supporters add their name in support of it, so the strength of that support is visible and can be presented to Council. It is independent of Chief and Council; OIATC built and hosts it, and the names stay on OIATC's own servers in Canada.</p>
 
+  <section class="rr-why" aria-label="Why members are asking">
+    <h2>Why members are asking</h2>
+    <p>Out of our roughly $603.5 million Robinson Huron settlement, about $185 million was kept back to be invested. Members have a few plain questions:</p>
+    <ul>
+      <li>Where is the ~$185 million, and who can approve taking money out? Most of it was placed in a trust at an outside bank, and members have never seen the trust's rules: who the trustee is, what it can be invested in, or what a withdrawal requires.</li>
+      <li>Why did the Nation take on about $68 million in new loans the same year it received the settlement?</li>
+      <li>About $97 million of the settlement was loaned to the Nation's own businesses (interest of 4% to 12%), with no public breakdown. Which businesses, on what terms, and is it coming back?</li>
+    </ul>
+    <p class="closer">The most recent audit is clean and we are not alleging anything. We are simply asking Council to show members the records. This is our settlement.</p>
+  </section>
+
   <p class="rr-link">
     {% if full_request_url %}
       <a href="{{ full_request_url }}">Read the full records request &rarr;</a>
@@ -88,7 +112,7 @@
 
   <section class="rr-card" data-rr aria-labelledby="rr-h">
     <h2 id="rr-h">Add your name</h2>
-    <p class="rr-count" data-rr-countbox hidden><b data-rr-count>0</b><span>members and supporters have signed</span></p>
+    <p class="rr-count" data-rr-countbox hidden>Joined by <b data-rr-count>0</b> members and supporters so far</p>
 
     <form class="rr-form" data-rr-form novalidate>
       <div class="rr-honey" aria-hidden="true"><label>Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -139,6 +163,7 @@
     <div class="rr-done" data-rr-done aria-live="polite">
       <h3>Miigwech, your name has been added.</h3>
       <p data-rr-donecount></p>
+      <p class="rr-share">Help it grow: ask another member to add their name. <button type="button" class="rr-copy" data-rr-copy>Copy link to share</button></p>
       <p class="rr-remove" data-rr-removewrap hidden>Changed your mind? <a href="#" data-rr-remove>Remove my signature</a>. Keep this link private to you.</p>
     </div>
 
@@ -245,6 +270,20 @@
           if (submit) { submit.disabled = false; submit.textContent = 'Add my name'; }
         });
     });
+
+    // Copy-link-to-share button (shown in the post-sign "done" state).
+    var copyBtn = card.querySelector('[data-rr-copy]');
+    if (copyBtn) {
+      copyBtn.addEventListener('click', function () {
+        var url = location.origin + '/support/records-request';
+        var ok = function () { copyBtn.textContent = 'Link copied'; setTimeout(function () { copyBtn.textContent = 'Copy link to share'; }, 2000); };
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(url).then(ok).catch(function () { window.prompt('Copy this link:', url); });
+        } else {
+          window.prompt('Copy this link:', url);
+        }
+      });
+    }
 
     hydrate();
   })();

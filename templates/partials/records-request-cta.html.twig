@@ -1,0 +1,13 @@
+{# Reusable records-request call-to-action block.
+   Renders on any base.html.twig page (uses the .rr-cta classes in site.css).
+   The live signature count is filled in by the small hydrator in
+   base.html.twig (it looks for [data-rr-cta] on the page and hits
+   /api/petition/records-request-support). Discipline: questions not
+   accusations, audit-is-clean, no private individuals. #}
+<aside class="rr-cta" data-rr-cta aria-label="Support the records request">
+  <p class="rr-cta__k">Member records request</p>
+  <p class="rr-cta__h">Add your name</p>
+  <p class="rr-cta__p">Members have asked Chief and Council, on the record, what the membership gains from the Nation's investments and who is being served. The most recent audit is clean and this alleges nothing; it simply asks Council to show members the records.</p>
+  <a class="btn btn--primary" href="/support/records-request">Add your name &rarr;</a>
+  <p class="rr-cta__count" data-rr-cta-countwrap hidden>Joined by <b data-rr-cta-count>0</b> members and supporters so far.</p>
+</aside>

@@ -65,6 +65,7 @@
         <span class="brand__title">Ontario Indigenous AI &amp; Technology Council</span>
       </a>
       <div class="top__meta">
+        <a class="records-link" href="/support/records-request">Records request</a>
         {% block topnav %}<a href="/resources/sagamok">Resources</a> <a href="/news">News</a> <a href="/design-system">Design system</a>{% endblock %}
         <button class="theme-toggle" type="button" aria-label="Toggle theme" data-theme-toggle>Dark</button>
       </div>
@@ -129,6 +130,20 @@
         });
       }, { threshold: 0.1 });
       els.forEach(function (el) { io.observe(el); });
+
+      // Live signature count for any records-request CTA block on the page.
+      if (document.querySelector('[data-rr-cta]')) {
+        fetch('/api/petition/records-request-support', { headers: { 'Accept': 'application/json' } })
+          .then(function (r) { return r.ok ? r.json() : null; })
+          .then(function (d) {
+            if (!d || !d.ok || !d.count) return; // only show momentum once there is a count
+            var n;
+            try { n = Number(d.count).toLocaleString(); } catch (e) { n = String(d.count); }
+            document.querySelectorAll('[data-rr-cta-count]').forEach(function (el) { el.textContent = n; });
+            document.querySelectorAll('[data-rr-cta-countwrap]').forEach(function (el) { el.hidden = false; });
+          })
+          .catch(function () {});
+      }
     })();
   </script>
   {% block scripts_extra %}{% endblock %}
