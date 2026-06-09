@@ -361,6 +361,7 @@ final class NewsController
             'add-your-voice' => 'OIATC has built a simple way for members to weigh in on the questions that matter. The first one: where our data actually lives.',
             'prescribeit-governance-failure' => 'Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.',
             'massey-solar-open-houses-paused' => 'Potentia\'s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.',
+            'massey-solar-drop-in-sessions-fire-hall' => 'Potentia has moved the Massey Solar Project\'s community drop-in sessions to the Massey Fire Hall, with dates in June and July 2026.',
             default => null,
         };
     }
@@ -491,6 +492,17 @@ final class NewsController
                 // 2026-06-04 00:00:00 UTC
                 'published_at' => 1780531200,
                 'related_explainer' => 'where-your-data-lives',
+                'status' => true,
+            ],
+            [
+                'title' => 'Massey Solar\'s drop-in sessions move to the Massey Fire Hall',
+                'slug' => 'massey-solar-drop-in-sessions-fire-hall',
+                'body' => '<p>The Massey Solar Project\'s community drop-in sessions, paused in early June over the venue, now have a new home. Potentia Renewables has notified the community that the sessions will take place at the Massey Fire Hall (Imperial St N, Massey), moved from the Massey Public Library to accommodate the number of community members interested in attending.</p>'
+                    . '<p>The schedule: Wednesday June 10 and Wednesday July 22 from 4:00pm to 7:00pm, and Thursday June 11 and Thursday July 23 from 11:00am to 2:00pm. The company says the times are unchanged from the original notice; only the venue has moved. Questions can go to info@masseysolar.ca.</p>'
+                    . '<p>These drop-in sessions are part of the project\'s public engagement. The Massey Solar Project holds a 20-year provincial electricity contract but still needs Ontario\'s Renewable Energy Approval, the environmental review where the groundwater, wildlife, wetland, and consultation questions are formally studied, before it can be built.</p>',
+                // 2026-06-09 00:00:00 UTC
+                'published_at' => 1780963200,
+                'related_explainer' => 'massey-solar-project',
                 'status' => true,
             ],
         ];
