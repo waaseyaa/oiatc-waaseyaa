@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Anokii program · OIATC{% endblock %}
+{% block description %}Anokii is OIATC's sovereign community infrastructure program: Nation-governed community platforms built on Waaseyaa. Two community vantages are live, with a regional coverage plan ready to fund.{% endblock %}
+{% block og_title %}Anokii program{% endblock %}
+{% block og_description %}Nation-governed community platforms built on Waaseyaa. Two vantages live today, with a North Shore regional coverage plan ready to fund.{% endblock %}
+{% block body_class %}route-program-anokii{% endblock %}
+
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="fund-wrap fund-wrap--narrow">
+
+  <p class="fund-eyebrow">OIATC program</p>
+  <h1>Anokii: sovereign community infrastructure</h1>
+  <p class="fund-lede">Nation-governed community platforms built on Waaseyaa, where governance and access control are structural rather than bolted on. Communities are vantage points on one shared map, not silos.</p>
+
+  <div class="fund-body">
+    <p>Anokii gives a Nation a grounded, cited assistant and a resource map it governs itself, running on infrastructure under community control. The data stays home. The framework underneath records consent as data and keeps an audit trail of every access and change.</p>
+  </div>
+
+  <section class="fund-sec">
+    <h2>What is live</h2>
+    <ul class="fund-links">
+      <li><a href="/anokii">The Anokii instance</a> <span>· one shared map, per-community vantages</span></li>
+      <li><a href="/anokii/sagamok">Sagamok vantage</a> <span>· community services and a grounded assistant</span></li>
+      <li><a href="/anokii/massey">Massey vantage</a> <span>· the solar project in local context</span></li>
+      <li><a href="/explainers/where-your-data-lives">Where your data lives</a> <span>· why sovereign infrastructure matters</span></li>
+    </ul>
+  </section>
+
+  <section class="fund-sec">
+    <h2>The fundable next step</h2>
+    <div class="fund-body">
+      <p>Two vantages are live. The next step is regional coverage along the North Shore, from Sault Ste. Marie to Sudbury to Manitoulin, so more Nations have a community-governed platform instead of a vendor-run one. This is the Northern Ontario technology-capacity story, and it scales one vantage at a time.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt">Regional rollout</span>
+      <p>Funding extends Anokii to more North Shore communities, each governing its own instance. Costs scale per community; the design and the framework are already built.</p>
+    </div>
+  </section>
+
+  <div class="fund-more">
+    <p class="fund-more__k">More from this program</p>
+    <div class="fund-more__links">
+      <a href="/anokii">The Anokii instance</a>
+      <a href="/explainers/where-your-data-lives">Where your data lives</a>
+      <a href="/support">Support this program</a>
+    </div>
+  </div>
+
+</article>
+{% endblock %}

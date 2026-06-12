@@ -1,16 +1,13 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Ontario Indigenous AI &amp; Technology Council{% endblock %}
-{% block description %}A council of two working to improve the digital systems that deliver services to First Nations. Governance framework, the Waaseyaa technical framework, and the Minoo community platform.{% endblock %}
+{% block description %}We author governance for Indigenous-led digital decisions and run four programs that put it into use: language, sovereign infrastructure, community knowledge, and member resources. Everything here is shipped and dated.{% endblock %}
 {% block body_class %}route-home{% endblock %}
 
-{# Canonical / og:* / twitter:* are provided by base.html.twig defaults using
-   the page blocks above and the auto-rendered OG card at /images/og/home.png.
-   Home is a website-type root, not an article — override og_type. The shorter
-   og_description trims the framework/platform names so the social preview
-   reads as a single hook. JSON-LD lives in its own block, separate from meta. #}
+{# Canonical / og:* / twitter:* come from base defaults + /images/og/home.png.
+   Home is a website root, not an article. #}
 {% block og_type %}website{% endblock %}
-{% block og_description %}A council of two working to improve the digital systems that deliver services to First Nations.{% endblock %}
+{% block og_description %}We author governance for Indigenous-led digital decisions and run four programs that put it into use. Everything on this site is shipped and dated.{% endblock %}
 
 {% block schema_jsonld %}
   <script type="application/ld+json">
@@ -46,7 +43,6 @@
         "sameAs": [
           "https://northops.ca",
           "https://waaseyaa.org",
-          "https://minoo.live",
           "https://github.com/jonesrussell"
         ]
       }
@@ -54,6 +50,8 @@
   }
   </script>
 {% endblock %}
+
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}{% endblock %}
 
 {% block content %}
     <section class="masthead">
@@ -63,102 +61,98 @@
           <h1 class="display">A council of two,<br>improving the systems<br>that serve First Nations.</h1>
         </div>
         <div>
-          <p class="lede">Ontario Indigenous AI &amp; Technology Council authors governance for Indigenous-led digital decisions and stewards the platforms that put it into use.</p>
-          <ul class="signals">
-            <li>Governance before product</li>
-            <li>Ontario mandate</li>
-            <li>Platforms tied to protocol</li>
-          </ul>
+          <p class="lede">We author governance for Indigenous-led digital decisions and run four programs that put it into use. Everything on this site is shipped and dated.</p>
+          <dl class="fund-facts">
+            <dt>Status</dt><dd>Incorporating, not-for-profit</dd>
+            <dt>Programs</dt><dd>4, all with shipped work</dd>
+            <dt>Funds held</dt><dd>Under trusteeship arrangements named on the <a href="/support">Support page</a></dd>
+          </dl>
         </div>
       </div>
     </section>
 
-    <section class="sec" id="premise">
+    <section class="sec" id="programs">
       <div class="shell">
         <div class="sec__head reveal">
-          <div><div class="sec__num">01 · Premise</div></div>
+          <div><div class="sec__num">01 · Programs</div></div>
           <div>
-            <h2 class="sec__title">The systems meant to serve First Nations are rarely chosen by them.</h2>
+            <h2 class="sec__title">Four programs. One premise.</h2>
+            <p class="sec__intro">The systems meant to serve First Nations are rarely chosen by them. Each program puts that right in a different place. All four have shipped work.</p>
           </div>
         </div>
-        <div class="reveal">
-          <p class="body body--wide">First Nations are routinely handed digital systems &mdash; case-management tools, data platforms, AI &mdash; chosen by vendors or administrators without the communities those systems are meant to serve. The result is software that doesn't fit, data that flows to the wrong places, and services that suffer for it.</p>
-          <p class="body body--wide">OIATC exists to change that. We are authoring a governance framework for Indigenous-led digital decisions and stewarding the platforms and practices that put it into use.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="sec" id="pillars">
-      <div class="shell">
-        <div class="sec__head reveal">
-          <div><div class="sec__num">02 · What we're building</div></div>
-          <div>
-            <h2 class="sec__title">One governance framework. Two platforms.</h2>
-            <p class="sec__intro">Three pieces, built in order. Governance first &mdash; the platforms exist to put it into use.</p>
-          </div>
-        </div>
-        <div class="grid-3 reveal">
-          <article class="pillar-demo">
-            <div class="pillar-demo__label">Governance</div>
-            <h3>Governance framework</h3>
-            <p>A framework for how First Nations can evaluate, govern, and steward the digital systems that run community services. Protocol before product. Consent before architecture.</p>
+        <div class="fund-cards reveal">
+          <article class="fund-card fund-card--flag">
+            <div class="fund-card__k"><span>Language</span><span class="fund-card__badge">Flagship · live</span></div>
+            <h3><a href="/programs/anishinaabemowin">Anishinaabemowin</a></h3>
+            <p>Language revitalization with consent infrastructure: Elder corpus, lesson app, games, the doll, story nights.</p>
+            <a class="fund-card__unlock" href="/programs/anishinaabemowin">$25k pilots the doll batch and a season of story nights &rarr;</a>
           </article>
-          <article class="pillar-demo">
-            <div class="pillar-demo__label">Platform</div>
-            <h3>Waaseyaa</h3>
-            <p><a class="link" href="https://waaseyaa.org" target="_blank" rel="noopener">waaseyaa.org</a>. A modular system where governance and access control are structural, not bolted on.</p>
+          <article class="fund-card">
+            <div class="fund-card__k"><span>Infrastructure</span></div>
+            <h3><a href="/programs/anokii">Anokii</a></h3>
+            <p>Nation-governed community platforms on Waaseyaa. Two vantages live, with a regional coverage plan ready to fund.</p>
+            <a class="fund-card__unlock" href="/programs/anokii">Regional rollout, Sault to Manitoulin &rarr;</a>
           </article>
-          <article class="pillar-demo">
-            <div class="pillar-demo__label">Community</div>
-            <h3>Minoo</h3>
-            <p><a class="link" href="https://minoo.live" target="_blank" rel="noopener">minoo.live</a>. The first platform built on Waaseyaa &mdash; for Indigenous languages, teachings, and community continuity.</p>
+          <article class="fund-card">
+            <div class="fund-card__k"><span>Knowledge</span></div>
+            <h3><a href="/programs/community-knowledge">Community knowledge</a></h3>
+            <p>Plain-language explainers members actually use: treaty annuities, the solar project, where your data lives.</p>
+            <a class="fund-card__unlock" href="/programs/community-knowledge">Cited by local press &rarr;</a>
+          </article>
+          <article class="fund-card">
+            <div class="fund-card__k"><span>Transparency</span></div>
+            <h3><a href="/programs/transparency">Member resources</a></h3>
+            <p>Helping members see how their governments and systems work: org explainers, records requests, responsible disclosure.</p>
+            <a class="fund-card__unlock" href="/programs/transparency">What you can ask for, and how &rarr;</a>
           </article>
         </div>
       </div>
     </section>
 
-    <section class="sec" id="practice">
+    <section class="sec" id="proof">
       <div class="shell">
         <div class="sec__head reveal">
-          <div><div class="sec__num">03 · Practice</div></div>
+          <div><div class="sec__num">02 · Proof, not slideware</div></div>
           <div>
-            <h2 class="sec__title">Concrete examples of what responsible looks like.</h2>
-            <p class="sec__intro">Governance lives in cases, not slogans. We publish working examples that others can read, adopt, and adapt.</p>
+            <h2 class="sec__title">What exists today.</h2>
           </div>
         </div>
-        <div class="grid-2 reveal">
-          <article class="card">
-            <div class="card__eyebrow">Case study &middot; 2026</div>
-            <h3><a class="link" href="/practice/ai-in-coursework">AI in coursework</a></h3>
-            <p class="card__meta">Grade 11 Environmental Science &middot; seven assignments &middot; seven audit logs</p>
-            <p class="body">A real student, a real course, and the audit logs that record what the AI did, what the student decided, and which sources were verified before any claim reached the page.</p>
-          </article>
-          <article class="card">
-            <div class="card__eyebrow">Project &middot; 2026</div>
-            <h3><a class="link" href="/anishinaabemowin">Anishinaabemowin</a></h3>
-            <p class="card__meta">Language revitalization &middot; corpus, lessons, and listening sessions</p>
-            <p class="body">A live, community-owned project to keep the language alive: record fluent speakers, build places to hear it, and ship learning tools the community controls. Working apps are already running.</p>
-          </article>
+        <div class="fund-proof reveal">
+          <div><div class="fund-proof__n">21,721</div><div class="fund-proof__l">dictionary entries preserved</div></div>
+          <div><div class="fund-proof__n">20+</div><div class="fund-proof__l">pages shipped and dated</div></div>
+          <div><div class="fund-proof__n">2</div><div class="fund-proof__l">platforms in active build</div></div>
+          <div><div class="fund-proof__n">1st</div><div class="fund-proof__l">party analytics, no ad-tech</div></div>
         </div>
       </div>
     </section>
 
-    <section class="sec sec--statement" id="candour">
+    <section class="sec sec--statement" id="theory">
       <div class="shell">
         <div class="sec__head reveal">
-          <div><div class="sec__num">04 · Where we are</div></div>
+          <div><div class="sec__num">03 · Theory of change</div></div>
           <div>
-            <h2 class="sec__title">Early. We are not pretending otherwise.</h2>
+            <h2 class="sec__title">When communities choose and govern their digital systems, the systems fit. When the systems fit, services and language outcomes improve. We exist to make the first part true.</h2>
           </div>
         </div>
-        <div class="reveal">
-          <p class="body body--wide">OIATC is early. The council has two members today. The framework is in active drafting. The platforms are in active build.</p>
-          <p class="body body--wide" style="margin-top: var(--gap-5);">We are looking for:</p>
-          <ul class="signals" style="margin-top: var(--gap-4); flex-direction: column; gap: var(--gap-3);">
-            <li>A Knowledge Keeper or Elder willing to sit on the council</li>
-            <li>A Nation interested in being a first partner</li>
-            <li>A legal or policy advisor with experience in Indigenous data governance</li>
-          </ul>
+      </div>
+    </section>
+
+    <section class="sec" id="support">
+      <div class="shell">
+        <div class="sec__head reveal">
+          <div><div class="sec__num">04 · Support</div></div>
+          <div>
+            <h2 class="sec__title">Fund shipped work.</h2>
+          </div>
+        </div>
+        <div class="fund-support reveal">
+          <div>
+            <p class="body body--wide">We are early and honest about it: incorporating now, funds held under named trusteeship until then. Each program page says exactly what the next dollar unlocks.</p>
+          </div>
+          <div>
+            <a class="btn btn--primary" href="/support">Partner with OIATC &rarr;</a>
+            <div class="fund-support__also">Also seeking: an Elder for the council, two arm's-length directors, and a first partner Nation.</div>
+          </div>
         </div>
       </div>
     </section>
@@ -169,7 +163,7 @@
           <div><div class="sec__num">05 · Council members</div></div>
           <div>
             <h2 class="sec__title">Two seats, held with care.</h2>
-            <p class="sec__intro">The council today is deliberately small. Growth is gated on fit &mdash; not urgency.</p>
+            <p class="sec__intro">The council today is deliberately small. Growth is gated on fit, not urgency. Full profiles live on the <a class="link" href="/about">About page</a>.</p>
           </div>
         </div>
         <div class="grid-2 reveal">
@@ -200,7 +194,7 @@
         </div>
         <div class="actions reveal">
           <a class="btn btn--primary" href="mailto:jonesrussell42@gmail.com">Email Russell &rarr;</a>
-          <a class="btn btn--secondary" href="https://waaseyaa.org" target="_blank" rel="noopener">Read the framework</a>
+          <a class="btn btn--secondary" href="/support">Partner with OIATC</a>
         </div>
       </div>
     </section>

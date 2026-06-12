@@ -156,6 +156,69 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'about',
+            RouteBuilder::create('/about')
+                ->controller(fn() => $controller->about())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'support',
+            RouteBuilder::create('/support')
+                ->controller(fn() => $controller->support())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'programs',
+            RouteBuilder::create('/programs')
+                ->controller(fn() => $controller->programs())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'programs.anishinaabemowin',
+            RouteBuilder::create('/programs/anishinaabemowin')
+                ->controller(fn() => $controller->programAnishinaabemowin())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'programs.anokii',
+            RouteBuilder::create('/programs/anokii')
+                ->controller(fn() => $controller->programAnokii())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'programs.community-knowledge',
+            RouteBuilder::create('/programs/community-knowledge')
+                ->controller(fn() => $controller->programCommunityKnowledge())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'programs.transparency',
+            RouteBuilder::create('/programs/transparency')
+                ->controller(fn() => $controller->programTransparency())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
             'positions.counter-disinformation',
             RouteBuilder::create('/positions/counter-disinformation')
                 ->controller(fn() => $controller->counterDisinformationPosition())

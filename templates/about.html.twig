@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}About OIATC{% endblock %}
+{% block description %}What OIATC is and where it stands: a council of two authoring governance for Indigenous-led digital decisions, running four programs, incorporating as a not-for-profit, and honest about being early.{% endblock %}
+{% block og_title %}About OIATC{% endblock %}
+{% block og_description %}A council of two authoring governance for Indigenous-led digital decisions and running four programs that put it into use. Incorporating now, and honest about being early.{% endblock %}
+{% block body_class %}route-about{% endblock %}
+
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="fund-wrap fund-wrap--narrow">
+
+  <p class="fund-eyebrow">Council · About</p>
+  <h1>About OIATC</h1>
+  <p class="fund-lede">The Ontario Indigenous AI and Technology Council exists because of a simple, repeated failure: the digital systems that run First Nations services are chosen by vendors and administrators, not by the communities they serve. We author governance for Indigenous-led digital decisions and we steward platforms that put that governance into use.</p>
+
+  <section class="fund-sec">
+    <h2>Where we are</h2>
+    <div class="fund-body">
+      <p>OIATC is early and small on purpose. The council has two members: Russell Jones (Ojibwe from Sagamok Anishnawbek, founder, full-stack developer) and Web Networks (a non-profit worker co-op, one of Canada's first ISPs, our hosting foundation). We are incorporating as a not-for-profit corporation; until that completes, partnership funds are held under trusteeship arrangements we will name here. We publish what we ship, we date what we publish, and we correct what we get wrong.</p>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>What we run</h2>
+    <div class="fund-body">
+      <p>Four programs: <a href="/programs/anishinaabemowin">Anishinaabemowin</a> (language revitalization with consent infrastructure), <a href="/programs/anokii">Anokii</a> (Nation-governed community platforms), <a href="/programs/community-knowledge">Community Knowledge</a> (plain-language explainers members actually use), and <a href="/programs/transparency">Transparency and Member Resources</a> (helping members see how their governments and systems work).</p>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Who we're looking for</h2>
+    <div class="fund-body">
+      <p>A Knowledge Keeper or Elder for the council. A Nation ready to be a first partner. A legal or policy advisor in Indigenous data governance. Two arm's-length directors as we incorporate. And funders who want shipped work over slideware: everything on this site exists and is dated.</p>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>The council</h2>
+    <div class="fund-profiles">
+      <article class="fund-profile">
+        <div class="fund-profile__k">Council member</div>
+        <h3>Russell Jones</h3>
+        <p class="fund-profile__meta">Ojibwe from Sagamok Anishnawbek · Founder · Full-stack developer</p>
+        <p>In 2023 Russell was contracted to implement a case-management system at a First Nations Child and Family Advocacy Unit, saw within weeks that it would not fit the community, and made the case for a Canadian-built alternative already in use at neighbouring Nations. The recommendation was shelved and the contract ended. OIATC is how that lesson becomes a practice.</p>
+      </article>
+      <article class="fund-profile">
+        <div class="fund-profile__k">Council member</div>
+        <h3><a href="https://web.net" target="_blank" rel="noopener">Web Networks</a></h3>
+        <p class="fund-profile__meta">Est. 1987 · One of Canada's first ISPs · Non-profit worker co-op · Canadian soil</p>
+        <p>A non-profit worker co-op whose clients have included the Legislative Assembly of Nunavut and Nunavut Public Library Services. Web Networks provides OIATC's hosting foundation and sits on the council as its second member.</p>
+      </article>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Council positions</h2>
+    <div class="fund-body">
+      <p>Beyond the programs, OIATC publishes occasional council-level statements on national questions that bear on Indigenous digital sovereignty.</p>
+    </div>
+    <ul class="fund-links">
+      <li><span class="fund-tag">Council position</span> &nbsp; <a href="/positions/counter-disinformation">Foreign disinformation is a sovereignty issue</a></li>
+      <li><span class="fund-tag">Council position</span> &nbsp; <a href="/positions/prescribeit">When the system is chosen for you: the PrescribeIT lesson</a></li>
+    </ul>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Contact</h2>
+    <div class="fund-body">
+      <p>For partnerships, funding, or council questions, write to Russell: <a href="mailto:jonesrussell42@gmail.com">jonesrussell42@gmail.com</a>. Writing to Russell is writing to OIATC.</p>
+    </div>
+  </section>
+
+</article>
+{% endblock %}

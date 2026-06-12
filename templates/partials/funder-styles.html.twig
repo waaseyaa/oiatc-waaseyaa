@@ -1,0 +1,108 @@
+{# Shared funder-frame styles, on the site tokens (light/dark aware). Namespaced
+   .fund-*. Included by the home page's section components and by the editorial
+   funder pages (/about, /programs, /support, program pages). Raw <style>;
+   include inside a {% block head_styles %}. #}
+<style>
+  /* ---- Home-page section components ---- */
+
+  .fund-facts { font-family: var(--font-mono); font-size: 12px; line-height: 1.8; border-top: 1px solid var(--rule); padding-top: var(--gap-3); display: grid; grid-template-columns: auto 1fr; gap: 2px var(--gap-4); margin: var(--gap-4) 0 0; color: var(--ink-2); }
+  .fund-facts dt { text-transform: uppercase; letter-spacing: 0.1em; color: var(--ink-3); font-size: 11px; }
+  .fund-facts dd { margin: 0; }
+  .fund-facts dd a { color: var(--accent-deep); }
+
+  .fund-cards { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-3); }
+  @media (max-width: 720px) { .fund-cards { grid-template-columns: 1fr; } }
+  .fund-card { border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--paper-2); padding: var(--gap-5); display: flex; flex-direction: column; }
+  .fund-card--flag { border-color: var(--accent); border-left-width: 3px; }
+  .fund-card__k { font-family: var(--font-mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3); margin-bottom: var(--gap-3); display: flex; justify-content: space-between; align-items: center; gap: 10px; }
+  .fund-card__badge { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.12em; text-transform: uppercase; background: var(--accent-deep); color: #fff; border-radius: 2px; padding: 2px 7px; white-space: nowrap; }
+  .fund-card h3 { font-family: var(--font-serif); font-weight: 500; font-size: 21px; margin: 0 0 8px; letter-spacing: -0.01em; }
+  .fund-card h3 a { color: var(--ink); text-decoration: none; }
+  .fund-card h3 a:hover { color: var(--accent-deep); }
+  .fund-card p { margin: 0 0 var(--gap-4); font-size: 14.5px; line-height: 1.6; color: var(--ink-2); }
+  .fund-card__unlock { margin-top: auto; font-family: var(--font-mono); font-size: 11.5px; line-height: 1.5; color: var(--accent-deep); text-decoration: none; }
+  .fund-card__unlock:hover { text-decoration: underline; }
+
+  .fund-proof { display: grid; grid-template-columns: repeat(4, 1fr); gap: var(--gap-4); }
+  @media (max-width: 720px) { .fund-proof { grid-template-columns: repeat(2, 1fr); } }
+  .fund-proof__n { font-family: var(--font-serif); font-weight: 300; font-size: clamp(30px, 4vw, 40px); line-height: 1; letter-spacing: -0.02em; color: var(--ink); }
+  .fund-proof__l { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-top: var(--gap-3); line-height: 1.4; }
+
+  .fund-support { display: grid; grid-template-columns: 1.3fr 1fr; gap: var(--gap-6); align-items: center; }
+  @media (max-width: 720px) { .fund-support { grid-template-columns: 1fr; gap: var(--gap-4); } }
+  .fund-support__also { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.04em; color: var(--ink-3); margin-top: var(--gap-3); line-height: 1.5; }
+
+  /* ---- Editorial funder pages (/about, /programs, /support, program pages) ---- */
+
+  .fund-wrap { max-width: 1080px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+  .fund-wrap--narrow { max-width: 820px; }
+  .fund-read { max-width: 74ch; }
+
+  .fund-eyebrow { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: var(--accent-deep); font-weight: 500; margin: 0 0 var(--gap-3); }
+  .fund-eyebrow a { color: var(--accent-deep); }
+  .fund-wrap h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(30px, 5vw, 48px); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 var(--gap-3); }
+  .fund-wrap h2 { font-family: var(--font-serif); font-weight: 600; font-size: clamp(21px, 2.6vw, 28px); line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 var(--gap-3); }
+  .fund-wrap h3 { font-family: var(--font-serif); font-weight: 600; font-size: 19px; margin: 0 0 8px; color: var(--ink); }
+  .fund-lede { font-family: var(--font-serif); font-size: clamp(18px, 1.7vw, 22px); line-height: 1.5; color: var(--ink-2); max-width: 74ch; margin: 0 0 var(--gap-4); text-wrap: pretty; }
+  .fund-wrap p { margin: 0 0 var(--gap-4); }
+  .fund-body { font-size: 16px; line-height: 1.7; color: var(--ink); max-width: 74ch; }
+  .fund-body a { color: var(--accent-deep); }
+  .fund-body strong { color: var(--ink); font-weight: 600; }
+
+  .fund-sec { margin: var(--gap-8) 0 0; }
+  .fund-sec__num { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: var(--accent-deep); font-weight: 500; }
+
+  /* Funding ask / panel */
+  .fund-ask { background: var(--paper-2); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: var(--radius-md); padding: 18px 20px; margin: var(--gap-3) 0 0; max-width: 92ch; }
+  .fund-ask__amt { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--accent-deep); }
+  .fund-ask p { margin: 6px 0 0; font-size: 14.5px; line-height: 1.6; color: var(--ink-2); }
+
+  /* Plain bulleted list */
+  .fund-list { list-style: none; padding-left: 0; margin: var(--gap-3) 0 0; max-width: 92ch; }
+  .fund-list li { position: relative; padding-left: 22px; margin: 0 0 12px; line-height: 1.6; color: var(--ink); font-size: 15.5px; }
+  .fund-list li::before { content: ""; position: absolute; left: 3px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+  .fund-list li a { color: var(--accent-deep); }
+
+  /* Shipped-links inline list */
+  .fund-links { list-style: none; padding: 0; margin: var(--gap-3) 0 0; display: grid; gap: 8px; max-width: 80ch; }
+  .fund-links li { font-size: 15px; line-height: 1.5; }
+  .fund-links a { color: var(--accent-deep); }
+  .fund-links span { color: var(--ink-3); }
+
+  /* Statement band (theory of change) inside an editorial page */
+  .fund-statement { background: var(--statement-bg); color: var(--statement-fg); border-radius: var(--radius-lg); padding: 28px 32px; margin: var(--gap-5) 0 0; }
+  .fund-statement p { font-family: var(--font-serif); font-size: clamp(19px, 2vw, 24px); line-height: 1.4; margin: 0; max-width: 56ch; color: var(--statement-fg); }
+
+  /* Council-position tag */
+  .fund-tag { display: inline-block; font-family: var(--font-mono); font-size: 10.5px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; color: var(--accent-deep); background: var(--accent-wash); border: 1px solid var(--accent-soft); border-radius: 999px; padding: 3px 10px; }
+
+  /* Profile cards (council members on /about) */
+  .fund-profiles { display: grid; grid-template-columns: 1fr 1fr; gap: var(--gap-3); margin: var(--gap-3) 0 0; }
+  @media (max-width: 720px) { .fund-profiles { grid-template-columns: 1fr; } }
+  .fund-profile { background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius-md); padding: 18px 20px; }
+  .fund-profile__k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .fund-profile__meta { font-size: 13px; color: var(--ink-3); margin: 0 0 10px; }
+  .fund-profile p { font-size: 14.5px; line-height: 1.6; color: var(--ink-2); margin: 0; }
+  .fund-profile a { color: var(--accent-deep); }
+
+  /* CTA panel */
+  .fund-cta { background: var(--accent-wash); border: 1px solid var(--accent-soft); border-left: 4px solid var(--accent); border-radius: var(--radius-lg); padding: 24px 26px; margin: var(--gap-4) 0 0; max-width: 92ch; }
+  .fund-cta p { color: var(--ink); font-size: 15.5px; line-height: 1.6; margin: 0 0 var(--gap-4); max-width: 74ch; }
+  .fund-cta__btn { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-sans); font-size: 15px; font-weight: 600; color: var(--paper); background: var(--accent-deep); border-radius: 999px; padding: 11px 22px; text-decoration: none; transition: filter var(--dur-fast) var(--ease); }
+  .fund-cta__btn:hover { filter: brightness(1.08); }
+  .fund-cta__addr { display: block; margin-top: 12px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); }
+  .fund-cta__addr a { color: var(--accent-deep); }
+
+  /* Program breadcrumb eyebrow (added to content pages) */
+  .fund-crumb { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 var(--gap-4); }
+  .fund-crumb a { color: var(--accent-deep); }
+
+  /* More-from-this-program cross-link footer (used on content pages too) */
+  .fund-more { margin: var(--gap-7) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); }
+  .fund-more__k { font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 0 0 10px; }
+  .fund-more__links { display: flex; flex-wrap: wrap; gap: 8px 18px; }
+  .fund-more__links a { font-family: var(--font-sans); font-size: 14px; color: var(--accent-deep); text-decoration: none; }
+  .fund-more__links a:hover { text-decoration: underline; }
+
+  .fund-byline { font-size: 13.5px; color: var(--ink-3); line-height: 1.6; margin: var(--gap-7) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); max-width: 92ch; }
+</style>

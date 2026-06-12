@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Support OIATC{% endblock %}
+{% block description %}For funders and partners: OIATC's theory of change, the four programs with their funding asks, our legal status stated plainly, the non-money help we need, and how to reach us. Shipped work over slideware.{% endblock %}
+{% block og_title %}Support OIATC{% endblock %}
+{% block og_description %}For funders and partners: the theory of change, four programs with funding asks, legal status stated plainly, and the non-money help we need. Shipped work over slideware.{% endblock %}
+{% block body_class %}route-support{% endblock %}
+
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="fund-wrap fund-wrap--narrow">
+
+  <p class="fund-eyebrow">For funders and partners</p>
+  <h1>Fund shipped work.</h1>
+  <p class="fund-lede">We are early and honest about it. Everything on this site exists and is dated. Here is the theory of change, what each program needs, and how the arrangement works while we incorporate.</p>
+
+  <section class="fund-sec">
+    <h2>Theory of change</h2>
+    <div class="fund-statement">
+      <p>When communities choose and govern their digital systems, the systems fit. When the systems fit, services and language outcomes improve. We exist to make the first part true.</p>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>The four programs, and what funding unlocks</h2>
+    <div class="fund-body">
+      <p>Each program has shipped work behind it. Each ask is concrete.</p>
+    </div>
+
+    <div class="fund-ask">
+      <span class="fund-ask__amt"><a href="/programs/anishinaabemowin">Anishinaabemowin</a> · $25,000 / $120,000</span>
+      <p>$25k pilots the first doll batch and a season of story nights. $120k funds a year of the program lead and Elder honoraria.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt"><a href="/programs/anokii">Anokii</a> · regional rollout</span>
+      <p>Two community vantages are live. Funding extends Anokii along the North Shore, from Sault Ste. Marie to Sudbury to Manitoulin, each Nation governing its own instance.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt"><a href="/programs/community-knowledge">Community knowledge</a> · more topics and communities</span>
+      <p>The explainers are used by members and local press. Funding maintains them as living resources and extends them to more communities and topics.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt"><a href="/programs/transparency">Member resources</a> · documentation at scale</span>
+      <p>Funding turns more public records into resources members can use, with the same documentation discipline, across more Nations that ask for it.</p>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Legal status, stated plainly</h2>
+    <div class="fund-body">
+      <p>OIATC is incorporating as a not-for-profit corporation. Until that completes, partnership funds are held under a trusteeship arrangement we name here before accepting anything. We will not take institutional funds without naming the arrangement that holds them.</p>
+    </div>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Help that is not money</h2>
+    <div class="fund-body">
+      <p>Some of what we need most cannot be bought.</p>
+    </div>
+    <ul class="fund-list">
+      <li>A Knowledge Keeper or Elder willing to sit on the council.</li>
+      <li>Two arm's-length directors as we incorporate.</li>
+      <li>A Nation ready to be a first partner.</li>
+      <li>A legal or policy advisor with experience in Indigenous data governance.</li>
+    </ul>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Contact</h2>
+    <div class="fund-cta">
+      <p>To partner, fund, or offer one of the seats above, write to Russell. There is no donate button: we will not collect funds before there is an entity and a named arrangement to receive them.</p>
+      <a class="fund-cta__btn" href="mailto:jonesrussell42@gmail.com">Partner with OIATC &rarr;</a>
+      <span class="fund-cta__addr">Write to Russell: <a href="mailto:jonesrussell42@gmail.com">jonesrussell42@gmail.com</a></span>
+    </div>
+  </section>
+
+  <div class="fund-more">
+    <p class="fund-more__k">More</p>
+    <div class="fund-more__links">
+      <a href="/about">About OIATC</a>
+      <a href="/programs">Programs</a>
+      <a href="/news">News</a>
+    </div>
+  </div>
+
+</article>
+{% endblock %}

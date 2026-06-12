@@ -85,6 +85,41 @@ final class HomeController
         return $this->renderTemplate('anishinaabemowin/doll-process.html.twig');
     }
 
+    public function about(): Response
+    {
+        return $this->renderTemplate('about.html.twig');
+    }
+
+    public function support(): Response
+    {
+        return $this->renderTemplate('support.html.twig');
+    }
+
+    public function programs(): Response
+    {
+        return $this->renderTemplate('programs/index.html.twig');
+    }
+
+    public function programAnishinaabemowin(): Response
+    {
+        return $this->renderTemplate('programs/anishinaabemowin.html.twig');
+    }
+
+    public function programAnokii(): Response
+    {
+        return $this->renderTemplate('programs/anokii.html.twig');
+    }
+
+    public function programCommunityKnowledge(): Response
+    {
+        return $this->renderTemplate('programs/community-knowledge.html.twig');
+    }
+
+    public function programTransparency(): Response
+    {
+        return $this->renderTemplate('programs/transparency.html.twig');
+    }
+
     public function sagamokPortalDisclosure(): Response
     {
         return $this->renderTemplate('disclosure/sagamok-portal.html.twig');

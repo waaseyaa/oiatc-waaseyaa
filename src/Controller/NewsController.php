@@ -127,6 +127,7 @@ final class NewsController
         $changed = $this->healRenamedLanguagePost($entities) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->languageProjectPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->languageDollPost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->programsRestructurePost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -344,6 +345,27 @@ final class NewsController
     }
 
     /**
+     * The site-restructure announcement (short, two paragraphs). Body is HTML so
+     * it renders through {{ post.body|raw }}; related_explainer 'programs' points
+     * the post CTA at the /programs index.
+     *
+     * @return array<string, mixed>
+     */
+    private function programsRestructurePost(): array
+    {
+        return [
+            'title' => 'OIATC is now organized around four programs',
+            'slug' => 'site-programs-restructure',
+            'body' => '<p>OIATC has reorganized oiatc.ca around four named programs: Anishinaabemowin, Anokii, community knowledge, and transparency and member resources. The work was always there. The new frame makes it legible, because each program has shipped work behind it, and each one says what funding would unlock.</p>'
+                . '<p>The change is for the people who want to understand and support this work. There is an about page, a support page, and a page for each program. Start at <a href="/programs">/programs</a>.</p>',
+            // 2026-06-12 16:00:00 UTC (after the doll post on the same day)
+            'published_at' => 1781280000,
+            'related_explainer' => 'programs',
+            'status' => true,
+        ];
+    }
+
+    /**
      * One-time, self-healing rename of the first-ship announcement. The project
      * shipped first as a practice case study with slug
      * `anishinaabemowin-program-published`; it is now a top-level project. Where
@@ -438,6 +460,7 @@ final class NewsController
             'massey-solar-drop-in-sessions-fire-hall' => 'Potentia has moved the Massey Solar Project\'s community drop-in sessions to the Massey Fire Hall, with dates in June and July 2026.',
             'anishinaabemowin-project-published' => 'OIATC has published a project section for Anishinaabemowin, a live, community-owned effort to record fluent speakers and keep the language alive.',
             'anishinaabemowin-doll-plan' => 'OIATC has published the plan for a doll that speaks Anishinaabemowin: a fluent Elder\'s voice in a child\'s hands, offline, recordings held by the community.',
+            'site-programs-restructure' => 'OIATC has reorganized its site around four named programs, each with shipped work and a clear funding ask.',
             default => null,
         };
     }
@@ -560,6 +583,7 @@ final class NewsController
             $this->masseyConsultationPost(),
             $this->languageProjectPost(),
             $this->languageDollPost(),
+            $this->programsRestructurePost(),
             [
                 'title' => 'Add your voice, and a tool built to keep your data home',
                 'slug' => 'add-your-voice',

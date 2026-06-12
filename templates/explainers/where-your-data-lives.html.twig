@@ -60,7 +60,7 @@
 {% block content %}
 <div class="dsv-wrap">
 
-  <p class="eyebrow">OIATC · Explainer</p>
+  <p class="eyebrow">Program · <a href="/programs/anokii" style="color: var(--accent-deep)">Anokii</a> · Explainer</p>
   <h1>Where does your community's data actually live?</h1>
   <p class="lede">Most First Nations and small municipal websites run on the same few tools, owned by companies in another country, on clouds the community does not control. So a simple question turns out to be hard: when you put your information into your community's website, where does it go, who can reach it, and whose laws decide? Here it is in plain terms, using the Sagamok members portal as the example.</p>
   <p class="dsv-byline">From Russell Jones, a Sagamok member, for OIATC. This explains how the technology works and is not legal advice. June 2026.</p>
@@ -182,6 +182,12 @@
   </ul>
 
   {% include 'partials/records-request-cta.html.twig' %}
+
+  <nav class="dsv-byline" aria-label="More from this program">
+    More from the <a href="/programs/anokii" style="color: var(--accent-deep)">Anokii program</a>:
+    <a href="/anokii" style="color: var(--accent-deep)">the Anokii instance</a> ·
+    <a href="/anokii/sagamok" style="color: var(--accent-deep)">Sagamok vantage</a>
+  </nav>
 
   <p class="dsv-note">A community resource from OIATC, the Ontario Indigenous AI and Technology Council, put together by Russell Jones, a Sagamok member. It explains how this technology works and what it means for community data. It is general information, not legal advice; for decisions that rely on the legal points, confirm with a privacy lawyer. Independent of Sagamok Chief and Council, and of Webflow, Memberstack, and the other companies named. Corrections welcome.</p>
 

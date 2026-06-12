@@ -54,6 +54,15 @@ final class IngestDocsCommand
         '/anishinaabemowin/doll' => 'anishinaabemowin/doll.html.twig',
         '/anishinaabemowin/doll/build' => 'anishinaabemowin/doll-build.html.twig',
         '/anishinaabemowin/doll/process' => 'anishinaabemowin/doll-process.html.twig',
+        // Funder frame: the programs layer and the about/support pages, so the
+        // grounded chat can answer "what does OIATC do" and "how is it funded".
+        '/about' => 'about.html.twig',
+        '/support' => 'support.html.twig',
+        '/programs' => 'programs/index.html.twig',
+        '/programs/anishinaabemowin' => 'programs/anishinaabemowin.html.twig',
+        '/programs/anokii' => 'programs/anokii.html.twig',
+        '/programs/community-knowledge' => 'programs/community-knowledge.html.twig',
+        '/programs/transparency' => 'programs/transparency.html.twig',
     ];
 
     public function __construct(

@@ -1,0 +1,51 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Community knowledge program · OIATC{% endblock %}
+{% block description %}OIATC's community knowledge program: plain-language explainers members actually use, on treaty annuities, the Massey solar project, where data lives, and responsible AI in coursework. One has already been used by local press.{% endblock %}
+{% block og_title %}Community knowledge program{% endblock %}
+{% block og_description %}Plain-language explainers members actually use: treaty annuities, the solar project, where data lives, responsible AI in coursework. One already used by local press.{% endblock %}
+{% block body_class %}route-program-community-knowledge{% endblock %}
+
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="fund-wrap fund-wrap--narrow">
+
+  <p class="fund-eyebrow">OIATC program</p>
+  <h1>Community knowledge</h1>
+  <p class="fund-lede">Plain-language civic information members actually use. We take the documents and decisions that affect a community and turn them into explainers anyone can read, every claim sourced, updated as the picture changes.</p>
+
+  <div class="fund-body">
+    <p>These are living resources, not one-off posts. A news system tracks updates and feeds each explainer's latest changes. The Massey explainer has already been used by local press covering the project, which is the kind of reach this program is built for.</p>
+  </div>
+
+  <section class="fund-sec">
+    <h2>What is shipped</h2>
+    <ul class="fund-links">
+      <li><a href="/explainers/robinson-huron-treaty">Robinson Huron Treaty</a> <span>· the annuity settlement, in plain language</span></li>
+      <li><a href="/explainers/massey-solar-project">The Massey solar project</a> <span>· the proposal, the review, the open questions</span></li>
+      <li><a href="/explainers/where-your-data-lives">Where your data lives</a> <span>· where community data physically goes</span></li>
+      <li><a href="/practice/ai-in-coursework">AI in coursework</a> <span>· a working example of responsible AI use</span></li>
+      <li><a href="/news">News</a> <span>· time-stamped updates, newest first</span></li>
+    </ul>
+  </section>
+
+  <section class="fund-sec">
+    <h2>The fundable next step</h2>
+    <div class="fund-body">
+      <p>The reach is measured with first-party analytics, no ad-tech. Funding extends the program to more communities and more topics, with each explainer maintained as a living resource rather than left to go stale.</p>
+    </div>
+  </section>
+
+  <div class="fund-more">
+    <p class="fund-more__k">More from this program</p>
+    <div class="fund-more__links">
+      <a href="/explainers/massey-solar-project">Massey solar project</a>
+      <a href="/explainers/robinson-huron-treaty">Robinson Huron Treaty</a>
+      <a href="/news">News</a>
+      <a href="/support">Support this program</a>
+    </div>
+  </div>
+
+</article>
+{% endblock %}

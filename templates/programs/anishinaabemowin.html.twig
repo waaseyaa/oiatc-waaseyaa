@@ -1,0 +1,55 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Anishinaabemowin program · OIATC{% endblock %}
+{% block description %}OIATC's flagship program: keeping Anishinaabemowin alive with consent infrastructure. A fluent Elder's corpus, a lesson app, learning games, and the talking doll are already shipped. Here is what funding unlocks.{% endblock %}
+{% block og_title %}Anishinaabemowin program{% endblock %}
+{% block og_description %}OIATC's flagship language program: corpus, lesson app, games, and the talking doll, already shipped. What the next dollar unlocks.{% endblock %}
+{% block body_class %}route-program-anishinaabemowin{% endblock %}
+
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="fund-wrap fund-wrap--narrow">
+
+  <p class="fund-eyebrow">OIATC program · Flagship</p>
+  <h1>Anishinaabemowin</h1>
+  <p class="fund-lede">Language revitalization with consent infrastructure. A fluent Elder's voice, recorded with consent and held by the community, carried into tools that meet learners where they are.</p>
+
+  <div class="fund-body">
+    <p>This is OIATC's flagship program. It records fluent speakers now, builds low-pressure places to hear the language, and ships learning tools on technology the community controls. Consent is recorded as data and checked at every step, so a voice is only ever used the way its speaker agreed.</p>
+    <p>The program has a full public home with its numbers, its four streams, and a dated progress log. This page is the short version for funders and partners.</p>
+  </div>
+
+  <section class="fund-sec">
+    <h2>What is shipped</h2>
+    <ul class="fund-links">
+      <li><a href="/anishinaabemowin">The program home</a> <span>· the numbers, the streams, the progress log</span></li>
+      <li><a href="/anishinaabemowin/doll">The talking doll</a> <span>· a fluent Elder's voice in a child's hands, offline</span></li>
+      <li><a href="/anishinaabemowin/doll/build">The doll build</a> <span>· parts, costs, and child safety</span></li>
+      <li><a href="/anishinaabemowin/doll/process">The doll process</a> <span>· consent from an Elder's voice to a child's hands</span></li>
+    </ul>
+  </section>
+
+  <section class="fund-sec">
+    <h2>What funding unlocks</h2>
+    <div class="fund-ask">
+      <span class="fund-ask__amt">$25,000</span>
+      <p>Pilots the first doll batch and a season of story nights.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt">$120,000</span>
+      <p>Funds a year of the program lead and Elder honoraria.</p>
+    </div>
+  </section>
+
+  <div class="fund-more">
+    <p class="fund-more__k">More from this program</p>
+    <div class="fund-more__links">
+      <a href="/anishinaabemowin">Program home</a>
+      <a href="/anishinaabemowin/doll">The talking doll</a>
+      <a href="/support">Support this program</a>
+    </div>
+  </div>
+
+</article>
+{% endblock %}
