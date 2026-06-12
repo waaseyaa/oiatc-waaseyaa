@@ -237,6 +237,15 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'practice.anishinaabemowin-program',
+            RouteBuilder::create('/practice/anishinaabemowin-program')
+                ->controller(fn() => $controller->practiceAnishinaabemowinProgram())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
             'disclosure.sagamok-portal',
             RouteBuilder::create('/disclosure/sagamok-portal')
                 ->controller(fn() => $controller->sagamokPortalDisclosure())
