@@ -72,3 +72,20 @@ Positions (counter-disinformation, PrescribeIT) stay council-level statements, t
   footer previously expanded OIATC as "Ojibway Information & Technology Council"
   (inconsistent with the canonical "Ontario Indigenous AI & Technology Council").
   Replaced that footer line as part of the B3 edit.
+- The 4-item top nav shows on the home and the funder pages (home, about,
+  programs, the four program pages, support). Deep editorial pages keep their
+  existing back-link topnav override; every page still reaches the full nav via
+  the global footer (About, Support, Programs, News) plus its program breadcrumb.
+- Pre-existing em dashes remain in the long-form body prose of the older docs
+  (RHT, Massey, how-Sagamok, where-your-data-lives, ai-in-coursework). They are
+  not new or revised copy; a site-wide body copy-edit is out of scope for this
+  task. All new and revised copy is em-dash-free.
+
+## Deployed and verified (2026-06-12)
+
+main 810ccaf, OIATC_REF bumped in waaseyaa-infra, container rebuilt, ingest run
+(39 sources, 268 chunks). Production checks all green: 8 new pages 200; topnav
+on home + funder pages; /resources/sagamok 301 (bare and cache-busted); every
+B1 page shows its program eyebrow; sitemap 30 URLs; RSS 14 items incl
+site-programs-restructure; zero minoo.live anchors across sampled pages; home +
+new pages verified light and dark locally on identical templates.
