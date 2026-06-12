@@ -65,9 +65,9 @@ final class HomeController
         return $this->renderTemplate('practice/ai-in-coursework.html.twig');
     }
 
-    public function practiceAnishinaabemowinProgram(): Response
+    public function anishinaabemowin(): Response
     {
-        return $this->renderTemplate('practice/anishinaabemowin-program.html.twig');
+        return $this->renderTemplate('anishinaabemowin/home.html.twig');
     }
 
     public function sagamokPortalDisclosure(): Response

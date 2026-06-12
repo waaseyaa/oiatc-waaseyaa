@@ -50,7 +50,7 @@ final class IngestDocsCommand
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
         '/positions/prescribeit' => 'positions/prescribeit.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',
-        '/practice/anishinaabemowin-program' => 'practice/anishinaabemowin-program.html.twig',
+        '/anishinaabemowin' => 'anishinaabemowin/home.html.twig',
     ];
 
     public function __construct(

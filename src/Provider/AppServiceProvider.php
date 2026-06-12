@@ -237,9 +237,20 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'anishinaabemowin',
+            RouteBuilder::create('/anishinaabemowin')
+                ->controller(fn() => $controller->anishinaabemowin())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        // The Anishinaabemowin work was first published as a practice case study;
+        // it is now a top-level project section. 301 the old URL to the new home.
+        $router->addRoute(
             'practice.anishinaabemowin-program',
             RouteBuilder::create('/practice/anishinaabemowin-program')
-                ->controller(fn() => $controller->practiceAnishinaabemowinProgram())
+                ->controller(fn() => new RedirectResponse('/anishinaabemowin', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),

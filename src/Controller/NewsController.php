@@ -124,7 +124,8 @@ final class NewsController
         $changed = $this->reconcileManagedPost($entities, $this->potentiaPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->prescribeitPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->masseyConsultationPost()) || $changed;
-        $changed = $this->reconcileManagedPost($entities, $this->languageProgramPost()) || $changed;
+        $changed = $this->healRenamedLanguagePost($entities) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->languageProjectPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -297,25 +298,52 @@ final class NewsController
     }
 
     /**
-     * The Anishinaabemowin language-program announcement (long-form, flowing
-     * paragraphs). Body is HTML so it renders through {{ post.body|raw }}, and
-     * its related_explainer points the CTA at the /practice page.
+     * The Anishinaabemowin project announcement (long-form, flowing paragraphs).
+     * Body is HTML so it renders through {{ post.body|raw }}; related_explainer
+     * 'anishinaabemowin' points the post CTA at the top-level /anishinaabemowin
+     * project home.
      *
      * @return array<string, mixed>
      */
-    private function languageProgramPost(): array
+    private function languageProjectPost(): array
     {
         return [
-            'title' => 'A working program for Anishinaabemowin',
-            'slug' => 'anishinaabemowin-program-published',
-            'body' => '<p>OIATC has published a new practice page documenting a live, community-owned program to keep Anishinaabemowin alive. The numbers set the stakes. The 2021 Census put the average age of the Ojibway mother-tongue population at 48, the second oldest among the major Algonquian languages, and fluent speakers are concentrated among Elders on both sides of the border. The next twenty years decide whether first-language transmission restarts or ends.</p>'
-                . '<p>The program runs four streams on one principle, that the technology serves the relationships and not the other way around: recording fluent speakers now into a curated, consent-tracked corpus; building low-pressure places to hear the language, from visiting evenings to standing online sessions; shipping a structured course on a shared open core; and keeping the language content community-controlled and gated even as the code stays open source. It is led by Russell Jones in Sagamok Anishnawbek.</p>'
-                . '<p>The page is a working document, not a finished statement. It carries a dated progress log, newest first, that will be extended as the work proceeds, so anyone can follow what has shipped and what is still being decided. Read it at <a href="/practice/anishinaabemowin-program">/practice/anishinaabemowin-program</a>.</p>',
+            'title' => 'A working project to keep Anishinaabemowin alive',
+            'slug' => 'anishinaabemowin-project-published',
+            'body' => '<p>OIATC has published a project section for Anishinaabemowin, a live, community-owned effort to keep the language alive through the next twenty years. The stakes are in the numbers. The 2021 Census put the average age of the Ojibway mother-tongue population at 48, the second oldest among the major Algonquian languages, and fluent speakers are concentrated among Elders on both sides of the border.</p>'
+                . '<p>This is not a plan waiting for funding. A corpus pipeline, a first lesson app, transcription and translation helpers, and a suite of Anishinaabemowin learning games on minoo.live are already running. The work is organized into four streams on one principle, that the technology serves the relationships and not the other way around: record fluent speakers now, build low-pressure places to hear the language, ship a structured course on a shared open core, and keep the language content community-controlled and gated even as the code stays open source. It is led by Russell Jones in Sagamok Anishnawbek and built on Waaseyaa, the framework OIATC stewards.</p>'
+                . '<p>The page is the project\'s public home, not a finished statement. It carries a dated progress log, newest first, that will be extended as the work proceeds, so anyone can follow what has shipped and what is still being decided. Read it at <a href="/anishinaabemowin">/anishinaabemowin</a>.</p>',
             // 2026-06-12 00:00:00 UTC
             'published_at' => 1781222400,
-            'related_explainer' => 'anishinaabemowin-program',
+            'related_explainer' => 'anishinaabemowin',
             'status' => true,
         ];
+    }
+
+    /**
+     * One-time, self-healing rename of the first-ship announcement. The project
+     * shipped first as a practice case study with slug
+     * `anishinaabemowin-program-published`; it is now a top-level project. Where
+     * that old row still exists, rename it in place to the new slug and copy the
+     * canonical project fields, so ensure-by-slug does not create a duplicate.
+     * After this runs once the old slug is gone and the check is a no-op.
+     *
+     * @param list<EntityInterface> $entities
+     */
+    private function healRenamedLanguagePost(array $entities): bool
+    {
+        foreach ($entities as $entity) {
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'anishinaabemowin-program-published') {
+                foreach ($this->languageProjectPost() as $field => $value) {
+                    $entity->set($field, $value);
+                }
+                $this->repository->save($entity);
+
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -385,7 +413,7 @@ final class NewsController
             'prescribeit-governance-failure' => 'Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.',
             'massey-solar-open-houses-paused' => 'Potentia\'s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.',
             'massey-solar-drop-in-sessions-fire-hall' => 'Potentia has moved the Massey Solar Project\'s community drop-in sessions to the Massey Fire Hall, with dates in June and July 2026.',
-            'anishinaabemowin-program-published' => 'OIATC has published a practice page on a live, community-owned program to record fluent speakers and keep Anishinaabemowin alive.',
+            'anishinaabemowin-project-published' => 'OIATC has published a project section for Anishinaabemowin, a live, community-owned effort to record fluent speakers and keep the language alive.',
             default => null,
         };
     }
@@ -506,7 +534,7 @@ final class NewsController
             $this->potentiaPost(),
             $this->prescribeitPost(),
             $this->masseyConsultationPost(),
-            $this->languageProgramPost(),
+            $this->languageProjectPost(),
             [
                 'title' => 'Add your voice, and a tool built to keep your data home',
                 'slug' => 'add-your-voice',

@@ -35,19 +35,19 @@
   {% set positions = ['prescribeit', 'counter-disinformation'] %}
   {% set disclosures = ['sagamok-portal'] %}
   {% set anokii_pages = ['anokii'] %}
-  {% set practice_pages = ['anishinaabemowin-program'] %}
+  {% set project_pages = ['anishinaabemowin'] %}
   {% if post.related_explainer in anokii_pages %}
     {% set rel_href = '/' ~ post.related_explainer %}
     {% set rel_label = 'Explore Anokii' %}
+  {% elseif post.related_explainer in project_pages %}
+    {% set rel_href = '/' ~ post.related_explainer %}
+    {% set rel_label = 'Read the project page' %}
   {% elseif post.related_explainer in positions %}
     {% set rel_href = '/positions/' ~ post.related_explainer %}
     {% set rel_label = 'Read the OIATC position' %}
   {% elseif post.related_explainer in disclosures %}
     {% set rel_href = '/disclosure/' ~ post.related_explainer %}
     {% set rel_label = 'Read the disclosure' %}
-  {% elseif post.related_explainer in practice_pages %}
-    {% set rel_href = '/practice/' ~ post.related_explainer %}
-    {% set rel_label = 'Read the practice page' %}
   {% else %}
     {% set rel_href = '/explainers/' ~ post.related_explainer %}
     {% set rel_label = 'Read the full explainer' %}
