@@ -51,6 +51,9 @@ final class IngestDocsCommand
         '/positions/prescribeit' => 'positions/prescribeit.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',
         '/anishinaabemowin' => 'anishinaabemowin/home.html.twig',
+        '/anishinaabemowin/doll' => 'anishinaabemowin/doll.html.twig',
+        '/anishinaabemowin/doll/build' => 'anishinaabemowin/doll-build.html.twig',
+        '/anishinaabemowin/doll/process' => 'anishinaabemowin/doll-process.html.twig',
     ];
 
     public function __construct(

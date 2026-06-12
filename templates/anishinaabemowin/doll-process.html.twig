@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}From an Elder's voice to a child's hands · OIATC{% endblock %}
+{% block description %}The part you cannot see or touch: how a phrase travels from an Elder's recording into a doll, with consent checked at every step, and where Waaseyaa and Minoo fit.{% endblock %}
+{% block og_title %}From an Elder's voice to a child's hands{% endblock %}
+{% block og_description %}How a phrase travels from an Elder's recording into the talking doll, with consent recorded as data and checked at every step, and where Waaseyaa and Minoo fit.{% endblock %}
+{% block body_class %}route-anishinaabemowin-doll-process{% endblock %}
+{% block topnav %}<a href="/anishinaabemowin/doll">&larr; The doll</a>{% endblock %}
+
+{% block head_styles %}{% include 'anishinaabemowin/_doll-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="dol-wrap">
+
+  <p class="dol-num">Anishinaabemowin project · The talking doll</p>
+  <h1>From an Elder's voice to a child's hands</h1>
+  <p class="dol-kicker">Companion to <a href="/anishinaabemowin/doll">the doll</a>. This is the part you cannot see or touch, and it is most of the work.</p>
+
+  <figure class="dol-figure">
+    <img src="/images/doll/doll-hands.png" alt="Concept render of an Elder's hands holding the soft doll toward a child's reaching hands." loading="lazy">
+    <figcaption>Concept render (AI-generated). The real doll will be made in community.</figcaption>
+  </figure>
+
+  <section class="dol-sec" id="path">
+    <div class="dol-sec__head"><span class="dol-num">01</span><h2>The path a phrase travels</h2></div>
+    <ol class="dol-journey dol-flow">
+      <li class="dol-step">
+        <div class="dol-step__n">1</div>
+        <div class="dol-step__main">
+          <div class="dol-step__head"><h3>The Elder records.</h3></div>
+          <p>On his terms, at his pace, in his orthography. Sessions are short and respectful of his time. Nothing is recorded that he has not agreed to record.</p>
+        </div>
+      </li>
+      <li class="dol-step">
+        <div class="dol-step__n">2</div>
+        <div class="dol-step__main">
+          <div class="dol-step__head"><h3>A written consent record is created with the recording, not after it.</h3></div>
+          <p>It names the uses: this teaching collection, the lesson app, the games, and the doll, each one separately agreed. A use he has not agreed to does not happen. He can withdraw a use later and we honour it, including in already-made dolls at their next reload.</p>
+        </div>
+      </li>
+      <li class="dol-step">
+        <div class="dol-step__n">3</div>
+        <div class="dol-step__main">
+          <div class="dol-step__head"><h3>A human curates.</h3></div>
+          <p>Every recording is checked by a person before it enters the collection. Transcription drafts from machines are treated as drafts. Spelling is preserved exactly as the Elder writes it. No AI ever generates Anishinaabemowin anywhere in this system.</p>
+        </div>
+      </li>
+      <li class="dol-step">
+        <div class="dol-step__n">4</div>
+        <div class="dol-step__main">
+          <div class="dol-step__head"><h3>The phrase set for the doll is chosen with him.</h3></div>
+          <p>He hears the doll before any family does.</p>
+        </div>
+      </li>
+      <li class="dol-step">
+        <div class="dol-step__n">5</div>
+        <div class="dol-step__main">
+          <div class="dol-step__head"><h3>Audio is exported for the doll</h3></div>
+          <p>only for items whose consent record covers physical-device use. The export step checks this; it is enforced by the data layer, not by someone remembering.</p>
+        </div>
+      </li>
+      <li class="dol-step">
+        <div class="dol-step__n">6</div>
+        <div class="dol-step__main">
+          <div class="dol-step__head"><h3>The doll ships with provenance.</h3></div>
+          <p>Each doll's card carries a manifest: which recordings, which speaker, which consent version. Years later, anyone can answer "whose voice is this, and did they agree to this?" with a file, not a memory.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="dol-sec" id="platforms">
+    <div class="dol-sec__head"><span class="dol-num">02</span><h2>Where the platforms fit</h2></div>
+    <div class="dol-cards is-3">
+      <div class="dol-card">
+        <h3>Where Waaseyaa fits</h3>
+        <p>Waaseyaa is the framework layer, where the governance is structural instead of bolted on. For the doll it provides the consent and provenance machinery: every recording is an entity with per-field access control, an append-only audit trail of every access and change, and consent recorded as data. The export-to-doll step is a gate the framework enforces. If an item's consent record does not cover toys, the export refuses it.</p>
+      </div>
+      <div class="dol-card">
+        <h3>Where Minoo fits</h3>
+        <p>Minoo is the community platform built on Waaseyaa, currently being rebuilt as a dedicated language platform. It is where the language data lives: the dictionary, the recordings' metadata, the speakers, the dialects. The doll is, in data terms, a tiny read-only copy of a consent-cleared slice of Minoo, baked onto a memory card. When Minoo relaunches, the doll's phrase sets are managed there: a language teacher picks phrases in Minoo's admin, the export tool checks consent and writes the card.</p>
+      </div>
+      <div class="dol-card">
+        <h3>Where the community fits</h3>
+        <p>Everywhere else. The doll bodies are sewn in community. The phrase lists are chosen with Elders and teachers. The testing happens in family homes. The masters are held by the Nation. OIATC's role is the plumbing and the publishing of the open design, not ownership. The suggestion that started this page came from a community member in a public thread, which is exactly how this should work.</p>
+      </div>
+    </div>
+  </section>
+
+  <p class="dol-byline">Companion to <a href="/anishinaabemowin/doll">the doll</a>, part of the Anishinaabemowin project. Corrections welcome.</p>
+
+</article>
+{% endblock %}
+
+{% block scripts_extra %}{% include 'anishinaabemowin/_doll-script.html.twig' %}{% endblock %}

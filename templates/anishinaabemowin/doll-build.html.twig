@@ -1,0 +1,93 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Building the doll · OIATC{% endblock %}
+{% block description %}The build behind the talking doll: two tiers, parts lists with costs, child-safety obligations, and an open hardware design any Nation can reuse.{% endblock %}
+{% block og_title %}Building the doll{% endblock %}
+{% block og_description %}The build behind the talking doll: two tiers, parts lists with costs, child-safety obligations treated as a feature, and an open hardware design any Nation can reuse.{% endblock %}
+{% block body_class %}route-anishinaabemowin-doll-build{% endblock %}
+{% block topnav %}<a href="/anishinaabemowin/doll">&larr; The doll</a>{% endblock %}
+
+{% block head_styles %}{% include 'anishinaabemowin/_doll-styles.html.twig' %}{% endblock %}
+
+{% block content %}
+<article class="dol-wrap">
+
+  <p class="dol-num">Anishinaabemowin project · The talking doll</p>
+  <h1>Building the doll</h1>
+  <p class="dol-kicker">Companion to <a href="/anishinaabemowin/doll">the doll</a>. Technical detail lives here so the main page stays clean.</p>
+
+  <figure class="dol-figure">
+    <img src="/images/doll/doll-internals.png" alt="Concept render of the doll's internals laid out on a sewing table." loading="lazy">
+    <figcaption>Concept render (AI-generated). The real doll will be made in community.</figcaption>
+  </figure>
+
+  <section class="dol-sec" id="tiers">
+    <div class="dol-sec__head"><span class="dol-num">01</span><h2>Two tiers, on purpose</h2></div>
+
+    <div class="dol-tier">
+      <div class="dol-tier__head"><h3>Tier 1, the pilot (this summer).</h3></div>
+      <div class="dol-col">
+        <p>Off-the-shelf recordable sound modules sewn into a locally made doll body. The kind of module used in greeting cards and teddy bears: record up to 30 seconds per module, press to play. Two or three modules give a doll a handful of phrases. No soldering, no firmware, under $40 all-in. The point is to put a real doll in a real child's hands fast and learn what matters.</p>
+      </div>
+      <div class="dol-tablewrap">
+        <table class="dol-table">
+          <caption class="dol-sr">Tier 1 parts and prices</caption>
+          <thead><tr><th scope="col">Tier 1 part</th><th class="dol-price" scope="col">Price</th></tr></thead>
+          <tbody>
+            <tr><td>Recordable sound modules with press activation, 2 or 3</td><td class="dol-price">about $8 each</td></tr>
+            <tr><td>Doll body, sewn in community (fabric, stuffing, thread)</td><td class="dol-price"></td></tr>
+            <tr><td>Coin cells come with the modules; sewn-shut pouches keep them away from children</td><td class="dol-price"></td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">Total: under $40, one evening of assembly</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="dol-tier">
+      <div class="dol-tier__head"><h3>Tier 2, the real one.</h3></div>
+      <div class="dol-col">
+        <p>A small microcontroller board with proper audio, loaded from the community's own recordings, built to be reloadable so the same doll design serves any Nation and any language.</p>
+      </div>
+      <div class="dol-tablewrap">
+        <table class="dol-table">
+          <caption class="dol-sr">Tier 2 parts and prices (working list, approximate)</caption>
+          <thead><tr><th scope="col">Tier 2 part (working list, prices approximate)</th><th class="dol-price" scope="col">Price</th></tr></thead>
+          <tbody>
+            <tr><td>Microcontroller with audio support (ESP32-S3 mini class)</td><td class="dol-price">$8 to $12</td></tr>
+            <tr><td>I2S audio amplifier (MAX98357A class)</td><td class="dol-price">$6</td></tr>
+            <tr><td>Small speaker, 4 ohm 3 watt</td><td class="dol-price">$4</td></tr>
+            <tr><td>MicroSD card for audio files, 8 GB is overkill</td><td class="dol-price">$6</td></tr>
+            <tr><td>Two soft buttons (squeeze sensors in the hands)</td><td class="dol-price">$4</td></tr>
+            <tr><td>AA battery holder with screwed, child-safe compartment. AA over lithium on purpose: toy safety first.</td><td class="dol-price">$5</td></tr>
+            <tr><td>Power switch, wiring, washable inner pouch for the electronics</td><td class="dol-price">$8</td></tr>
+          </tbody>
+          <tfoot><tr><td colspan="2">Board + speaker + battery estimated total: $40 to $55 per doll at single quantities, meaningfully less at batch quantity</td></tr></tfoot>
+        </table>
+      </div>
+    </div>
+
+    <div class="dol-col" style="margin-top: var(--gap-5)">
+      <p>Behavior: squeeze a hand, the doll speaks Anishinaabemowin. Squeeze again within a few seconds, it repeats in English. A switch inside the pouch selects Anishinaabemowin-only mode for immersion households. Audio is plain WAV files on the card: no app, no pairing, no account, and a parent or a language teacher can change the phrase set by swapping files.</p>
+    </div>
+  </section>
+
+  <section class="dol-sec" id="safety">
+    <div class="dol-safety">
+      <div class="dol-sec__head"><span class="dol-num">02</span><h2>Safety, treated as a feature</h2></div>
+      <p>Toys for under-threes carry real obligations: no small detachable parts, sewn-in electronics pouch, screwed battery compartment, volume capped, washable outer body with the pouch removed. Canada Consumer Product Safety Act and the toy regulations apply to anything distributed, even gifts; the small-batch stage includes getting this checked properly rather than guessed at.</p>
+    </div>
+  </section>
+
+  <section class="dol-sec" id="open">
+    <div class="dol-sec__head"><span class="dol-num">03</span><h2>Open hardware, like the rest of the project</h2></div>
+    <div class="dol-col">
+      <p>The Tier 2 design (board choice, wiring, enclosure pattern, firmware) will be published openly, the same posture as the project's code: any Nation can build the doll and load their own language. The voices themselves are never published; each community holds its own.</p>
+    </div>
+  </section>
+
+  <p class="dol-byline">Companion to <a href="/anishinaabemowin/doll">the doll</a>, part of the Anishinaabemowin project. Cost figures are estimates and update as the first parts orders come in.</p>
+
+</article>
+{% endblock %}
+
+{% block scripts_extra %}{% include 'anishinaabemowin/_doll-script.html.twig' %}{% endblock %}

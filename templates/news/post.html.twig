@@ -39,6 +39,9 @@
   {% if post.related_explainer in anokii_pages %}
     {% set rel_href = '/' ~ post.related_explainer %}
     {% set rel_label = 'Explore Anokii' %}
+  {% elseif post.related_explainer == 'anishinaabemowin-doll' %}
+    {% set rel_href = '/anishinaabemowin/doll' %}
+    {% set rel_label = 'Read the doll plan' %}
   {% elseif post.related_explainer in project_pages %}
     {% set rel_href = '/' ~ post.related_explainer %}
     {% set rel_label = 'Read the project page' %}

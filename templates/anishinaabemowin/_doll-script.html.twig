@@ -1,0 +1,12 @@
+{# Concept-render slots degrade gracefully: if the image file is missing (the
+   renders are dropped in later), hide the whole figure including its caption.
+   Included inside each doll page's {% block scripts_extra %} (end of body). #}
+<script>
+  (function () {
+    document.querySelectorAll('.dol-figure img').forEach(function (img) {
+      function hide() { var f = img.closest('figure'); if (f) { f.style.display = 'none'; } }
+      if (img.complete && img.naturalWidth === 0) { hide(); }
+      img.addEventListener('error', hide);
+    });
+  })();
+</script>

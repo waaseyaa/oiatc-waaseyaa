@@ -70,6 +70,21 @@ final class HomeController
         return $this->renderTemplate('anishinaabemowin/home.html.twig');
     }
 
+    public function anishinaabemowinDoll(): Response
+    {
+        return $this->renderTemplate('anishinaabemowin/doll.html.twig');
+    }
+
+    public function anishinaabemowinDollBuild(): Response
+    {
+        return $this->renderTemplate('anishinaabemowin/doll-build.html.twig');
+    }
+
+    public function anishinaabemowinDollProcess(): Response
+    {
+        return $this->renderTemplate('anishinaabemowin/doll-process.html.twig');
+    }
+
     public function sagamokPortalDisclosure(): Response
     {
         return $this->renderTemplate('disclosure/sagamok-portal.html.twig');

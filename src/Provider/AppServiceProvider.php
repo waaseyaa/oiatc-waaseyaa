@@ -245,6 +245,33 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        $router->addRoute(
+            'anishinaabemowin.doll',
+            RouteBuilder::create('/anishinaabemowin/doll')
+                ->controller(fn() => $controller->anishinaabemowinDoll())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'anishinaabemowin.doll.build',
+            RouteBuilder::create('/anishinaabemowin/doll/build')
+                ->controller(fn() => $controller->anishinaabemowinDollBuild())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
+            'anishinaabemowin.doll.process',
+            RouteBuilder::create('/anishinaabemowin/doll/process')
+                ->controller(fn() => $controller->anishinaabemowinDollProcess())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         // The Anishinaabemowin work was first published as a practice case study;
         // it is now a top-level project section. 301 the old URL to the new home.
         $router->addRoute(

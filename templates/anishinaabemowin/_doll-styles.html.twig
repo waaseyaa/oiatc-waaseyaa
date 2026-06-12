@@ -1,0 +1,107 @@
+{# Shared styles for the talking-doll cluster (/anishinaabemowin/doll*). Built on
+   the site editorial tokens so it follows the light/dark toggle, in a ~1180px
+   frame with prose capped near 74ch. Namespaced .dol-* so nothing leaks into
+   site.css and it sits cleanly beside the project home's .anm-* rules.
+   Included inside each doll page's {% block head_styles %}. #}
+<style>
+  .dol-wrap {
+    --dol-max: 1180px;
+    --dol-read: 74ch;
+    max-width: var(--dol-max);
+    margin: 0 auto;
+    padding: var(--gap-7) var(--gap-5) var(--gap-9);
+  }
+
+  .dol-wrap h1 { font-family: var(--font-serif); font-weight: 400; font-size: clamp(30px, 5vw, 50px); line-height: 1.06; letter-spacing: -0.02em; margin: 0 0 var(--gap-3); }
+  .dol-wrap h2 { font-family: var(--font-serif); font-weight: 600; font-size: clamp(22px, 2.6vw, 29px); line-height: 1.2; letter-spacing: -0.01em; margin: 0 0 var(--gap-3); }
+  .dol-wrap p { margin: 0 0 var(--gap-4); }
+  .dol-wrap strong { color: var(--ink); font-weight: 600; }
+
+  .dol-num { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.08em; color: var(--accent-deep); font-weight: 500; }
+  .dol-lede { font-family: var(--font-serif); font-size: clamp(18px, 1.7vw, 22px); line-height: 1.5; color: var(--ink-2); max-width: var(--dol-read); margin: 0 0 var(--gap-3); text-wrap: pretty; }
+  .dol-updated { font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.04em; color: var(--accent-deep); margin: 0; }
+  .dol-col { max-width: var(--dol-read); }
+  .dol-col p { color: var(--ink); }
+
+  .dol-sec { margin: var(--gap-8) 0 0; scroll-margin-top: 80px; }
+  .dol-sec__head { display: flex; align-items: baseline; gap: 14px; margin: 0 0 var(--gap-4); flex-wrap: wrap; }
+  .dol-sec__head .dol-num { padding-top: 2px; }
+
+  /* Back / companion top link */
+  .dol-kicker { font-family: var(--font-sans); font-size: 14px; color: var(--ink-2); margin: 0 0 var(--gap-5); }
+  .dol-kicker a { color: var(--accent-deep); }
+
+  /* Concept-render figure. Hidden by the shared script if the file is absent. */
+  .dol-figure { margin: var(--gap-5) 0 0; border: 1px solid var(--rule); border-radius: var(--radius-lg); overflow: hidden; background: var(--paper-2); max-width: 920px; }
+  .dol-figure img { display: block; width: 100%; height: auto; }
+  .dol-figure figcaption { font-family: var(--font-sans); font-size: 12.5px; color: var(--ink-3); padding: 10px 16px; border-top: 1px solid var(--rule); background: var(--paper-2); }
+
+  /* Numbered journey (page 1) and vertical flow (page 3) share the step shell. */
+  .dol-journey { list-style: none; padding: 0; margin: var(--gap-4) 0 0; }
+  .dol-step { position: relative; display: grid; grid-template-columns: 44px 1fr; gap: var(--gap-4); padding: 18px 0; border-top: 1px solid var(--rule); }
+  .dol-journey .dol-step:last-child { border-bottom: 1px solid var(--rule); }
+  .dol-step__n { font-family: var(--font-mono); font-size: 15px; font-weight: 500; color: var(--paper); background: var(--accent-deep); width: 34px; height: 34px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
+  .dol-step__head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 0 0 6px; }
+  .dol-step__head h3 { font-family: var(--font-serif); font-size: 19px; font-weight: 600; margin: 0; color: var(--ink); }
+  .dol-step__main p { margin: 0; color: var(--ink-2); font-size: 15px; line-height: 1.6; max-width: var(--dol-read); }
+
+  /* Status chips, parsed from the plan copy */
+  .dol-chip { font-family: var(--font-sans); font-size: 10.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; white-space: nowrap; border: 1px solid transparent; align-self: center; }
+  .dol-chip--inprogress { color: var(--accent-deep); background: var(--accent-wash); border-color: var(--accent-soft); }
+  .dol-chip--next { color: oklch(0.42 0.09 240); background: oklch(0.95 0.03 240); border-color: oklch(0.80 0.05 240); }
+  .dol-chip--planned { color: var(--ink-3); background: var(--paper-3); border-color: var(--rule); }
+  [data-theme="dark"] .dol-chip--next { color: oklch(0.82 0.10 240); background: oklch(0.30 0.05 240); border-color: oklch(0.45 0.06 240); }
+
+  /* Vertical flow connector (page 3) */
+  .dol-flow .dol-step { border-top: 0; padding: 0 0 var(--gap-5) 0; }
+  .dol-flow .dol-step:last-child { border-bottom: 0; }
+  .dol-flow .dol-step::before { content: ""; position: absolute; left: 16px; top: 38px; bottom: 0; width: 2px; background: var(--rule); }
+  .dol-flow .dol-step:last-child::before { display: none; }
+
+  /* Companion-page cards + where-fits cards */
+  .dol-cards { display: grid; gap: var(--gap-3); margin: var(--gap-4) 0 0; }
+  @media (min-width: 720px) { .dol-cards.is-2 { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 760px) { .dol-cards.is-3 { grid-template-columns: repeat(3, 1fr); } }
+  .dol-card { background: var(--paper-2); border: 1px solid var(--rule); border-left: 3px solid var(--accent-soft); border-radius: var(--radius-md); padding: 18px 20px; }
+  .dol-card h3 { font-family: var(--font-serif); font-size: 19px; font-weight: 600; margin: 0 0 8px; color: var(--ink); }
+  .dol-card h3 a { color: var(--ink); text-decoration: none; }
+  .dol-card h3 a:hover { color: var(--accent-deep); }
+  .dol-card p { margin: 0; color: var(--ink-2); font-size: 14.5px; line-height: 1.6; }
+  .dol-card .dol-more { display: inline-block; margin-top: 12px; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--accent-deep); text-decoration: none; }
+
+  /* Parts tables (page 2) */
+  .dol-tier { margin: var(--gap-5) 0 0; }
+  .dol-tier__head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin: 0 0 var(--gap-2); }
+  .dol-tier__head h3 { font-family: var(--font-serif); font-size: 20px; font-weight: 600; margin: 0; color: var(--ink); }
+  .dol-tablewrap { overflow-x: auto; -webkit-overflow-scrolling: touch; border: 1px solid var(--rule); border-radius: var(--radius-md); background: var(--paper-2); margin: var(--gap-3) 0 0; }
+  .dol-table { border-collapse: collapse; width: 100%; min-width: 420px; font-size: 14.5px; }
+  .dol-table th, .dol-table td { padding: 11px 16px; border-bottom: 1px solid var(--rule); text-align: left; vertical-align: top; color: var(--ink); }
+  .dol-table thead th { font-family: var(--font-sans); font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em; color: var(--ink-3); font-weight: 600; }
+  .dol-table td.dol-price { font-family: var(--font-mono); font-size: 13.5px; color: var(--ink); white-space: nowrap; text-align: right; font-variant-numeric: tabular-nums; }
+  .dol-table th.dol-price { text-align: right; }
+  .dol-table tbody tr:last-child td { border-bottom: 0; }
+  .dol-table tfoot td { font-weight: 700; color: var(--ink); border-top: 2px solid var(--rule); border-bottom: 0; }
+
+  /* Safety panel, visually distinct */
+  .dol-safety { background: var(--accent-wash); border: 1px solid var(--accent-soft); border-left: 4px solid var(--accent); border-radius: var(--radius-lg); padding: 22px 24px; margin: var(--gap-4) 0 0; max-width: 96ch; }
+  .dol-safety h2 { margin-top: 0; }
+  .dol-safety p { color: var(--ink); }
+  .dol-safety p:last-child { margin-bottom: 0; }
+
+  /* Plain bulleted list */
+  .dol-list { list-style: none; padding-left: 0; margin: var(--gap-3) 0 0; max-width: 96ch; }
+  .dol-list li { position: relative; padding-left: 22px; margin: 0 0 12px; line-height: 1.6; color: var(--ink); font-size: 15px; }
+  .dol-list li::before { content: ""; position: absolute; left: 3px; top: 11px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+  /* Take-part CTA panel */
+  .dol-cta { background: var(--accent-wash); border: 1px solid var(--accent-soft); border-left: 4px solid var(--accent); border-radius: var(--radius-lg); padding: 24px 26px; margin: var(--gap-4) 0 0; max-width: 96ch; }
+  .dol-cta p { color: var(--ink); font-size: 15.5px; line-height: 1.6; margin: 0 0 var(--gap-4); max-width: 80ch; }
+  .dol-cta__btn { display: inline-flex; align-items: center; gap: 9px; font-family: var(--font-sans); font-size: 15px; font-weight: 600; color: var(--paper); background: var(--accent-deep); border-radius: 999px; padding: 11px 22px; text-decoration: none; transition: filter var(--dur-fast) var(--ease); }
+  .dol-cta__btn:hover { filter: brightness(1.08); }
+  .dol-cta__addr { display: block; margin-top: 12px; font-family: var(--font-mono); font-size: 13px; color: var(--ink-2); }
+  .dol-cta__addr a { color: var(--accent-deep); }
+
+  .dol-byline { font-size: 13.5px; color: var(--ink-3); line-height: 1.6; margin: var(--gap-7) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); max-width: 96ch; font-style: italic; }
+
+  .dol-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+</style>

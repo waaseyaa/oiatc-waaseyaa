@@ -126,6 +126,7 @@ final class NewsController
         $changed = $this->reconcileManagedPost($entities, $this->masseyConsultationPost()) || $changed;
         $changed = $this->healRenamedLanguagePost($entities) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->languageProjectPost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->languageDollPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -321,6 +322,28 @@ final class NewsController
     }
 
     /**
+     * The talking-doll announcement (short, two paragraphs). Body is HTML so it
+     * renders through {{ post.body|raw }}; related_explainer 'anishinaabemowin-doll'
+     * points the post CTA at /anishinaabemowin/doll. The Elder and the commenter
+     * who raised the idea both stay unnamed here.
+     *
+     * @return array<string, mixed>
+     */
+    private function languageDollPost(): array
+    {
+        return [
+            'title' => 'A doll that speaks Anishinaabemowin',
+            'slug' => 'anishinaabemowin-doll-plan',
+            'body' => '<p>The idea arrived twice on the same day. In a community thread about the future of the language, a commenter suggested putting fluent speakers\' voices into a learning doll, with the recordings kept by the Nations themselves. Russell Jones had been carrying the same idea. When two people who have never met describe the same object, you build it.</p>'
+                . '<p>OIATC has published the plan, from idea to a child holding one: a soft doll sewn in community with a fluent Elder\'s voice inside, Anishinaabemowin on the first squeeze and English on the second, no screen, no app, nothing online. The page carries the whole build, parts list and costs included, and the consent process that puts the Elder\'s agreement at the centre of every step. Read it at <a href="/anishinaabemowin/doll">/anishinaabemowin/doll</a>.</p>',
+            // 2026-06-12 12:00:00 UTC (after the project-section post on the same day)
+            'published_at' => 1781265600,
+            'related_explainer' => 'anishinaabemowin-doll',
+            'status' => true,
+        ];
+    }
+
+    /**
      * One-time, self-healing rename of the first-ship announcement. The project
      * shipped first as a practice case study with slug
      * `anishinaabemowin-program-published`; it is now a top-level project. Where
@@ -414,6 +437,7 @@ final class NewsController
             'massey-solar-open-houses-paused' => 'Potentia\'s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.',
             'massey-solar-drop-in-sessions-fire-hall' => 'Potentia has moved the Massey Solar Project\'s community drop-in sessions to the Massey Fire Hall, with dates in June and July 2026.',
             'anishinaabemowin-project-published' => 'OIATC has published a project section for Anishinaabemowin, a live, community-owned effort to record fluent speakers and keep the language alive.',
+            'anishinaabemowin-doll-plan' => 'OIATC has published the plan for a doll that speaks Anishinaabemowin: a fluent Elder\'s voice in a child\'s hands, offline, recordings held by the community.',
             default => null,
         };
     }
@@ -535,6 +559,7 @@ final class NewsController
             $this->prescribeitPost(),
             $this->masseyConsultationPost(),
             $this->languageProjectPost(),
+            $this->languageDollPost(),
             [
                 'title' => 'Add your voice, and a tool built to keep your data home',
                 'slug' => 'add-your-voice',
