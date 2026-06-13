@@ -1,0 +1,132 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}When a foreign order can switch off your AI, what do you actually own? · OIATC{% endblock %}
+{% block description %}A US export order disabled two of the most capable AI models worldwide overnight. For First Nations, the lesson is not which model to use. It is that the model is the layer you do not own, and sovereignty lives in the data and the infrastructure you do.{% endblock %}
+{% block og_title %}When a foreign order can switch off your AI, what do you actually own?{% endblock %}
+{% block og_description %}A US export order switched off two of the most capable AI models worldwide overnight. The lesson for First Nations: the model is the swappable layer; sovereignty lives in the data and infrastructure you own.{% endblock %}
+{% block body_class %}route-position-sovereign-ai{% endblock %}
+
+{% block head_styles %}
+  <style>
+    /* OIATC sovereign-AI position. Editorial page on the site tokens (follows the
+       light/dark toggle), single readable column. The three-layer "stack" visual
+       is kept verbatim inside a fixed-dark inset panel so its semantic colours
+       (amber order, grey model, blue data, green infrastructure) read on both
+       themes. Namespaced .sai-* so nothing collides with site.css. */
+    .sai-wrap { max-width: 760px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
+    .sai-wrap h1 { font-family: var(--font-serif); font-size: clamp(28px, 4.2vw, 38px); line-height: 1.18; letter-spacing: -0.01em; font-weight: 400; margin: 0 0 var(--gap-3); }
+    .sai-wrap h2 { font-family: var(--font-serif); font-size: 22px; line-height: 1.25; font-weight: 600; letter-spacing: -0.01em; margin: var(--gap-7) 0 var(--gap-3); }
+    .sai-wrap p { margin: 0 0 var(--gap-3); }
+    .sai-wrap strong { color: var(--ink); font-weight: 600; }
+    .sai-lede { font-size: clamp(18px, 1.6vw, 20px); line-height: 1.55; color: var(--ink-2); }
+    .sai-byline { font-size: 14px; color: var(--ink-3); margin: var(--gap-4) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); }
+
+    .sai-wrap ul { list-style: none; padding-left: 0; margin: 0 0 var(--gap-4); }
+    .sai-wrap li { position: relative; padding-left: 20px; margin: 0 0 10px; line-height: 1.65; }
+    .sai-wrap li::before { content: ""; position: absolute; left: 3px; top: 12px; width: 6px; height: 6px; border-radius: 50%; background: var(--accent); }
+
+    .sai-hl { background: var(--accent-wash); color: var(--ink); padding: .03em .28em; border-radius: 4px; font-weight: 600; }
+    .sai-hlw { background: color-mix(in oklab, var(--accent) 22%, transparent); color: var(--ink); padding: .03em .28em; border-radius: 4px; font-weight: 600; }
+    .sai-pull { font-family: var(--font-serif); font-size: 21px; line-height: 1.4; color: var(--ink); font-weight: 500; border-left: 3px solid var(--accent); padding: 4px 0 4px 18px; margin: var(--gap-5) 0; }
+
+    /* Three-layer stack: fixed-dark inset so the SVG's colours read on both themes. */
+    .sai-stack { background: #0f1826; border: 1px solid #243349; border-radius: var(--radius-lg); padding: 16px 16px 8px; margin: var(--gap-4) 0; }
+    .sai-stack svg { display: block; width: 100%; height: auto; }
+    .sai-stackcap { font-size: 13.5px; color: #9aa7b6; line-height: 1.55; margin: 10px 4px 6px; }
+    .sai-stackcap b { color: #c6d2df; font-weight: 600; }
+
+    .sai-note { font-size: 14px; color: var(--ink-3); margin: var(--gap-6) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); line-height: 1.6; }
+    .sai-note p { margin: 0 0 10px; }
+    .sai-note p:last-child { margin-bottom: 0; }
+
+    .sai-more { margin: var(--gap-6) 0 0; font-family: var(--font-sans); font-size: 13.5px; color: var(--ink-3); }
+    .sai-more a { color: var(--accent-deep); }
+  </style>
+{% endblock %}
+
+{% block content %}
+<article class="sai-wrap">
+
+  <p class="eyebrow"><a href="/about" style="color: var(--accent-deep)">Council position</a> · Sovereign AI</p>
+  <h1>When a foreign order can switch off your AI, what do you actually own?</h1>
+  <p class="sai-lede">On the evening of June 12, 2026, the United States ordered a major AI company to cut off its two most capable models to every foreign national. Because the company could not separate foreign users from the rest in real time, it shut the models off for everyone, worldwide, the same night. People in Canada who were using the tool an hour earlier simply lost it. For First Nations, the lesson is not which model to use. It is that the model is the one layer you do not control, and sovereignty lives in the layers you do.</p>
+  <p class="sai-byline">From Russell Jones, a Sagamok member, for OIATC. This is OIATC's position, and general information, not legal advice. June 13, 2026.</p>
+
+  <h2>What happened</h2>
+  <p>The US government sent the order under export-control authority. It applied to <span class="sai-hl">any foreign national, whether inside or outside the United States</span>, including the company's own foreign-born staff. The company complied while disputing the reasoning, said it believed the concern was a narrow technical one, and said it expects to restore access. Every other model from that company kept working.</p>
+  <p>Treat the specific dispute as unsettled. That is not the point. The point is what the event revealed about the shape of the thing.</p>
+
+  <h2>Why this is not a one-off</h2>
+  <p>The most capable AI models are built by a small number of companies in one or two countries, and they run as a service you reach over the internet. That arrangement is convenient, and most of the time it works. But it means your access is a <span class="sai-hl">permission</span>, and a permission can be changed by a government you did not elect, in a country you do not live in, overnight, with no notice to you. This is the same lesson as <a href="/explainers/where-your-data-lives">where your community's data actually lives</a>, one layer up. When the important parts sit outside the community, the community cannot answer the basic question of whether they will be there tomorrow.</p>
+
+  <h2>The three layers, and which ones you can own</h2>
+  <p>An AI system that serves a community is not one thing. It is three layers stacked on top of each other, and they are not equally in your hands.</p>
+  <div class="sai-stack">
+    <svg viewBox="0 0 720 300" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Three stacked layers. Top: the model, swappable, can be switched off from outside. Middle: the data, governed by the community under OCAP. Bottom: the infrastructure, owned by the community. An external order strikes the top layer only.">
+      <!-- external order arrow hitting the top layer -->
+      <g>
+        <text x="540" y="34" font-family="sans-serif" font-size="12.5" fill="#e0b15a">Foreign order</text>
+        <line x1="585" y1="44" x2="585" y2="74" stroke="#e0b15a" stroke-width="2" marker-end="url(#a)"/>
+        <defs><marker id="a" markerWidth="9" markerHeight="9" refX="7" refY="4.5" orient="auto"><path d="M0,0 L9,4.5 L0,9 z" fill="#e0b15a"/></marker></defs>
+      </g>
+      <!-- top: model -->
+      <rect x="40" y="78" width="640" height="60" rx="10" fill="#1b2230" stroke="#3a4254" stroke-width="1.4" stroke-dasharray="6 4"/>
+      <text x="60" y="104" font-family="sans-serif" font-size="15" fill="#fff" font-weight="700">The model</text>
+      <text x="60" y="124" font-family="sans-serif" font-size="12.5" fill="#9aa7b6">Swappable. A commodity. Can be switched off from outside.</text>
+      <text x="660" y="113" text-anchor="end" font-family="sans-serif" font-size="11.5" fill="#e0b15a">not yours</text>
+      <!-- middle: data -->
+      <rect x="40" y="150" width="640" height="60" rx="10" fill="#142436" stroke="#5fb0d6" stroke-width="1.6"/>
+      <text x="60" y="176" font-family="sans-serif" font-size="15" fill="#fff" font-weight="700">The data</text>
+      <text x="60" y="196" font-family="sans-serif" font-size="12.5" fill="#9aa7b6">Your community's, governed under OCAP. The real moat.</text>
+      <text x="660" y="185" text-anchor="end" font-family="sans-serif" font-size="11.5" fill="#5fb0d6">yours</text>
+      <!-- bottom: infrastructure -->
+      <rect x="40" y="222" width="640" height="60" rx="10" fill="#13261f" stroke="#7fd0a8" stroke-width="1.6"/>
+      <text x="60" y="248" font-family="sans-serif" font-size="15" fill="#fff" font-weight="700">The infrastructure</text>
+      <text x="60" y="268" font-family="sans-serif" font-size="12.5" fill="#9aa7b6">Where it runs. Indigenous-controlled hosting.</text>
+      <text x="660" y="257" text-anchor="end" font-family="sans-serif" font-size="11.5" fill="#7fd0a8">yours</text>
+    </svg>
+    <p class="sai-stackcap"><b>The order struck the top layer only.</b> The model is the part built and held by someone else, and it is the part that can be revoked. The data and the infrastructure underneath it are the parts a community can own outright. Build so the layer that can be taken away is the layer you can replace.</p>
+  </div>
+  <p>Put plainly: <span class="sai-hl">the model is the swappable layer</span>. Lose one, you can run another. What must not be swappable from under you is your community's data, and the ground it runs on.</p>
+
+  <h2>What OIATC is choosing to build, and what it is not</h2>
+  <p>OIATC will not build a frontier model. A single training run for one of these systems costs in the hundreds of millions to over a billion dollars, and that is a race for a handful of large companies and governments. Chasing it would be the wrong use of a community's resources, and we will not pretend otherwise.</p>
+  <p>What OIATC builds, and helps Nations build, is the part that confers sovereignty:</p>
+  <ul>
+    <li><strong>Governed data.</strong> Community information held under OCAP, owned and controlled by the community, never handed wholesale to an outside model.</li>
+    <li><strong>Open models that run anywhere.</strong> Open-weight models a community can download, inspect, and run on its own terms, so no single vendor holds the off switch. Strong open models now exist, including Canadian-built ones.</li>
+    <li><strong>Indigenous-controlled hosting.</strong> Infrastructure the community governs, so the data and the system that uses it sit on ground the community stands on. This is the work already underway in <a href="/programs/anokii">Anokii</a>.</li>
+  </ul>
+  <p>For an Indigenous-language model this matters even more, because the value is in the language data, not the model, and the large companies will never serve a language like Anishinaabemowin well enough to bother. That is precisely the ground a community-governed effort can hold.</p>
+
+  <h2>Canada is already moving this way</h2>
+  <p>This is not a fringe view. Canada's national AI strategy includes a sovereign-compute plan and names Indigenous self-determination over how AI is built and used. The largest Canadian model company has released open-weight models it markets for sovereign infrastructure. The argument OIATC has been making, that <span class="sai-hl">who governs the data and the ground matters more than who builds the model</span>, is now close to government and industry consensus. OIATC's place in that is specific and local: the Ontario Indigenous voice for First Nations communities, and a delivery partner that already runs sovereign tools on its own infrastructure.</p>
+
+  <p class="sai-pull">The dependency is real. The answer a community can actually own is its own governed data, open models it can run, and infrastructure it controls.</p>
+
+  <h2>What a First Nation can take from this</h2>
+  <ul>
+    <li>Treat any one company's model as replaceable. Prefer tools that let you change the model underneath without losing your data.</li>
+    <li>Keep the community's data under OCAP, and know which systems have a copy of it.</li>
+    <li>For anything that matters, ask what it would take to run it on infrastructure the community controls.</li>
+    <li>Judge a vendor not only by how good the model is today, but by whether you keep your data and your access if the vendor, or a foreign government, changes the terms tomorrow.</li>
+  </ul>
+
+  <h2>Sources</h2>
+  <ul>
+    <li><a href="https://www.anthropic.com/news/fable-mythos-access" target="_blank" rel="noopener">The company's own statement on the directive</a>, and reporting from <a href="https://www.cnbc.com/2026/06/12/anthropic-disables-access-to-fable-5-and-mythos-5-to-comply-with-government-directive.html" target="_blank" rel="noopener">CNBC</a>.</li>
+    <li><a href="https://www.businesswire.com/news/home/20260520121796/en/Cohere-Releases-Command-A-An-Open-Source-Enterprise-AI-Model-Built-for-Sovereign-Critical-Infrastructure" target="_blank" rel="noopener">Cohere's open-weight Command A+, built for sovereign infrastructure</a>.</li>
+    <li><a href="https://ised-isde.canada.ca/site/ised/en/canadas-national-artificial-intelligence-strategy-ai-all" target="_blank" rel="noopener">Canada's national AI strategy, AI for All</a>, and the <a href="https://ised-isde.canada.ca/site/ised/en/canadian-sovereign-ai-compute-strategy" target="_blank" rel="noopener">Canadian Sovereign AI Compute Strategy</a>.</li>
+    <li><a href="https://fnigc.ca/ocap-training/" target="_blank" rel="noopener">The First Nations Principles of OCAP (FNIGC)</a>.</li>
+    <li>OIATC's companion explainer, <a href="/explainers/where-your-data-lives">where your community's data actually lives</a>.</li>
+  </ul>
+
+  <div class="sai-note">
+    <p>A position from OIATC, the Ontario Indigenous AI and Technology Council, written by Russell Jones, a Sagamok member. It explains how this technology works and what it means for community data and access. It is general information, not legal advice. Independent of the companies named. Corrections welcome.</p>
+    <p>Ontario Indigenous AI &amp; Technology Council · OIATC · oiatc.ca</p>
+  </div>
+
+  <p class="sai-more">More from OIATC: <a href="/explainers/where-your-data-lives">where your data lives</a> · <a href="/programs/anokii">the Anokii program</a> · <a href="/about">council positions</a></p>
+
+</article>
+{% endblock %}

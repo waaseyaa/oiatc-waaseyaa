@@ -30,6 +30,11 @@ final class HomeController
         return $this->renderTemplate('positions/prescribeit.html.twig');
     }
 
+    public function sovereignAiPosition(): Response
+    {
+        return $this->renderTemplate('positions/sovereign-ai.html.twig');
+    }
+
     public function robinsonHuronTreatyExplainer(): Response
     {
         return $this->renderTemplate('explainers/robinson-huron-treaty.html.twig');

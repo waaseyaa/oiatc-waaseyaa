@@ -128,6 +128,7 @@ final class NewsController
         $changed = $this->reconcileManagedPost($entities, $this->languageProjectPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->languageDollPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->programsRestructurePost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->sovereignAiPositionPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -366,6 +367,29 @@ final class NewsController
     }
 
     /**
+     * The sovereign-AI position announcement (short, two paragraphs). Body is
+     * HTML so it renders through {{ post.body|raw }}; related_explainer
+     * 'sovereign-ai' is in the positions set, so the CTA points at
+     * /positions/sovereign-ai. The access loss is kept structural (no individual
+     * named as the person who lost access).
+     *
+     * @return array<string, mixed>
+     */
+    private function sovereignAiPositionPost(): array
+    {
+        return [
+            'title' => 'When a foreign order can switch off your AI',
+            'slug' => 'sovereign-ai-position',
+            'body' => '<p>On the evening of June 12, 2026, a United States export order forced a major AI company to cut off its two most capable models to every foreign national, worldwide, overnight. Because the company could not separate foreign users from the rest in real time, it shut the models off for everyone. People in Canada who were using the tool an hour earlier lost it the same night.</p>'
+                . '<p>OIATC has published its position on what that means for First Nations. The lesson is not which model to use. The model is the swappable layer, and sovereignty lives in the data a community governs under OCAP and the infrastructure it controls. Read it at <a href="/positions/sovereign-ai">/positions/sovereign-ai</a>.</p>',
+            // 2026-06-13 00:00:00 UTC
+            'published_at' => 1781308800,
+            'related_explainer' => 'sovereign-ai',
+            'status' => true,
+        ];
+    }
+
+    /**
      * One-time, self-healing rename of the first-ship announcement. The project
      * shipped first as a practice case study with slug
      * `anishinaabemowin-program-published`; it is now a top-level project. Where
@@ -461,6 +485,7 @@ final class NewsController
             'anishinaabemowin-project-published' => 'OIATC has published a project section for Anishinaabemowin, a live, community-owned effort to record fluent speakers and keep the language alive.',
             'anishinaabemowin-doll-plan' => 'OIATC has published the plan for a doll that speaks Anishinaabemowin: a fluent Elder\'s voice in a child\'s hands, offline, recordings held by the community.',
             'site-programs-restructure' => 'OIATC has reorganized its site around four named programs, each with shipped work and a clear funding ask.',
+            'sovereign-ai-position' => 'OIATC\'s position on a US export order that switched off two major AI models worldwide overnight, and what it means for First Nations sovereignty.',
             default => null,
         };
     }
@@ -584,6 +609,7 @@ final class NewsController
             $this->languageProjectPost(),
             $this->languageDollPost(),
             $this->programsRestructurePost(),
+            $this->sovereignAiPositionPost(),
             [
                 'title' => 'Add your voice, and a tool built to keep your data home',
                 'slug' => 'add-your-voice',

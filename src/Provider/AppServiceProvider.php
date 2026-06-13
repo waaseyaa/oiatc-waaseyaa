@@ -237,6 +237,15 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'positions.sovereign-ai',
+            RouteBuilder::create('/positions/sovereign-ai')
+                ->controller(fn() => $controller->sovereignAiPosition())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        $router->addRoute(
             'explainers.robinson-huron-treaty',
             RouteBuilder::create('/explainers/robinson-huron-treaty')
                 ->controller(fn() => $controller->robinsonHuronTreatyExplainer())

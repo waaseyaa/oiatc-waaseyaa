@@ -49,6 +49,7 @@ final class IngestDocsCommand
         '/explainers/how-sagamok-is-organized' => 'explainers/how-sagamok-is-organized.html.twig',
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
         '/positions/prescribeit' => 'positions/prescribeit.html.twig',
+        '/positions/sovereign-ai' => 'positions/sovereign-ai.html.twig',
         '/practice/ai-in-coursework' => 'practice/ai-in-coursework.html.twig',
         '/anishinaabemowin' => 'anishinaabemowin/home.html.twig',
         '/anishinaabemowin/doll' => 'anishinaabemowin/doll.html.twig',
