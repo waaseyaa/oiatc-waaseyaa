@@ -20,8 +20,15 @@ Positions (counter-disinformation, PrescribeIT) stay council-level statements, t
   anokii, where-your-data-lives, how-sagamok, 2 records-request, news index),
   plus 12+ news posts. "20+ pages shipped and dated" is true and conservative.
   Sitemap was a curated subset (8 URLs); rebuilt to reflect reality.
-- **21,721 dictionary entries:** taken from the approved mockup (user-supplied).
-  Not independently re-verified here (Minoo dictionary data is not in this repo).
+- **21,721 dictionary entries: REMOVED 2026-06-14 as an overclaim.** That count
+  is the Ojibwe People's Dictionary's content, not something OIATC created or
+  preserved, so presenting it as OIATC's proof was wrong. The home proof tile now
+  reads "4 / programs, all with shipped work" (true and ownable). The Ojibwe
+  People's Dictionary stays only as an attributed external source on the
+  Anishinaabemowin page. Flagged for Russell: the "4 programs" tile duplicates
+  the masthead facts panel, so he may prefer to drop to three tiles or use a real
+  language stat instead (e.g. the 27 curated corpus items from one Elder's
+  teachings); not changed without his call.
 - **2 platforms in active build:** Waaseyaa + Minoo. Real.
 - **First-party analytics, no ad-tech:** real (analytics subsystem in repo).
 - **Cited by local press:** real (Massey coverage by myespanolanow.com / R. Russell).
