@@ -1,60 +1,41 @@
-<!--
-  OIATC public disclosure page for oiatc.ca. Single file, plain-language, for members and the general public.
-  SAFETY: no URLs to the affected files, no passwords, no reproduction method, no document content. Do not add them.
-  BEFORE PUBLISHING:
-    1. Set the date in the byline.
-    2. Confirm the "What happens now" line is accurate at publish time.
-    3. Platform vendor is left unnamed on purpose. Naming it is optional.
--->
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Sagamok's members-only website has not been private · OIATC</title>
-<meta name="description" content="The Sagamok members-only website, including Council minutes, financial statements and more, has been readable by anyone online with no login. Plain-language explanation for members.">
-<link rel="canonical" href="https://oiatc.ca/disclosure/sagamok-portal">
-<meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-<meta property="og:locale" content="en_CA">
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://oiatc.ca/disclosure/sagamok-portal">
-<meta property="og:title" content="Sagamok's members-only website has not been private">
-<meta property="og:description" content="The Sagamok members-only website, including Council minutes, financial statements and more, has been readable by anyone online with no login. Plain-language explanation for members.">
-<meta property="og:image" content="https://oiatc.ca/images/og-sagamok-portal.png">
-<meta name="twitter:card" content="summary_large_image">
-<script defer src="/js/oiatc-analytics.js?v=3"></script>
+{% extends 'base.html.twig' %}
+
+{% block title %}Sagamok's members-only website has not been private · OIATC{% endblock %}
+{% block description %}The Sagamok members-only website, including Council minutes, financial statements and more, has been readable by anyone online with no login. Plain-language explanation for members.{% endblock %}
+{% block og_title %}Sagamok's members-only website has not been private{% endblock %}
+{% block og_description %}The Sagamok members-only website, including Council minutes, financial statements and more, has been readable by anyone online with no login. Plain-language explanation for members.{% endblock %}
+{% block og_image %}https://oiatc.ca/images/og-sagamok-portal.png{% endblock %}
+{% block body_class %}route-disclosure-sagamok-portal{% endblock %}
+
+{% block head_styles %}
 <style>
-  :root{
-    --bg:#0d1420; --panel:#131d2c; --panel-2:#0f1826;
-    --text:#e7ecf3; --muted:#9aa7b6; --border:#243349;
-    --accent:#5fb0d6; --warn:#e0b15a;
+  .docwrap{
+    --muted:var(--ink-3); --panel:var(--paper-2); --panel-2:var(--paper-3);
+    --border:var(--rule); --warn:var(--accent-deep);
     --maxw:680px;
-  }
-  *{box-sizing:border-box}
-  html{-webkit-text-size-adjust:100%}
-  body{
-    margin:0; background:var(--bg); color:var(--text);
-    font:18px/1.7 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    background:var(--paper); color:var(--ink);
+    font:18px/1.7 var(--font-sans);
     -webkit-font-smoothing:antialiased;
   }
+  .docwrap *{box-sizing:border-box}
   .wrap{max-width:var(--maxw); margin:0 auto; padding:52px 22px 72px}
   a{color:var(--accent); text-decoration:none}
   a:hover{text-decoration:underline}
   .eyebrow{font-size:12.5px; letter-spacing:.16em; text-transform:uppercase; color:var(--muted); margin:0 0 16px; font-weight:600}
   h1{font-size:32px; line-height:1.18; font-weight:700; margin:0 0 16px; letter-spacing:-.01em}
-  .lede{font-size:19px; color:#cdd6e1; margin:0 0 8px}
+  .lede{font-size:19px; color:var(--ink-2); margin:0 0 8px}
   .byline{font-size:14px; color:var(--muted); margin:16px 0 0; padding-top:16px; border-top:1px solid var(--border)}
   h2{font-size:21px; line-height:1.25; font-weight:700; margin:42px 0 12px; letter-spacing:-.01em}
   p{margin:0 0 16px}
-  strong{color:#fff}
-  .hl{background:rgba(95,176,214,.16); color:#eaf4fa; padding:.03em .28em; border-radius:4px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone}
-  .hlw{background:rgba(224,177,90,.18); color:#f3e2bd; padding:.03em .28em; border-radius:4px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+  strong{color:var(--ink)}
+  .hl{background:var(--accent-wash); color:var(--ink); padding:.03em .28em; border-radius:4px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone}
+  .hlw{background:var(--accent-wash); color:var(--ink); padding:.03em .28em; border-radius:4px; font-weight:600; box-decoration-break:clone; -webkit-box-decoration-break:clone}
   .summary{background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:8px 22px 12px; margin:26px 0 8px}
   .summary p.h{font-size:12.5px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); font-weight:600; margin:16px 0 10px}
   ul{margin:0 0 18px; padding-left:0; list-style:none}
   li{position:relative; padding-left:22px; margin:0 0 11px}
   li::before{content:""; position:absolute; left:3px; top:12px; width:6px; height:6px; border-radius:50%; background:var(--accent)}
-  .pull{font-size:21px; line-height:1.4; color:#fff; font-weight:600; border-left:3px solid var(--accent); padding:4px 0 4px 20px; margin:22px 0}
+  .pull{font-size:21px; line-height:1.4; color:var(--ink); font-weight:600; border-left:3px solid var(--accent); padding:4px 0 4px 20px; margin:22px 0}
   .diagram{margin:24px 0 6px}
   .diagram svg{display:block; width:100%; height:auto}
   .figcap{font-size:13.5px; color:var(--muted); margin:12px 2px 0; line-height:1.5}
@@ -64,13 +45,13 @@
   .tl:last-child{padding-bottom:0}
   .tl::before{content:""; position:absolute; left:-36px; top:2px; width:20px; height:20px; border-radius:50%; background:var(--panel-2); border:3px solid var(--accent)}
   .tl .when{display:inline-block; font-size:13.5px; letter-spacing:.03em; color:var(--accent); font-weight:700; margin:0 0 5px}
-  .tl p{margin:0; color:#cdd6e1; font-size:16px; line-height:1.55}
-  .status{border-left:3px solid var(--warn); background:var(--panel-2); padding:14px 18px; border-radius:0 10px 10px 0; color:#d8e0ea; font-size:16.5px}
+  .tl p{margin:0; color:var(--ink-2); font-size:16px; line-height:1.55}
+  .status{border-left:3px solid var(--warn); background:var(--panel-2); padding:14px 18px; border-radius:0 10px 10px 0; color:var(--ink-2); font-size:16.5px}
   .tech{font-size:14.5px; color:var(--muted); background:var(--panel-2); border:1px solid var(--border); border-radius:10px; padding:15px 18px; margin:20px 0 0; line-height:1.55}
-  .tech b{color:#c6d2df}
+  .tech b{color:var(--ink-2)}
   .cta{background:var(--panel); border:1px solid var(--border); border-left:4px solid var(--warn); border-radius:12px; padding:20px 24px; margin:30px 0 0}
-  .cta__h{font-size:18px; font-weight:700; color:#fff; margin:0 0 8px}
-  .cta p{color:#cdd6e1; margin:0 0 12px}
+  .cta__h{font-size:18px; font-weight:700; color:var(--ink); margin:0 0 8px}
+  .cta p{color:var(--ink-2); margin:0 0 12px}
   .cta__btn{display:inline-block; background:var(--warn); color:#241a08; font-weight:700; text-decoration:none; padding:11px 20px; border-radius:8px}
   .cta__btn:hover{filter:brightness(1.06); color:#241a08}
   footer{margin-top:50px; padding-top:20px; border-top:1px solid var(--border); color:var(--muted); font-size:14px}
@@ -79,11 +60,11 @@
   .d-toplink a{color:var(--warn); font-weight:700}
   .d-toplink a.home{color:var(--muted); font-weight:600}
 </style>
-</head>
-<body>
-<div class="wrap">
+{% endblock %}
 
-  <nav class="d-toplink" aria-label="Site"><a class="home" href="/">oiatc.ca</a><a href="/support/records-request">Records request</a></nav>
+{% block content %}
+<div class="docwrap">
+<div class="wrap">
 
   <p class="eyebrow">Program · <a href="/programs/member-resources">Transparency and member resources</a> · For Sagamok members</p>
   <h1>Sagamok's members-only website has not been private</h1>
@@ -191,9 +172,8 @@
 
   <footer>
     <p>This is from Russell Jones, a Sagamok Anishnawbek member, on behalf of the Ontario Indigenous AI and Technology Council. It is independent of Sagamok Chief and Council and its administration. I have not shared any of the affected documents. Questions and corrections are welcome.</p>
-    <p class="kicker">Ontario Indigenous AI &amp; Technology Council · OIATC · oiatc.ca</p>
   </footer>
 
 </div>
-</body>
-</html>
+</div>
+{% endblock %}
