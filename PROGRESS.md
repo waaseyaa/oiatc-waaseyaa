@@ -225,3 +225,25 @@ REMAINING (not yet done):
   the same edits; several have inline SVG/specimen visuals to handle like the disclosure.)
 
 Stopped before deploy for review, with the 2 positions durable on a clean tree.
+
+### 2026-06-14 Job 3 COMPLETE — all long-form docs unified onto the base shell
+
+All self-contained long-form docs now `{% extends 'base.html.twig' %}` with standard
+nav + footer + light/dark toggle. Their colours are remapped to site tokens via a
+`.docwrap` wrapper so the body follows the theme; layout/typography/content unchanged.
+The doc mastheads were dropped; the editorial footers (update dates, related links)
+were kept as content.
+
+Fixed a latent bug from the first two: the docs' own `.top` masthead CSS was leaking
+onto the base header (constraining it to 880px). Renamed every dead `.top*` selector
+to `.doctop*` in all docs so it can no longer collide with the base `.top` masthead.
+
+Unified + verified (200, correct <title>, content preserved, base nav + footer present,
+masthead un-polluted, reads in light AND dark):
+- positions/prescribeit, positions/counter-disinformation
+- disclosure/sagamok-portal
+- explainers/robinson-huron-treaty (+ /distribution-models)
+- explainers/massey-solar-project (+ /what-youve-heard, /voices, /climate-and-environment)
+
+Skipped (already base-extending): positions/sovereign-ai, explainers/where-your-data-lives,
+explainers/how-sagamok-is-organized.

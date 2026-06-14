@@ -1,45 +1,23 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Voices on the Massey Solar Project · OIATC</title>
-  <meta name="description" content="The committee, the Mayor and Deputy Mayor, a former councillor, Potentia, and the First Nations — a representative range of positions on the Massey Solar Project, in their own framing.">
-  <link rel="canonical" href="https://oiatc.ca/explainers/massey-solar-project/voices">
-  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://oiatc.ca/explainers/massey-solar-project/voices">
-  <meta property="og:title" content="Voices on the Massey Solar Project">
-  <meta property="og:description" content="A representative range of positions on the Massey Solar Project, in their own framing.">
-  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Voices on the Massey Solar Project">
-  <meta name="twitter:description" content="A representative range of positions on the Massey Solar Project, in their own framing.">
-  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/favicon.ico" sizes="32x32">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script defer src="/js/oiatc-analytics.js?v=3"></script>
+{% extends 'base.html.twig' %}
+
+{% block title %}Voices on the Massey Solar Project · OIATC{% endblock %}
+{% block description %}The committee, the Mayor and Deputy Mayor, a former councillor, Potentia, and the First Nations — a representative range of positions on the Massey Solar Project, in their own framing.{% endblock %}
+{% block og_title %}Voices on the Massey Solar Project{% endblock %}
+{% block og_description %}A representative range of positions on the Massey Solar Project, in their own framing.{% endblock %}
+{% block body_class %}route-explainer-massey-solar-project-voices{% endblock %}
+
+{% block head_styles %}
   <style>
-    :root {
-      --bg: #f8f5ef;
-      --surface: #fffefb;
-      --ink: #0d1420;
-      --ink-soft: #2b3340;
-      --ink-mute: #5b6473;
-      --rule: #d9d2c2;
-      --rule-soft: #ebe6d8;
-      --accent: #6a3a1f;
-      --accent-soft: #b88a5a;
-      --highlight: #f1ebd6;
-      --serif: "Source Serif 4", Georgia, serif;
-      --sans: "Inter", system-ui, sans-serif;
-      --mono: "JetBrains Mono", ui-monospace, monospace;
+    .docwrap {
+      --bg: var(--paper);
+      --surface: var(--paper-2);
+      --ink-soft: var(--ink-2);
+      --ink-mute: var(--ink-3);
+      --rule-soft: var(--rule);
+      --highlight: var(--accent-wash);
+      --serif: var(--font-serif);
+      --sans: var(--font-sans);
+      --mono: var(--font-mono);
       --content: 800px;
       --gap-1: 4px;
       --gap-2: 8px;
@@ -50,7 +28,7 @@
     }
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
-    body {
+    .docwrap {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
@@ -64,7 +42,7 @@
     a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
     a:hover { color: var(--ink); }
 
-    .top {
+    .doctop {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -79,15 +57,15 @@
       gap: 16px;
       flex-wrap: wrap;
     }
-    .top__brand {
+    .doctop__brand {
       font-weight: 600;
       color: var(--ink);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-    .top__brand a { color: var(--ink); border-bottom: none; }
-    .top__brand a:hover { color: var(--accent); }
-    .top__meta { font-variant-numeric: tabular-nums; }
+    .doctop__brand a { color: var(--ink); border-bottom: none; }
+    .doctop__brand a:hover { color: var(--accent); }
+    .doctop__meta { font-variant-numeric: tabular-nums; }
 
     .page {
       max-width: var(--content);
@@ -218,19 +196,15 @@
     footer a { color: var(--accent); }
 
     @media print {
-      .top, .backnav { display: none; }
+      .doctop, .backnav { display: none; }
       .voice { page-break-inside: avoid; }
       footer { border-top: 1px solid var(--rule); }
     }
   </style>
-</head>
-<body>
+{% endblock %}
 
-<header class="top">
-  <span class="top__brand"><a href="/">OIATC</a> · <a href="/programs/community-knowledge" style="color: inherit">Community knowledge</a></span>
-  <span class="top__meta">Last updated 2026-05-25</span>
-</header>
-
+{% block content %}
+<div class="docwrap">
 <main class="page">
 
   <p class="backnav"><a href="/explainers/massey-solar-project">← Massey Solar Project overview</a></p>
@@ -341,5 +315,5 @@
   <p>Ontario Indigenous AI &amp; Technology Council · OIATC · <a href="https://oiatc.ca">oiatc.ca</a></p>
 </footer>
 
-</body>
-</html>
+</div>
+{% endblock %}

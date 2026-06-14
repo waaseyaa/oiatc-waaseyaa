@@ -50,7 +50,7 @@
       padding: 64px 48px 96px;
     }
 
-    .top {
+    .doctop {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -63,17 +63,17 @@
       color: var(--ink-mute);
       letter-spacing: 0.02em;
     }
-    .top__brand {
+    .doctop__brand {
       font-weight: 600;
       color: var(--ink);
       letter-spacing: 0.06em;
       text-transform: uppercase;
     }
-    .top__brand a {
+    .doctop__brand a {
       color: inherit;
       text-decoration: none;
     }
-    .top__meta { font-variant-numeric: tabular-nums; }
+    .doctop__meta { font-variant-numeric: tabular-nums; }
 
     .cover {
       padding: 80px 0 96px;
@@ -248,7 +248,7 @@
     a { color: var(--accent); }
 
     @media (max-width: 720px) {
-      .top, .page { padding-left: 24px; padding-right: 24px; }
+      .doctop, .page { padding-left: 24px; padding-right: 24px; }
       .sec__head { grid-template-columns: 1fr; gap: var(--gap-2); }
       .sec__body { grid-column: 1; }
       .sec__num { padding-top: 0; }
@@ -258,7 +258,7 @@
 
     @media print {
       .docwrap { --bg: #ffffff; --surface: #ffffff; --highlight: #f6f1e3; font-size: 11pt; }
-      .top { display: none; }
+      .doctop { display: none; }
       .page { padding: 0; max-width: none; }
       .sec { page-break-inside: avoid; padding: 28pt 0; border-bottom: none; }
       .cover { padding: 0 0 28pt; }

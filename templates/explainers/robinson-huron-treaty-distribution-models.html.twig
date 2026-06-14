@@ -1,46 +1,23 @@
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Distribution models · The Robinson Huron Treaty in 2026 · OIATC</title>
-  <meta name="description" content="Three ways a Robinson Huron Treaty community can distribute its share, and the questions each approach has to answer to be fair to the whole membership, on-reserve and off.">
-  <link rel="canonical" href="https://oiatc.ca/explainers/robinson-huron-treaty/distribution-models">
-  <meta property="og:site_name" content="Ontario Indigenous AI &amp; Technology Council">
-  <meta property="og:locale" content="en_CA">
-  <meta property="og:type" content="article">
-  <meta property="og:url" content="https://oiatc.ca/explainers/robinson-huron-treaty/distribution-models">
-  <meta property="og:title" content="Distribution models: questions each model has to answer">
-  <meta property="og:description" content="Three ways a Robinson Huron Treaty community can distribute its share, and the questions each approach has to answer.">
-  <meta property="og:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Distribution models: questions each model has to answer">
-  <meta name="twitter:description" content="Three approaches RHT communities are using, and the fair-test questions each one has to answer.">
-  <meta name="twitter:image" content="https://oiatc.ca/images/og-default.png">
-  <meta name="theme-color" content="#f8f5ef" media="(prefers-color-scheme: light)">
-  <meta name="theme-color" content="#0d1420" media="(prefers-color-scheme: dark)">
-  <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-  <link rel="icon" href="/favicon.ico" sizes="32x32">
-  <link rel="apple-touch-icon" href="/apple-touch-icon.png">
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Source+Serif+4:ital,opsz,wght@0,8..60,300;0,8..60,400;0,8..60,500;0,8..60,600;1,8..60,400&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap">
-  <script defer src="/js/oiatc-analytics.js?v=3"></script>
+{% extends 'base.html.twig' %}
+
+{% block title %}Distribution models · The Robinson Huron Treaty in 2026 · OIATC{% endblock %}
+{% block description %}Three ways a Robinson Huron Treaty community can distribute its share, and the questions each approach has to answer to be fair to the whole membership, on-reserve and off.{% endblock %}
+{% block og_title %}Distribution models: questions each model has to answer{% endblock %}
+{% block og_description %}Three ways a Robinson Huron Treaty community can distribute its share, and the questions each approach has to answer.{% endblock %}
+{% block body_class %}route-explainer-robinson-huron-treaty-distribution-models{% endblock %}
+
+{% block head_styles %}
   <style>
-    :root {
-      --bg: #f8f5ef;
-      --surface: #fffefb;
-      --ink: #0d1420;
-      --ink-soft: #2b3340;
-      --ink-mute: #5b6473;
-      --rule: #d9d2c2;
-      --rule-soft: #ebe6d8;
-      --accent: #6a3a1f;
-      --accent-soft: #b88a5a;
-      --highlight: #f1ebd6;
-      --serif: "Source Serif 4", Georgia, serif;
-      --sans: "Inter", system-ui, sans-serif;
-      --mono: "JetBrains Mono", ui-monospace, monospace;
+    .docwrap {
+      --bg: var(--paper);
+      --surface: var(--paper-2);
+      --ink-soft: var(--ink-2);
+      --ink-mute: var(--ink-3);
+      --rule-soft: var(--rule);
+      --highlight: var(--accent-wash);
+      --serif: var(--font-serif);
+      --sans: var(--font-sans);
+      --mono: var(--font-mono);
       --content: 800px;
       --gap-1: 4px;
       --gap-2: 8px;
@@ -51,7 +28,7 @@
     }
     * { box-sizing: border-box; }
     html { -webkit-text-size-adjust: 100%; }
-    body {
+    .docwrap {
       margin: 0;
       background: var(--bg);
       color: var(--ink);
@@ -65,7 +42,7 @@
     a { color: var(--accent); text-decoration: none; border-bottom: 1px solid var(--accent-soft); }
     a:hover { color: var(--ink); }
 
-    .top {
+    .doctop {
       display: flex;
       align-items: baseline;
       justify-content: space-between;
@@ -80,13 +57,13 @@
       gap: 16px;
       flex-wrap: wrap;
     }
-    .top__brand {
+    .doctop__brand {
       font-weight: 600;
       color: var(--ink);
       letter-spacing: 0.08em;
       text-transform: uppercase;
     }
-    .top__meta { font-variant-numeric: tabular-nums; }
+    .doctop__meta { font-variant-numeric: tabular-nums; }
 
     .page {
       max-width: var(--content);
@@ -193,7 +170,7 @@
     }
     .matrix tbody td { color: var(--ink-soft); background: var(--surface); }
     .matrix tbody tr:last-child th, .matrix tbody tr:last-child td { border-bottom: none; }
-    .matrix__hard td { background: #faf2e1; color: var(--ink); font-style: italic; }
+    .matrix__hard td { background: var(--highlight); color: var(--ink); font-style: italic; }
     .matrix__hard th { background: var(--highlight); color: var(--accent); font-style: italic; }
     .matrix-note {
       font-family: var(--sans);
@@ -441,19 +418,14 @@
     }
 
     @media print {
-      .top { display: none; }
+      .doctop { display: none; }
       section, .model, .matrix { page-break-inside: avoid; }
     }
   </style>
-</head>
-<body>
+{% endblock %}
 
-<header class="top">
-  <span class="top__brand"><a href="/" style="color: inherit">OIATC</a> · <a href="/programs/community-knowledge" style="color: inherit">Community knowledge</a></span>
-  <span><a href="/explainers/robinson-huron-treaty">Back to main explainer</a></span>
-  <span class="top__meta">Updated 2026-05-16</span>
-</header>
-
+{% block content %}
+<div class="docwrap">
 <main class="page">
 
   <section class="cover">
@@ -663,5 +635,5 @@
   <p>OIATC · <a href="https://oiatc.ca">oiatc.ca</a> · <a href="/explainers/robinson-huron-treaty">Back to the main explainer</a></p>
 </footer>
 
-</body>
-</html>
+</div>
+{% endblock %}
