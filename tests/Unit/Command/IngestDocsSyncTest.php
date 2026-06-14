@@ -136,6 +136,8 @@ final class IngestDocsSyncTest extends TestCase
     private function repository(): EntityRepositoryInterface
     {
         return new class implements EntityRepositoryInterface {
+            use \App\Tests\Support\RevisionRepositoryStubs;
+
             /** @var array<string, DocChunk> */
             private array $store = [];
 

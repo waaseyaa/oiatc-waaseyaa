@@ -331,6 +331,8 @@ final class NewsControllerTest extends TestCase
     private function repository(array $entities): EntityRepositoryInterface
     {
         return new class ($entities) implements EntityRepositoryInterface {
+            use \App\Tests\Support\RevisionRepositoryStubs;
+
             /** @param list<EntityInterface> $entities */
             public function __construct(private array $entities) {}
 
