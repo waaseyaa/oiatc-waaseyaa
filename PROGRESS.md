@@ -195,3 +195,33 @@ JOBS 1, 2, 4 DONE and verified locally. JOB 3 NOT done (see below).
 NOT deployed. The unrelated anokii-shared-graph migration changes in the working
 tree (composer, AppServiceProvider additions, config/anokii.yaml, new tests) were
 left untouched.
+
+## 2026-06-14 Job 3 (long-form unify onto base shell) — IN PROGRESS, committed incrementally
+
+Tree confirmed clean and Jobs 1/2/4 committed (commit c4eee8d) before starting; the
+anokii-shared-graph migration is merged (no longer mid-migration).
+
+Transformation recipe (validated, theme-aware): per doc, `{% extends 'base.html.twig' %}`
++ title/description/body_class blocks + `{% block head_styles %}`; the doc's `:root`
+and `body` rules become `.docwrap` with COLOUR tokens remapped to site tokens
+(--bg->--paper, --surface->--paper-2/3, --ink-soft->--ink-2, --ink-mute->--ink-3,
+--rule-soft->--rule, --highlight->--accent-wash; --ink/--rule/--accent/--accent-soft
+omitted so they inherit site values; fonts->--font-*; gaps/content kept). Content
+wrapped in `<div class="docwrap">`; the doc's own masthead and footer dropped (base
+provides nav + footer). Layout/typography/content unchanged; only colour changes.
+
+DONE and verified in BOTH light and dark, committed:
+- positions/prescribeit (commit ec4ad3d)
+- positions/counter-disinformation (commit 49eb387)
+
+REMAINING (not yet done):
+- disclosure/sagamok-portal — heavier: originally DARK-themed, ~27 hardcoded hex
+  values scattered through the rules (not just :root) plus an inline SVG diagram
+  with its own palette. Needs per-rule colour remap + the SVG either remapped or
+  put in a fixed-dark panel.
+- explainers/robinson-huron-treaty + robinson-huron-treaty-distribution-models
+- explainers/massey-solar-project + -what-youve-heard + -voices + -climate-and-environment
+  (the explainer clusters share a structure, so once one is converted the rest follow
+  the same edits; several have inline SVG/specimen visuals to handle like the disclosure.)
+
+Stopped before deploy for review, with the 2 positions durable on a clean tree.
