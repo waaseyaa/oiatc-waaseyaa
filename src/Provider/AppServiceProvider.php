@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
+use Anokii\Config\DistributionConfig;
 use App\Analytics\AnalyticsRecorder;
 use App\Analytics\AnalyticsReport;
 use App\Analytics\AnalyticsSchema;
@@ -23,7 +24,6 @@ use App\Support\ChatPromptBuilder;
 use App\Support\GraphRetriever;
 use App\Support\SqliteRateLimiter;
 use App\Support\TopicVocabulary;
-use Anokii\Config\DistributionConfig;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Waaseyaa\AI\Agent\Provider\AnthropicProvider;
@@ -47,7 +47,7 @@ final class AppServiceProvider extends ServiceProvider
         // would resolve to the safe-by-default sovereign posture).
         $this->singleton(
             DistributionConfig::class,
-            fn (): DistributionConfig => DistributionConfig::fromFile($this->projectRoot . '/config/anokii.yaml'),
+            fn(): DistributionConfig => DistributionConfig::fromFile($this->projectRoot . '/config/anokii.yaml'),
         );
     }
 
@@ -66,7 +66,7 @@ final class AppServiceProvider extends ServiceProvider
             // guarded by tableExists() and ensureCampaign() only inserts when
             // the slug is absent. Storage is OIATC's own SQLite on the storage
             // volume (sovereign at rest); see PetitionSchema for the OCAP note.
-            (new PetitionSchema($this->persistentDatabase()))->ensure();
+            new PetitionSchema($this->persistentDatabase())->ensure();
             $this->petitionRepository()->ensureCampaign(
                 'sagamok-data-governance',
                 'Member data governance at Sagamok',
@@ -713,7 +713,9 @@ final class AppServiceProvider extends ServiceProvider
             );
         }
 
-        $legacyPaths = ['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
+        // '/about' is a real page (see the 'about' route above), so it is not a
+        // legacy redirect; the rest redirect to home.
+        $legacyPaths = ['/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'];
         foreach ($legacyPaths as $legacyPath) {
             $router->addRoute(
                 'legacy.redirect' . str_replace('/', '.', $legacyPath),

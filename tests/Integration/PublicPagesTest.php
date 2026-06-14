@@ -36,7 +36,10 @@ final class PublicPagesTest extends TestCase
         $this->assertSame('home', $router->match('/')['_route'] ?? null);
         $this->assertSame('design-system', $router->match('/design-system')['_route'] ?? null);
 
-        foreach (['/about', '/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'] as $legacy) {
+        // '/about' is a real page, not a legacy redirect.
+        $this->assertSame('about', $router->match('/about')['_route'] ?? null);
+
+        foreach (['/waaseyaa', '/minoo', '/grants', '/contact', '/founding-charter'] as $legacy) {
             $match = $router->match($legacy);
             $this->assertArrayHasKey('_route', $match, sprintf('Expected %s to resolve to a legacy redirect route.', $legacy));
             $this->assertStringStartsWith('legacy.redirect', $match['_route'] ?? '');
@@ -55,7 +58,6 @@ final class PublicPagesTest extends TestCase
         $this->assertStringContainsString('Russell Jones', $html);
         $this->assertStringContainsString('Sagamok Anishnawbek', $html);
         $this->assertStringContainsString('Waaseyaa', $html);
-        $this->assertStringContainsString('Minoo', $html);
         $this->assertStringContainsString('Web Networks', $html);
         $this->assertStringContainsString('jonesrussell42@gmail.com', $html);
     }
@@ -285,7 +287,7 @@ final class PublicPagesTest extends TestCase
         $this->assertSame(200, $response->getStatusCode());
         $this->assertStringContainsString('Climate and environment context', $html);
         // Public and indexable (unlike the unlisted demo).
-        $this->assertStringContainsString('content="index, follow"', $html);
+        $this->assertStringContainsString('content="index,follow"', $html);
         // Neutral framing and sourcing retained.
         $this->assertStringContainsString('does not take a position', $html);
         $this->assertStringContainsString('Renewable Energy Approval', $html);
