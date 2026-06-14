@@ -63,7 +63,7 @@ final class IngestDocsCommand
         '/programs/anishinaabemowin' => 'programs/anishinaabemowin.html.twig',
         '/programs/anokii' => 'programs/anokii.html.twig',
         '/programs/community-knowledge' => 'programs/community-knowledge.html.twig',
-        '/programs/transparency' => 'programs/transparency.html.twig',
+        '/programs/member-resources' => 'programs/member-resources.html.twig',
     ];
 
     public function __construct(

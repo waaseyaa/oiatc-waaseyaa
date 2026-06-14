@@ -120,9 +120,9 @@ final class HomeController
         return $this->renderTemplate('programs/community-knowledge.html.twig');
     }
 
-    public function programTransparency(): Response
+    public function programMemberResources(): Response
     {
-        return $this->renderTemplate('programs/transparency.html.twig');
+        return $this->renderTemplate('programs/member-resources.html.twig');
     }
 
     public function sagamokPortalDisclosure(): Response

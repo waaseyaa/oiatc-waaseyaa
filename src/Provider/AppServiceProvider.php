@@ -221,9 +221,19 @@ final class AppServiceProvider extends ServiceProvider
         );
 
         $router->addRoute(
+            'programs.member-resources',
+            RouteBuilder::create('/programs/member-resources')
+                ->controller(fn() => $controller->programMemberResources())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
+        // Renamed from /programs/transparency on 2026-06-14; 301 the old path.
+        $router->addRoute(
             'programs.transparency',
             RouteBuilder::create('/programs/transparency')
-                ->controller(fn() => $controller->programTransparency())
+                ->controller(fn() => new RedirectResponse('/programs/member-resources', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),

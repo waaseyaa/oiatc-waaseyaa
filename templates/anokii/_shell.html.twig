@@ -12,8 +12,6 @@
 
 {% block body_class %}route-anokii anokii{% endblock %}
 
-{% block topnav %}<a href="/anokii">Anokii</a>{% endblock %}
-
 {% block head_styles %}
   <style>
     /* One outer container shared with the masthead (.top__inner) and footer
@@ -97,7 +95,7 @@
 {% block content %}
 <div class="ak-shell">
   <aside class="ak-side">
-    <div class="ak-brand"><span>Anokii</span></div>
+    <div class="ak-brand"><a href="/anokii" style="color: inherit; text-decoration: none"><span>Anokii</span></a></div>
     <p class="ak-tag">A shared community knowledge graph from OIATC.</p>
 
     <nav class="ak-switch" aria-label="Community">

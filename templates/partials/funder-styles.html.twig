@@ -105,4 +105,18 @@
   .fund-more__links a:hover { text-decoration: underline; }
 
   .fund-byline { font-size: 13.5px; color: var(--ink-3); line-height: 1.6; margin: var(--gap-7) 0 0; padding-top: var(--gap-4); border-top: 1px solid var(--rule); max-width: 92ch; }
+
+  /* Status ladder: one badge, three tiers. Idea < Prototype < Live.
+     Live = in real use; Prototype = working proof of concept; Idea = designed. */
+  .fund-stage { display: inline-block; font-family: var(--font-mono); font-size: 9.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; border-radius: 999px; padding: 2px 9px; line-height: 1.5; white-space: nowrap; vertical-align: middle; border: 1px solid transparent; }
+  .fund-stage--live { background: var(--accent-deep); color: #fff; }
+  .fund-stage--proto { background: var(--accent-wash); color: var(--accent-deep); border-color: var(--accent-soft); }
+  .fund-stage--idea { background: var(--paper-3); color: var(--ink-3); border-color: var(--rule); }
+
+  /* Work-by-stage list: a badge then the item. Reuses .fund-links spacing. */
+  .fund-links li .fund-stage { margin-right: 8px; }
+
+  /* The honest principle line on /programs. */
+  .fund-principle { font-size: 14px; line-height: 1.6; color: var(--ink-2); background: var(--paper-2); border: 1px solid var(--rule); border-left: 3px solid var(--accent); border-radius: var(--radius-md); padding: 14px 18px; margin: var(--gap-5) 0 0; max-width: 80ch; }
+  .fund-principle strong { color: var(--ink); }
 </style>

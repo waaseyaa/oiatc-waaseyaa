@@ -3,9 +3,8 @@
 {% block title %}Anokii · OIATC{% endblock %}
 {% block description %}Anokii is a shared community knowledge graph from OIATC. One graph, many vantage points: communities, the resources around them, and the projects they share. Independent of the communities named; public information only.{% endblock %}
 {% block body_class %}route-anokii-home{% endblock %}
-{% block topnav %}<a href="/">&larr; Home</a>{% endblock %}
 
-{% block head_styles %}
+{% block head_styles %}{% include 'partials/funder-styles.html.twig' %}
   <style>
     .akh-wrap { max-width: 880px; margin: 0 auto; padding: var(--gap-7) var(--gap-5) var(--gap-9); }
     .akh-lead { color: var(--ink-2); max-width: 64ch; margin: 0 0 var(--gap-6); }
@@ -38,14 +37,14 @@
 
   <p class="akh-h">Modules</p>
   <div class="akh-mods">
-    <div class="akh-mod is-live">Co-Intelligence <span class="akh-tag">Live</span></div>
-    <div class="akh-mod is-live">Resources <span class="akh-tag">Live</span></div>
-    <div class="akh-mod">Drive <span class="akh-tag">Preview</span></div>
-    <div class="akh-mod">Data Rooms <span class="akh-tag">Preview</span></div>
-    <div class="akh-mod">Workspaces <span class="akh-tag">Preview</span></div>
-    <div class="akh-mod">Vault <span class="akh-tag">Preview</span></div>
-    <div class="akh-mod">Governance <span class="akh-tag">Preview</span></div>
-    <div class="akh-mod">Portal <span class="akh-tag">Preview</span></div>
+    <div class="akh-mod is-live">Co-Intelligence <span class="fund-stage fund-stage--live">Live</span></div>
+    <div class="akh-mod is-live">Resources <span class="fund-stage fund-stage--live">Live</span></div>
+    <div class="akh-mod">Drive <span class="fund-stage fund-stage--idea">Idea</span></div>
+    <div class="akh-mod">Data Rooms <span class="fund-stage fund-stage--idea">Idea</span></div>
+    <div class="akh-mod">Workspaces <span class="fund-stage fund-stage--idea">Idea</span></div>
+    <div class="akh-mod">Vault <span class="fund-stage fund-stage--idea">Idea</span></div>
+    <div class="akh-mod">Governance <span class="fund-stage fund-stage--idea">Idea</span></div>
+    <div class="akh-mod">Portal <span class="fund-stage fund-stage--idea">Idea</span></div>
   </div>
 
   <nav class="akh-note" aria-label="More from this program">
