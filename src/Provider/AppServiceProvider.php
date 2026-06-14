@@ -23,6 +23,7 @@ use App\Support\ChatPromptBuilder;
 use App\Support\GraphRetriever;
 use App\Support\SqliteRateLimiter;
 use App\Support\TopicVocabulary;
+use Anokii\Config\DistributionConfig;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Waaseyaa\AI\Agent\Provider\AnthropicProvider;
@@ -38,7 +39,17 @@ final class AppServiceProvider extends ServiceProvider
 {
     private ?DatabaseInterface $persistentDatabase = null;
 
-    public function register(): void {}
+    public function register(): void
+    {
+        // Anokii distribution posture: OIATC runs in the shared-graph tier.
+        // Loaded from config/anokii.yaml so the install's tenancy mode and
+        // module gate are resolvable from the container (lazy; a missing file
+        // would resolve to the safe-by-default sovereign posture).
+        $this->singleton(
+            DistributionConfig::class,
+            fn (): DistributionConfig => DistributionConfig::fromFile($this->projectRoot . '/config/anokii.yaml'),
+        );
+    }
 
     public function boot(): void
     {

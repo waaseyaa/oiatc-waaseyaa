@@ -1,0 +1,37 @@
+# Anokii distribution configuration for OIATC.
+# SPDX-License-Identifier: GPL-2.0-or-later
+#
+# OIATC runs on the Anokii distribution (waaseyaa/anokii) in the SHARED-GRAPH
+# tier: one public install serving many communities as vantage views over a
+# shared PUBLIC graph (Community, Place, Org, Service, Project, Topic). Only
+# public-sourced data lives in the shared layer; there is no member data and no
+# member login. Loaded by Anokii\Config\DistributionConfig
+# (src/Config/DistributionConfig.php), bound in AppServiceProvider.
+
+# The tier switch. OIATC is the canonical shared-graph install.
+tenancy_mode: shared-graph
+
+# Data-residency posture, stated explicitly. Shared-graph holds only
+# public-sourced data; cross-tenant reads are permitted but the framework
+# FieldAccessPolicyInterface still keeps anything above the public tier
+# Forbidden across tenants.
+data_residency:
+  ownership: shared
+  default_classification: public
+  cross_tenant_reads: true
+
+# Module surface gate. OIATC's live public surfaces are the Co-Intelligence
+# chat and the Resources surface. The sovereign-workspace WP04 surfaces are not
+# part of this public install, so they are flagged preview (not production).
+modules:
+  enabled:
+    - cointelligence
+    - resources
+  preview:
+    - governed-drive
+    - forms
+    - tasks
+    - data-rooms
+    - docs
+    - sheets
+    - admin-centre
