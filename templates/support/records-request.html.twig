@@ -79,6 +79,10 @@
     .rr-share { margin: 14px 0 0; font-size: 14px; color: var(--ink-2); }
     .rr-copy { -webkit-appearance: none; appearance: none; cursor: pointer; border: 1px solid var(--accent-soft); background: var(--accent-wash); color: var(--accent-deep); font: inherit; font-size: 13px; font-weight: 600; padding: 5px 12px; border-radius: 999px; margin-left: 4px; }
     .rr-copy:hover { border-color: var(--accent); }
+    .rr-sharebar { margin: 0 0 18px; font-size: 13.5px; color: var(--ink-2); display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; }
+    .rr-card.is-done .rr-sharebar { display: none; }
+    .rr-sharebtn { -webkit-appearance: none; appearance: none; cursor: pointer; border: none; background: var(--accent); color: var(--paper); font: inherit; font-size: 13px; font-weight: 700; padding: 6px 16px; border-radius: 999px; display: inline-flex; align-items: center; gap: 6px; }
+    .rr-sharebtn:hover { filter: brightness(1.05); }
   </style>
 {% endblock %}
 
@@ -114,6 +118,11 @@
     <h2 id="rr-h">Add your name</h2>
     <p class="rr-count" data-rr-countbox hidden>Joined by <b data-rr-count>0</b> members and supporters so far</p>
     <p class="rr-paper" data-rr-paper hidden></p>
+
+    <p class="rr-sharebar">Share this page:
+      <button type="button" class="rr-sharebtn" data-rr-share hidden>Share</button>
+      <button type="button" class="rr-copy" data-rr-copy>Copy link</button>
+    </p>
 
     <form class="rr-form" data-rr-form novalidate>
       <div class="rr-honey" aria-hidden="true"><label>Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -164,7 +173,7 @@
     <div class="rr-done" data-rr-done aria-live="polite">
       <h3>Miigwech, your name has been added.</h3>
       <p data-rr-donecount></p>
-      <p class="rr-share">Help it grow: ask another member to add their name. <button type="button" class="rr-copy" data-rr-copy>Copy link to share</button></p>
+      <p class="rr-share">Help it grow: ask another member to add their name. <button type="button" class="rr-sharebtn" data-rr-share hidden>Share</button> <button type="button" class="rr-copy" data-rr-copy>Copy link to share</button></p>
       <p class="rr-remove" data-rr-removewrap hidden>Changed your mind? <a href="#" data-rr-remove>Remove my signature</a>. Keep this link private to you.</p>
     </div>
 
@@ -278,17 +287,41 @@
         });
     });
 
-    // Copy-link-to-share button (shown in the post-sign "done" state).
-    var copyBtn = card.querySelector('[data-rr-copy]');
-    if (copyBtn) {
-      copyBtn.addEventListener('click', function () {
-        var url = location.origin + '/support/records-request';
-        var ok = function () { copyBtn.textContent = 'Link copied'; setTimeout(function () { copyBtn.textContent = 'Copy link to share'; }, 2000); };
-        if (navigator.clipboard && navigator.clipboard.writeText) {
-          navigator.clipboard.writeText(url).then(ok).catch(function () { window.prompt('Copy this link:', url); });
-        } else {
-          window.prompt('Copy this link:', url);
-        }
+    // Share / copy controls. Native device share (Web Share API) where the
+    // browser supports it, with copy-link as the universal fallback. The same
+    // handlers serve the persistent share bar and the post-sign "done" state.
+    var shareUrl = location.origin + '/support/records-request';
+
+    function copyLink(btn) {
+      var orig = btn.getAttribute('data-orig') || btn.textContent;
+      btn.setAttribute('data-orig', orig);
+      var ok = function () { btn.textContent = 'Link copied'; setTimeout(function () { btn.textContent = orig; }, 2000); };
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(shareUrl).then(ok).catch(function () { window.prompt('Copy this link:', shareUrl); });
+      } else {
+        window.prompt('Copy this link:', shareUrl);
+      }
+    }
+
+    function nativeShare() {
+      if (!navigator.share) return;
+      navigator.share({
+        title: 'Support the member records request',
+        text: 'Add your name to the member records request to Sagamok Chief and Council.',
+        url: shareUrl
+      }).catch(function () {});
+    }
+
+    card.querySelectorAll('[data-rr-copy]').forEach(function (btn) {
+      btn.addEventListener('click', function () { copyLink(btn); });
+    });
+
+    // Only reveal the native Share button on devices that support it; the copy
+    // button remains as the fallback everywhere else.
+    if (navigator.share) {
+      card.querySelectorAll('[data-rr-share]').forEach(function (btn) {
+        btn.hidden = false;
+        btn.addEventListener('click', nativeShare);
       });
     }
 

@@ -372,3 +372,14 @@ on paper and physically handed in, alongside the online rows, in its public tota
   office) on June 15, 2026.").
 - Verified locally: API count = online + 16, paper note present; CI gates green. The other
   campaign (sagamok-data-governance) is unaffected (paper_count 0).
+
+## 2026-06-15 records-request: native device share
+
+Added a native Share (Web Share API) control to /support/records-request.
+- Persistent "Share this page:" bar above the form (visible to everyone), plus a Share button
+  in the post-sign "Help it grow" line. Both use navigator.share({title,text,url}).
+- Progressive enhancement: the Share button is hidden unless navigator.share exists; the
+  existing Copy link is the universal fallback (works on desktop too). Handlers generalized
+  to wire all share/copy buttons (querySelectorAll), copy label restores per-button via data-orig.
+- Template-only change; gates green (cs-fixer, phpunit 112/630). Verified: share bar renders,
+  copy success path fires (label -> "Link copied"), Share hidden where unsupported. No em dashes.
