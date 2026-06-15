@@ -95,7 +95,7 @@ final class PetitionController
         return new JsonResponse([
             'ok' => true,
             'status' => $result['status'],
-            'count' => $this->petitions->verifiedCount((int) $campaign['id']),
+            'count' => $this->petitions->publicCount($campaign),
             'manage_url' => '/petition/remove/' . $result['token'],
             'recipient' => (string) $campaign['recipient'],
         ]);
@@ -120,7 +120,11 @@ final class PetitionController
             'title' => (string) $campaign['title'],
             'the_ask' => (string) $campaign['the_ask'],
             'recipient' => (string) $campaign['recipient'],
-            'count' => $this->petitions->verifiedCount((int) $campaign['id']),
+            'count' => $this->petitions->publicCount($campaign),
+            // Aggregate count of signatures collected on paper and handed in,
+            // included in `count`, plus a dated public provenance note.
+            'paper_count' => (int) ($campaign['paper_count'] ?? 0),
+            'paper_note' => (string) ($campaign['paper_note'] ?? ''),
             // Privacy-safe: only signers who chose "show my name publicly",
             // as first name + last initial. Pages may or may not render these.
             'recent' => $this->petitions->recentPublicSupporters((int) $campaign['id']),

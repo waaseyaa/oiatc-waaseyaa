@@ -55,6 +55,32 @@ final class PetitionRepository
         );
     }
 
+    /**
+     * Set the count of signatures collected on paper and handed in for a
+     * campaign, with a short public provenance note (where and when). This is an
+     * aggregate count only; no paper signer's personal data is stored. Idempotent:
+     * it only writes when the count or note actually changes, so it is safe to
+     * reconcile from code on every boot.
+     */
+    public function setPaperCount(string $slug, int $count, string $note): bool
+    {
+        $campaign = $this->findCampaign($slug);
+        if ($campaign === null) {
+            return false;
+        }
+        $count = max(0, $count);
+        if ((int) ($campaign['paper_count'] ?? 0) === $count && (string) ($campaign['paper_note'] ?? '') === $note) {
+            return false;
+        }
+        $this->db->query(
+            'UPDATE ' . PetitionSchema::TABLE_CAMPAIGN
+            . ' SET paper_count = ?, paper_note = ?, paper_updated_at = ? WHERE slug = ?',
+            [$count, $note, $this->now(), $slug],
+        );
+
+        return true;
+    }
+
     /** @return array<string, mixed>|null */
     public function findCampaign(string $slug): ?array
     {
@@ -179,6 +205,18 @@ final class PetitionRepository
     }
 
     // ---- Public read surface --------------------------------------------
+
+    /**
+     * The public support total for a campaign: verified online signatures plus
+     * the signatures collected on paper and handed in. Takes the campaign row so
+     * callers that already loaded it avoid a second query.
+     *
+     * @param array<string, mixed> $campaign
+     */
+    public function publicCount(array $campaign): int
+    {
+        return $this->verifiedCount((int) $campaign['id']) + (int) ($campaign['paper_count'] ?? 0);
+    }
 
     public function verifiedCount(int $campaignId): int
     {

@@ -29,6 +29,7 @@
     .rr-card h2 { font-family: var(--font-serif); font-weight: 500; font-size: 22px; margin: 0 0 4px; color: var(--ink); }
     .rr-count { margin: 0 0 18px; font-size: 15px; color: var(--ink-2); }
     .rr-count b { font-family: var(--font-sans); font-size: 22px; font-weight: 700; color: var(--accent-deep); font-variant-numeric: tabular-nums; }
+    .rr-paper { margin: -12px 0 18px; font-size: 13px; line-height: 1.5; color: var(--ink-3); }
 
     .rr-field { margin: 0 0 16px; }
     .rr-label { display: block; font-family: var(--font-sans); font-size: 13px; font-weight: 600; color: var(--ink); margin: 0 0 5px; }
@@ -112,6 +113,7 @@
   <section class="rr-card" data-rr aria-labelledby="rr-h">
     <h2 id="rr-h">Add your name</h2>
     <p class="rr-count" data-rr-countbox hidden>Joined by <b data-rr-count>0</b> members and supporters so far</p>
+    <p class="rr-paper" data-rr-paper hidden></p>
 
     <form class="rr-form" data-rr-form novalidate>
       <div class="rr-honey" aria-hidden="true"><label>Leave blank<input type="text" name="website" tabindex="-1" autocomplete="off"></label></div>
@@ -196,6 +198,12 @@
       if (box) box.hidden = false;
     }
 
+    function setPaper(count, note) {
+      if (!count || !note) return;
+      var el = card.querySelector('[data-rr-paper]');
+      if (el) { el.textContent = note; el.hidden = false; }
+    }
+
     function renderSupporters(recent) {
       if (!recent || !recent.length) return;
       var wrap = document.querySelector('[data-rr-supporters]');
@@ -213,7 +221,7 @@
     function hydrate() {
       fetch('/api/petition/' + SLUG, { headers: { 'Accept': 'application/json' } })
         .then(function (r) { return r.ok ? r.json() : null; })
-        .then(function (d) { if (d && d.ok) { setCount(d.count); renderSupporters(d.recent); } })
+        .then(function (d) { if (d && d.ok) { setCount(d.count); setPaper(d.paper_count, d.paper_note); renderSupporters(d.recent); } })
         .catch(function () {});
     }
 

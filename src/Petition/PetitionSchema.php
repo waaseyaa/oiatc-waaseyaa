@@ -39,6 +39,48 @@ final class PetitionSchema
         $this->ensureCampaignTable();
         $this->ensureSignatureTable();
         $this->ensureSignatureColumns();
+        $this->ensureCampaignColumns();
+    }
+
+    /**
+     * Additive column migrations for the campaign table: an aggregate count of
+     * signatures collected on paper and physically handed in, kept beside the
+     * online rows so the public total reflects real-world support too. Guarded
+     * by PRAGMA so it is idempotent and safe on every boot. No personal data is
+     * stored here, only a count and a dated, public provenance note.
+     */
+    private function ensureCampaignColumns(): void
+    {
+        if (!$this->db->schema()->tableExists(self::TABLE_CAMPAIGN)) {
+            return;
+        }
+
+        // Never let a migration hiccup take down app boot (see the signature note).
+        try {
+            $have = [];
+            foreach ($this->db->query('PRAGMA table_info(' . self::TABLE_CAMPAIGN . ')') as $row) {
+                $have[(string) $row['name']] = true;
+            }
+
+            if (!isset($have['paper_count'])) {
+                $this->db->query(
+                    'ALTER TABLE ' . self::TABLE_CAMPAIGN
+                    . ' ADD COLUMN paper_count int NOT NULL DEFAULT 0',
+                );
+            }
+            if (!isset($have['paper_note'])) {
+                $this->db->query(
+                    'ALTER TABLE ' . self::TABLE_CAMPAIGN . ' ADD COLUMN paper_note varchar(255)',
+                );
+            }
+            if (!isset($have['paper_updated_at'])) {
+                $this->db->query(
+                    'ALTER TABLE ' . self::TABLE_CAMPAIGN . ' ADD COLUMN paper_updated_at varchar(19)',
+                );
+            }
+        } catch (\Throwable) {
+            // swallow — see ensureSignatureColumns note
+        }
     }
 
     /**
@@ -90,6 +132,11 @@ final class PetitionSchema
                 'recipient' => ['type' => 'varchar', 'length' => 255, 'not null' => true],
                 'active' => ['type' => 'int', 'not null' => true, 'default' => 1],
                 'created_at' => ['type' => 'varchar', 'length' => 19, 'not null' => true],
+                // Signatures collected on paper and physically handed in (an
+                // aggregate count only), plus a dated public provenance note.
+                'paper_count' => ['type' => 'int', 'not null' => true, 'default' => 0],
+                'paper_note' => ['type' => 'varchar', 'length' => 255],
+                'paper_updated_at' => ['type' => 'varchar', 'length' => 19],
             ],
             'primary key' => ['id'],
             'indexes' => [

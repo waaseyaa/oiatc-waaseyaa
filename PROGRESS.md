@@ -352,3 +352,23 @@ Updated councilMembersPost() body (reaches the live row via reconcileManagedPost
 - Oliver's line: "...and governance experience as OIATC incorporates" (was "joins the board as OIATC incorporates").
 - Explicit meta description updated to match ("OIATC has added two people to the council...").
 Kept bold lead-ins, Steven's first-mention Facebook link, the /about "council page" link, CTA, OG card, slug, and 2026-06-15 date unchanged. Verified locally (200, no em dashes); CI gates green.
+
+## 2026-06-15 Petition: count paper signatures handed in
+
+The records-request petition (records-request-support) now includes signatures collected
+on paper and physically handed in, alongside the online rows, in its public total.
+
+- Schema: petition_campaign gains paper_count (int, default 0), paper_note, paper_updated_at
+  (additive, PRAGMA-guarded migration + createTable; idempotent at boot). Aggregate count only,
+  no paper signer PII (consistent with the OCAP/sovereignty note).
+- Repo: setPaperCount(slug, count, note) (idempotent, writes only on change) and
+  publicCount(campaign) = verified online + paper_count.
+- Boot: setPaperCount('records-request-support', 16, dated provenance note). Code-managed;
+  bump the number here when another batch is handed in.
+- API /api/petition/{slug} and the sign response now return the combined publicCount; info()
+  also returns paper_count + paper_note.
+- records-request page shows a small dated note under the count when paper_count > 0
+  ("Includes signatures collected on paper and handed to the Sagamok band office (political
+  office) on June 15, 2026.").
+- Verified locally: API count = online + 16, paper note present; CI gates green. The other
+  campaign (sagamok-data-governance) is unaffected (paper_count 0).

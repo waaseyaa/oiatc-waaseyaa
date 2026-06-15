@@ -79,6 +79,14 @@ final class AppServiceProvider extends ServiceProvider
                 'We, the undersigned members of Sagamok Anishnawbek, support the records request submitted to Chief and Council. We want clear answers, on the record, to one question: when the Nation invests in businesses and ventures, what are the benefits to the membership, and who is being served? We ask Council to provide the records and respond to the membership.',
                 'Sagamok Chief and Council',
             );
+            // Signatures collected on paper and physically handed in count toward
+            // the public total alongside the online rows. Code-managed and dated:
+            // bump this when another batch is handed in. Aggregate only, no PII.
+            $this->petitionRepository()->setPaperCount(
+                'records-request-support',
+                16,
+                'Includes signatures collected on paper and handed to the Sagamok band office (political office) on June 15, 2026.',
+            );
         }
     }
 
