@@ -313,3 +313,14 @@ left as-is. Not changed (flagged earlier): design-system.html.twig sample copy.
 Verified: all changed pages 200; new wording present; 0 residual overclaims
 (actually use / vantages live / cited by local press / already shipped / checked at every
 step / records fluent speakers) on public pages; no em dashes added.
+
+## 2026-06-15 Council finalization: Steven Bennett (Elder), 3-col layout, Oliver trim, design-system cleanup
+
+Built + verified locally (light + dark, no em dashes); honesty pass already shipped (6018463).
+
+- Council card layout: home #council grid-2 -> grid-3 (3 council members in one row, no orphan); about .fund-profiles -> 3-column. Steven Bennett added as a full-width featured Elder/Knowledge Keeper card below the members on both (home: full-width .card; about: .fund-profiles--single).
+- Steven Bennett: eyebrow "Elder · Knowledge Keeper", name linked to Facebook (profile id 61582894730998), meta "Fluent speaker of Anishinaabemowin", body "A fluent speaker who shares his teachings of Anishinaabemowin publicly. His recordings are the foundation of the language program, used with his agreement, and he guides the council on language and cultural knowledge." Named in /about "Where we are".
+- Oliver bio softened: dropped "and grounds its governance" (home + about) -> "...Joins the board as OIATC incorporates."
+- Elder/Knowledge Keeper recruitment ask removed (now filled): home "Also seeking" line, /about "Who we're looking for", and /support "Help that is not money" list.
+- design-system showcase cleaned: no "council of two" / "second member" / "two members today" wording remains anywhere (sample copy -> "A small council..." / "...sits on the council." / "The council is small today.").
+- Verified: all pages 200; correct titles; 0 residual "council of two"/"second member"/"two members" sitewide incl design-system; CI gates green locally (cs-fixer, phpstan, phpunit 112/630).
