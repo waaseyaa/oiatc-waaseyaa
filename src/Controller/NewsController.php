@@ -403,9 +403,9 @@ final class NewsController
         return [
             'title' => 'OIATC welcomes an Elder and a director to the council',
             'slug' => 'council-elder-and-director',
-            'body' => '<p>OIATC is adding two people to the council as it incorporates as a not-for-profit corporation: an Elder and Knowledge Keeper, and a director. The council stays small, and grows on fit rather than urgency.</p>'
-                . '<p><strong><a href="https://www.facebook.com/profile.php?id=61582894730998" target="_blank" rel="noopener">Steven Bennett</a></strong> joins as the council\'s Elder and Knowledge Keeper. He is a fluent speaker who shares his teachings of Anishinaabemowin publicly, and his recorded teachings are the foundation of OIATC\'s language program, used with his agreement. He guides the council on language and cultural knowledge.</p>'
-                . '<p><strong>Oliver Zielke</strong> joins as a director. A former Director at Web Networks, the non-profit worker co-op that provides OIATC\'s hosting foundation, he brings a background in non-profit and open-source technology, and joins the board as OIATC incorporates.</p>'
+            'body' => '<p>OIATC has added two people to the council as it incorporates as a not-for-profit: an Elder and Knowledge Keeper, and a director. The council stays small, and grows on fit rather than urgency.</p>'
+                . '<p><strong><a href="https://www.facebook.com/profile.php?id=61582894730998" target="_blank" rel="noopener">Steven Bennett</a></strong> joins as the council\'s Elder and Knowledge Keeper. He is a fluent speaker who shares his teachings of Anishinaabemowin publicly, and his recorded teachings are the foundation of OIATC\'s language program, used with his agreement. He guides the council on language, on protocol, and on how community knowledge is used.</p>'
+                . '<p><strong>Oliver Zielke</strong> joins as a director. A former Director at Web Networks, the non-profit worker co-op that provides OIATC\'s hosting foundation, he brings a background in non-profit and open-source technology, and governance experience as OIATC incorporates.</p>'
                 . '<p>Full profiles are on the <a href="/about">council page</a>.</p>',
             // 2026-06-15 00:00:00 UTC
             'published_at' => 1781481600,
@@ -511,7 +511,7 @@ final class NewsController
             'anishinaabemowin-doll-plan' => 'OIATC has published the plan for a doll that speaks Anishinaabemowin: a fluent Elder\'s voice in a child\'s hands, offline, recordings held by the community.',
             'site-programs-restructure' => 'OIATC has reorganized its site around four named programs, each with shipped work and a clear funding ask.',
             'sovereign-ai-position' => 'OIATC\'s position on a US export order that switched off two major AI models worldwide overnight, and what it means for First Nations sovereignty.',
-            'council-elder-and-director' => 'OIATC is adding two people to the council as it incorporates: Steven Bennett as Elder and Knowledge Keeper, and Oliver Zielke as a director.',
+            'council-elder-and-director' => 'OIATC has added two people to the council as it incorporates: Steven Bennett as Elder and Knowledge Keeper, and Oliver Zielke as a director.',
             default => null,
         };
     }

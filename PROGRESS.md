@@ -343,3 +343,12 @@ posts (NewsController: councilMembersPost() in announcementPosts() + reconcileMa
   link, /about back-link + CTA, indexed newest-first, no em dashes; light + dark consistent
   with the rest of the site (scoped .news-* on site tokens); CI gates green (cs-fixer, phpstan,
   phpunit 112/630).
+
+## 2026-06-15 News post body refresh: council Elder + director
+
+Updated councilMembersPost() body (reaches the live row via reconcileManagedPost):
+- Tense to past ("OIATC has added two people..."), "not-for-profit corporation" -> "not-for-profit".
+- Steven's guidance line expanded: "on language, on protocol, and on how community knowledge is used."
+- Oliver's line: "...and governance experience as OIATC incorporates" (was "joins the board as OIATC incorporates").
+- Explicit meta description updated to match ("OIATC has added two people to the council...").
+Kept bold lead-ins, Steven's first-mention Facebook link, the /about "council page" link, CTA, OG card, slug, and 2026-06-15 date unchanged. Verified locally (200, no em dashes); CI gates green.
