@@ -247,3 +247,69 @@ masthead un-polluted, reads in light AND dark):
 
 Skipped (already base-extending): positions/sovereign-ai, explainers/where-your-data-lives,
 explainers/how-sagamok-is-organized.
+
+## 2026-06-15 Third council member: Oliver Zielke (retire "council of two")
+
+OIATC adds Oliver Zielke as a third council member and director. No other people added
+(no Elder, no Steven Bennett yet). Numberless, future-proof framing throughout.
+
+Public pages updated (built + verified locally, NOT deployed):
+- home: hero -> "A small council"; council heading -> "A small council, held with care.";
+  new Oliver card; Web Networks card drops "second member"; director ask -> "one more".
+- about: meta + og description -> "a small council"; "Where we are" names three members;
+  director ask -> "One more arm's-length director"; Web Networks drops "second member";
+  new Oliver profile.
+- support: director ask -> "One more arm's-length director".
+- base: default meta description -> "A small council".
+- one-pager (oiatc-onepager-source.html): h1 + "Also seeking" line; OIATC_One_Pager.pdf regenerated.
+
+Oliver card copy (suggested wording, pending Russell's confirmation):
+  eyebrow "Council member" / name "Oliver Zielke" / meta "Director · Non-profit technology" /
+  body "Former Director at Web Networks, with decades in non-profit and open-source technology.
+  Joins the board as OIATC incorporates and grounds its governance."
+
+Flagged, NOT changed (await decision):
+- templates/design-system.html.twig (6 occurrences of council-of-two / two-members / second-member
+  in the internal component showcase).
+- one-pager line "an incorporated not-for-profit with an Elder seat and two arm's-length directors
+  (in progress)" - target governance structure, may be unchanged if Oliver is one of those seats.
+
+3 cards now sit in a 2-column grid on both home and /about (2 on row 1, Oliver in the left
+column of row 2 at the same width). Stop before deploy for review.
+
+## 2026-06-15 Honesty pass (true status and tense)
+
+Rule applied: nothing aspirational, prototype, demo, or planned is stated as a delivered
+present fact. Built + verified locally; NOT deployed. (Same working tree as the council update.)
+
+HOME (home.html.twig):
+- Hero: "improving the systems that serve First Nations" -> "so First Nations choose the systems that serve them" (purpose, not claimed impact).
+- Anishinaabemowin card: badge "Flagship · live" -> "Flagship · in build"; body now reads corpus now / Lesson 1 in prototype / games returning at relaunch / doll in design / story nights to come.
+- Community knowledge card: "explainers members actually use" -> "explainers for members"; "Cited by local press" -> "Used by a local reporter".
+- Anokii card: "Nation-governed... Two vantages live" -> "designed to be Nation-governed... Two OIATC-run reference vantages running".
+- Support line + Funds-held fact: "named trusteeship" -> "trusteeship being arranged / before we accept funds".
+- Oliver bio: "decades in" -> "a background in".
+
+/about: Anokii one-liner -> "designed to be Nation-governed"; "explainers members actually use" -> "for members"; trusteeship -> future tense; Oliver inline + profile "decades" -> "a background".
+
+/support: "Two community vantages are live" -> "Two OIATC-run reference vantages are running"; trusteeship -> future tense.
+
+base.html.twig: (default meta already "working to improve" = purpose; left as-is).
+
+/programs (index): flagship badge "live" -> "in build"; Anishinaabemowin body reframed (stages); unlock "What is shipped" -> "What is built"; Anokii body -> "designed to be Nation-governed... OIATC-run reference vantages run today, seeded from public information"; unlock "The live vantages" -> "The reference vantages"; community-knowledge "actually use" -> "for members" and "cited by local press" -> "A local reporter used the Massey explainer".
+
+/programs/anishinaabemowin: meta "already shipped" -> stage-accurate; "It records fluent speakers now" -> "It records one fluent speaker"; "Consent is recorded as data and checked at every step" -> "The speaker agreed to how his recordings are used, and that consent is tracked"; "ships learning tools" -> "builds"; games badge Live -> Prototype.
+
+/anishinaabemowin (program home): meta reframed (stages); "records fluent speakers ... ships learning tools" -> "records one fluent speaker's teachings ... builds learning tools"; games badge Live -> Prototype.
+
+/programs/anokii: meta + lede + core paragraph reframed so the design is Nation-governed but the two running vantages are honestly OIATC-run demonstrations seeded from public information ("no Nation governs them yet"); consent/audit "records ... keeps" -> "is built to record ... keep"; the three instance/vantage badges Live -> Prototype (the Where-your-data-lives explainer stays Live); next-step "Two vantages are live" -> "Two OIATC-run reference vantages are running"; Sagamok/Massey vantages labelled as demonstrations from public information.
+
+/programs/member-resources: "resources a member can actually read/use" -> "can read/use".
+
+Anokii vantage pages (/anokii, /anokii/sagamok): already carried honest disclaimers
+(independent of the communities named, public information only, links to official sources);
+left as-is. Not changed (flagged earlier): design-system.html.twig sample copy.
+
+Verified: all changed pages 200; new wording present; 0 residual overclaims
+(actually use / vantages live / cited by local press / already shipped / checked at every
+step / records fluent speakers) on public pages; no em dashes added.

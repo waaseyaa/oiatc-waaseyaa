@@ -54,11 +54,12 @@ final class PublicPagesTest extends TestCase
 
         $this->assertSame(200, $response->getStatusCode());
         $this->assertStringContainsString('Ontario Indigenous AI', $html);
-        $this->assertStringContainsString('A council of two', $html);
+        $this->assertStringContainsString('A small council', $html);
         $this->assertStringContainsString('Russell Jones', $html);
         $this->assertStringContainsString('Sagamok Anishnawbek', $html);
         $this->assertStringContainsString('Waaseyaa', $html);
         $this->assertStringContainsString('Web Networks', $html);
+        $this->assertStringContainsString('Oliver Zielke', $html);
         $this->assertStringContainsString('jonesrussell42@gmail.com', $html);
     }
 
