@@ -35,6 +35,7 @@
   {% set disclosures = ['sagamok-portal'] %}
   {% set anokii_pages = ['anokii'] %}
   {% set project_pages = ['anishinaabemowin'] %}
+  {% set rel_title = post.related_explainer|replace({'-': ' '})|title %}
   {% if post.related_explainer in anokii_pages %}
     {% set rel_href = '/' ~ post.related_explainer %}
     {% set rel_label = 'Explore Anokii' %}
@@ -44,6 +45,10 @@
   {% elseif post.related_explainer == 'programs' %}
     {% set rel_href = '/programs' %}
     {% set rel_label = 'See the programs' %}
+  {% elseif post.related_explainer == 'council' %}
+    {% set rel_href = '/about' %}
+    {% set rel_label = 'Meet the council' %}
+    {% set rel_title = 'The council' %}
   {% elseif post.related_explainer in project_pages %}
     {% set rel_href = '/' ~ post.related_explainer %}
     {% set rel_label = 'Read the project page' %}
@@ -59,7 +64,7 @@
   {% endif %}
   <a class="news-cta" href="{{ rel_href }}">
     <span class="news-cta__k">{{ rel_label }}</span>
-    <span class="news-cta__t">{{ post.related_explainer|replace({'-': ' '})|title }} &rarr;</span>
+    <span class="news-cta__t">{{ rel_title }} &rarr;</span>
   </a>
 </article>
 {% endblock %}

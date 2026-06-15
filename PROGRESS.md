@@ -324,3 +324,22 @@ Built + verified locally (light + dark, no em dashes); honesty pass already ship
 - Elder/Knowledge Keeper recruitment ask removed (now filled): home "Also seeking" line, /about "Who we're looking for", and /support "Help that is not money" list.
 - design-system showcase cleaned: no "council of two" / "second member" / "two members today" wording remains anywhere (sample copy -> "A small council..." / "...sits on the council." / "The council is small today.").
 - Verified: all pages 200; correct titles; 0 residual "council of two"/"second member"/"two members" sitewide incl design-system; CI gates green locally (cs-fixer, phpstan, phpunit 112/630).
+
+## 2026-06-15 News post: council Elder + director announcement
+
+Published /news/council-elder-and-director ("OIATC welcomes an Elder and a director to
+the council"), 2026-06-15. Added as a NewsPost ensured-by-slug like the other announcement
+posts (NewsController: councilMembersPost() in announcementPosts() + reconcileManagedPost()
++ explicit short meta description).
+
+- Body: flowing <p> blocks with two bold lead-ins (Steven Bennett, Oliver Zielke); Steven's
+  first mention links to his public page; closes with a link to the council page.
+- Back-link / CTA: new related_explainer 'council' case in news/post.html.twig points the CTA
+  at /about ("Meet the council" / "The council"); added a rel_title override so the CTA title
+  is clean.
+- Own OG card generated locally (CI skips news cards: no PHP/DB on that runner) at
+  public/images/og/news/council-elder-and-director.png; the post serves it via ogImageFor().
+- Verified: 200, correct title, explicit meta, June 15 date, two <strong> lead-ins, Steven FB
+  link, /about back-link + CTA, indexed newest-first, no em dashes; light + dark consistent
+  with the rest of the site (scoped .news-* on site tokens); CI gates green (cs-fixer, phpstan,
+  phpunit 112/630).
