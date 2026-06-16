@@ -60,7 +60,6 @@ final class IngestDocsCommand
         '/about' => 'about.html.twig',
         '/support' => 'support.html.twig',
         '/programs' => 'programs/index.html.twig',
-        '/programs/anishinaabemowin' => 'programs/anishinaabemowin.html.twig',
         '/programs/anokii' => 'programs/anokii.html.twig',
         '/programs/community-knowledge' => 'programs/community-knowledge.html.twig',
         '/programs/member-resources' => 'programs/member-resources.html.twig',

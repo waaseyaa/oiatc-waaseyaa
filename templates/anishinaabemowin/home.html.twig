@@ -1,9 +1,9 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Anishinaabemowin · OIATC{% endblock %}
-{% block description %}OIATC's flagship language program: one fluent speaker's recorded teachings becoming a living course, with a curated corpus now, Lesson 1 in prototype, language games returning at relaunch, and a talking doll in design, on technology the community controls.{% endblock %}
+{% block description %}OIATC's flagship language program: one fluent speaker's recorded teachings becoming a living course, with a curated corpus now, Lesson 1 in prototype, language games returning at relaunch, and a talking doll now being built, on technology the community controls.{% endblock %}
 {% block og_title %}Anishinaabemowin{% endblock %}
-{% block og_description %}One fluent speaker's recorded teachings becoming a living course: a curated corpus now, Lesson 1 in prototype, language games returning at relaunch, and a talking doll in design.{% endblock %}
+{% block og_description %}One fluent speaker's recorded teachings becoming a living course: a curated corpus now, Lesson 1 in prototype, language games returning at relaunch, and a talking doll now being built.{% endblock %}
 {% block body_class %}route-anishinaabemowin{% endblock %}
 
 {% block head_styles %}{% include 'partials/funder-styles.html.twig' %}
@@ -23,6 +23,8 @@
     .lang-minoo__btn--live { color: var(--paper); background: var(--accent-deep); }
     .lang-minoo__btn--live:hover { filter: brightness(1.08); }
     .lang-minoo__btn--soon { color: var(--ink-2); background: var(--paper-3); border: 1px dashed var(--rule-strong); cursor: default; }
+    .lang-doll { background: var(--paper-2); border: 1px solid var(--rule); border-left: 4px solid var(--accent); border-radius: var(--radius-lg); padding: 20px 22px; margin: var(--gap-3) 0 0; display: flex; flex-wrap: wrap; align-items: center; gap: 14px; justify-content: space-between; }
+    .lang-doll p { margin: 0; color: var(--ink); font-size: 15px; line-height: 1.55; max-width: 54ch; }
   </style>
 {% endblock %}
 
@@ -58,8 +60,16 @@
       <li><span class="fund-stage fund-stage--live">Live</span> The curated corpus <span>· 27 items from one fluent speaker's teachings, consent-tracked</span></li>
       <li><span class="fund-stage fund-stage--proto">Prototype</span> Lesson 1 <span>· kitchen vocabulary, 16 items; goes live on Minoo at relaunch</span></li>
       <li><span class="fund-stage fund-stage--proto">Prototype</span> The language games <span>· Shkoda, Matcher, Agim, a crossword, and Minoo's Journey; built, on Minoo, returning at relaunch</span></li>
-      <li><span class="fund-stage fund-stage--idea">Idea</span> <a href="/anishinaabemowin/doll">The talking doll</a> <span>· a fluent Elder's voice in a child's hands, offline; in design</span></li>
+      <li><span class="fund-stage fund-stage--build">Building</span> <a href="/anishinaabemowin/doll">The talking doll</a> <span>· a fluent Elder's voice in a child's hands, offline; build started, posted as it goes</span></li>
     </ul>
+  </section>
+
+  <section class="fund-sec">
+    <h2>Building the doll</h2>
+    <div class="lang-doll">
+      <p>A soft doll with a fluent Elder's voice inside: squeeze a hand for Anishinaabemowin, squeeze again for English. No screen, no app, no internet. The build has started, and the doll page is the log, updated as it goes.</p>
+      <a class="lang-minoo__btn lang-minoo__btn--live" href="/anishinaabemowin/doll">See the doll and the build &rarr;</a>
+    </div>
   </section>
 
   <section class="fund-sec">
@@ -81,7 +91,15 @@
   <section class="fund-sec">
     <h2>The fundable next step</h2>
     <div class="fund-body">
-      <p>Funding extends the corpus beyond one speaker, ships the next lessons end to end, and pilots the doll batch and a season of community story nights. The <a href="/support">Support page</a> carries the specific asks.</p>
+      <p>Funding extends the corpus beyond one speaker, ships the next lessons end to end, and pilots the doll batch and a season of community story nights.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt">$25,000</span>
+      <p>Pilots the first doll batch and a season of story nights.</p>
+    </div>
+    <div class="fund-ask">
+      <span class="fund-ask__amt">$120,000</span>
+      <p>Funds a year of the program lead and Elder honoraria.</p>
     </div>
   </section>
 
@@ -89,7 +107,6 @@
     <p class="fund-more__k">More from this program</p>
     <div class="fund-more__links">
       <a href="/anishinaabemowin/doll">The talking doll</a>
-      <a href="/programs/anishinaabemowin">Funding summary</a>
       <a href="/programs">All programs</a>
       <a href="/support">Support this program</a>
     </div>

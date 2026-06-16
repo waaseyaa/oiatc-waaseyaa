@@ -105,11 +105,6 @@ final class HomeController
         return $this->renderTemplate('programs/index.html.twig');
     }
 
-    public function programAnishinaabemowin(): Response
-    {
-        return $this->renderTemplate('programs/anishinaabemowin.html.twig');
-    }
-
     public function programAnokii(): Response
     {
         return $this->renderTemplate('programs/anokii.html.twig');

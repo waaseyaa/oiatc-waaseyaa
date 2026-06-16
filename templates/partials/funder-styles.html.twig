@@ -67,7 +67,7 @@
   .fund-links { list-style: none; padding: 0; margin: var(--gap-3) 0 0; display: grid; gap: 8px; max-width: 80ch; }
   .fund-links li { font-size: 15px; line-height: 1.5; }
   .fund-links a { color: var(--accent-deep); }
-  .fund-links span { color: var(--ink-3); }
+  .fund-links span:not(.fund-stage) { color: var(--ink-3); }
 
   /* Statement band (theory of change) inside an editorial page */
   .fund-statement { background: var(--statement-bg); color: var(--statement-fg); border-radius: var(--radius-lg); padding: 28px 32px; margin: var(--gap-5) 0 0; }
@@ -113,6 +113,7 @@
   .fund-stage--live { background: var(--accent-deep); color: #fff; }
   .fund-stage--proto { background: var(--accent-wash); color: var(--accent-deep); border-color: var(--accent-soft); }
   .fund-stage--idea { background: var(--paper-3); color: var(--ink-3); border-color: var(--rule); }
+  .fund-stage--build { background: var(--accent-wash); color: var(--accent-deep); border-color: var(--accent-deep); }
 
   /* Work-by-stage list: a badge then the item. Reuses .fund-links spacing. */
   .fund-links li .fund-stage { margin-right: 8px; }

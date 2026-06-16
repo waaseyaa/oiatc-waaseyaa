@@ -201,10 +201,12 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // /programs/anishinaabemowin is consolidated into the canonical
+        // /anishinaabemowin program home; 301 the old funder path to it.
         $router->addRoute(
             'programs.anishinaabemowin',
             RouteBuilder::create('/programs/anishinaabemowin')
-                ->controller(fn() => $controller->programAnishinaabemowin())
+                ->controller(fn() => new RedirectResponse('/anishinaabemowin', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),

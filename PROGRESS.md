@@ -383,3 +383,24 @@ Added a native Share (Web Share API) control to /support/records-request.
   to wire all share/copy buttons (querySelectorAll), copy label restores per-button via data-orig.
 - Template-only change; gates green (cs-fixer, phpunit 112/630). Verified: share bar renders,
   copy success path fires (label -> "Link copied"), Share hidden where unsupported. No em dashes.
+
+## 2026-06-15 Anishinaabemowin: consolidate program pages + surface and rebadge the doll
+
+1. Consolidated /programs/anishinaabemowin into the canonical /anishinaabemowin:
+   - /programs/anishinaabemowin now 301-redirects to /anishinaabemowin (route in AppServiceProvider;
+     removed HomeController::programAnishinaabemowin and the orphaned programs/anishinaabemowin.html.twig
+     template + its OG card).
+   - Folded the funder-only specifics ($25,000 / $120,000 "what funding unlocks") into /anishinaabemowin.
+   - Repointed every internal link (/programs index card, home card, about, support, base footer, doll
+     pages) from /programs/anishinaabemowin to /anishinaabemowin; removed the self-referential
+     "Funding summary" link.
+   - Removed the dead path from sitemap.xml and the IngestDocsCommand PAGES corpus.
+2. Surfaced the doll: added a featured "Building the doll" section on /anishinaabemowin linking
+   /anishinaabemowin/doll (doll URLs unchanged).
+3. Doll status idea -> building: new "Building" stage badge (fund-stage--build) added to the ladder
+   and documented in the /programs stage legend ("being built now, not yet a working unit"); doll item
+   rebadged Idea -> Building; card/meta copy "a talking doll in design" -> "now being built"; doll page
+   lede now "the build has started, this page is the log", updated 2026-06-15.
+   - Fix: .fund-links span color rule was overriding every stage badge's text to muted ink (the Live
+     badge was dark-on-dark amber). Scoped it to span:not(.fund-stage) so Live/Prototype/Building badges
+     show their intended colors. Verified light + dark.
