@@ -404,3 +404,21 @@ Added a native Share (Web Share API) control to /support/records-request.
    - Fix: .fund-links span color rule was overriding every stage badge's text to muted ink (the Live
      badge was dark-on-dark amber). Scoped it to span:not(.fund-stage) so Live/Prototype/Building badges
      show their intended colors. Verified light + dark.
+
+## 2026-06-16 Massey explainer: neutrality refinements (from external review)
+
+Acted on a reviewer's neutrality assessment of /explainers/massey-solar-project. Added only
+the genuinely-missing, non-duplicative pieces (the page anchors a 4-page cluster, so the
+six-claims / voices / climate companions already cover much of it):
+- "Local concerns, in brief": an in-line bullet summary of residents'/MWCC concerns in their
+  own terms, with a note that they are assessed in the REA (not settled at the municipal/contract
+  stage). Addresses the reviewer's symmetry point without duplicating the companions.
+- "What is not yet known": explicit list of questions pending the REA studies, with the framing
+  that statements from any party (including the developer) are positions, not findings. Covers the
+  reviewer's "developer statements pending review" and "what is unknown" points.
+- "How to take part in the review": constructive, neutral REA participation steps (public meetings,
+  written comments to MECP, asking for studies/conditions, drop-in sessions, Crown duty to consult).
+- "About this page": added an explicit does / does-not statement of the page's boundaries.
+Judged already-covered, not added: "why people talk past each other" (the Five-things-at-once and
+Who-decides-what sections already do this); a full Committee/voices mirror (the linked companions).
+OIATC voice, no em dashes added. Gates green (cs-fixer, phpunit 112/630).
