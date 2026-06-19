@@ -151,23 +151,6 @@
     .m-zei { background: var(--sog-zei); } .m-grt { background: var(--sog-grt); } .m-rf { background: var(--sog-rf); }
     .m-sre { background: var(--sog-sre); } .m-mh { background: var(--sog-mh); } .m-staff { background: var(--sog-staff); }
 
-    /* Pay chart — one sorted horizontal bar chart */
-    .sog-paychart { background: var(--paper-2); border: 1px solid var(--rule); border-radius: var(--radius-lg); padding: 18px 20px 8px; margin: var(--gap-4) 0; }
-    .sog-payrow { display: grid; grid-template-columns: 190px 1fr; gap: 14px; align-items: center; padding: 7px 0; }
-    @media (max-width: 620px) { .sog-payrow { grid-template-columns: 1fr; gap: 4px; } }
-    .sog-paylabel { font-size: 13.5px; line-height: 1.25; color: var(--ink); }
-    .sog-paylabel .pr { display: block; font-family: var(--font-mono); font-size: 10.5px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-3); margin-top: 1px; }
-    .sog-paybar { display: flex; align-items: center; gap: 10px; }
-    .sog-paytrack { flex: 1; background: var(--paper-3); border-radius: 3px; overflow: hidden; height: 22px; }
-    .sog-payfill { height: 100%; background: var(--accent); border-radius: 3px 0 0 3px; min-width: 2px; }
-    .sog-payrow.is-chief .sog-payfill { background: var(--accent-deep); }
-    .sog-payrow.is-partial .sog-payfill { background-image: repeating-linear-gradient(45deg, transparent, transparent 5px, color-mix(in oklab, var(--paper) 35%, transparent) 5px, color-mix(in oklab, var(--paper) 35%, transparent) 10px); }
-    .sog-payval { font-family: var(--font-mono); font-size: 13px; font-variant-numeric: tabular-nums; color: var(--ink); white-space: nowrap; min-width: 74px; }
-    .sog-pill { display: inline-block; font-family: var(--font-sans); font-size: 10px; font-weight: 600; letter-spacing: 0.04em; text-transform: uppercase; color: var(--accent-deep); background: var(--accent-wash); border: 1px solid var(--accent-soft); border-radius: 999px; padding: 1px 7px; margin-left: 6px; vertical-align: middle; }
-    .sog-paykey { display: flex; flex-wrap: wrap; gap: 16px; margin: 12px 0 6px; font-size: 12.5px; color: var(--ink-3); }
-    .sog-paykey span { display: inline-flex; align-items: center; gap: 7px; }
-    .sog-paykey i { width: 22px; height: 12px; border-radius: 3px; display: inline-block; flex: none; }
-    .sog-paykey i.partial { background-image: repeating-linear-gradient(45deg, var(--accent), var(--accent) 4px, var(--accent-soft) 4px, var(--accent-soft) 8px); }
 
     /* Bulleted lists */
     .sog-list { list-style: none; padding-left: 0; margin: 0 0 var(--gap-4); max-width: 92ch; }
@@ -202,15 +185,14 @@
 {% block content %}
 <article class="sog-wrap">
 
-  <p class="eyebrow">Program · <a href="/programs/member-resources" style="color: var(--accent-deep)">Transparency and member resources</a> · Updated 2026-06-04</p>
+  <p class="eyebrow">Program · <a href="/programs/member-resources" style="color: var(--accent-deep)">Transparency and member resources</a> · Updated 2026-06-18</p>
   <h1>How Sagamok Anishnawbek is organized: <em>a member's guide</em></h1>
-  <p class="sog-lede">Aanii. As a member, you have the right to see how your Nation is organized and how its money is handled. This page helps you use it. Sagamok Anishnawbek is really three things working together: the people you elect, the administration that runs day-to-day services, and a set of companies the Nation owns. The same names recur across all three. This page maps the structure, names the people in each public role, and shows where those roles overlap, drawn entirely from public records.</p>
+  <p class="sog-lede">Aanii. As a member, you have the right to see how your Nation is organized. This page helps you use it. Sagamok Anishnawbek is really three things working together: the people you elect, the administration that runs day-to-day services, and a set of companies the Nation owns. This page maps the structure and names the people in each public role, drawn entirely from public records.</p>
 
   <nav class="sog-jump" aria-label="On this page">
     <a href="#why">Why this matters</a>
     <a href="#structure">The structure</a>
     <a href="#board">Who sits on which board</a>
-    <a href="#pay">What Council is paid</a>
     <a href="#ask">What you can ask for</a>
     <a href="#terms">Key terms</a>
     <a href="#sources">Sources</a>
@@ -221,34 +203,34 @@
     <div class="sog-stat"><b>~11</b><span>departments and program areas</span></div>
     <div class="sog-stat"><b>3</b><span>standing committees</span></div>
     <div class="sog-stat"><b>8+</b><span>band-owned companies and partnerships</span></div>
-    <div class="sog-stat"><b>6</b><span>Councillors also on the ZEI board (zgamok.ca)</span></div>
+    <div class="sog-stat"><b>2</b><span>parent companies (SDC and ZEI)</span></div>
   </div>
 
-  <p class="sog-featured">It is easier to ask good questions, and to know who to ask, once you can see.</p>
+  <p class="sog-featured">Once you can see how it is organized, it is easier to know who to ask.</p>
 
   <section id="why">
     <div class="sog-why">
       <h3>Why this matters to you</h3>
-      <p>Sagamok's government decides how the Nation's money is spent and how its services are run. The same handful of people often sit in more than one chair: an elected Councillor can also hold a paid staff job and sit on the board of a company the Nation owns. This guide lays the whole shape out in one place, named and sourced, so you can see it at a glance.</p>
+      <p>Understanding how your Nation is organized helps you know who does what, and who to contact. This guide lays the whole shape out in one place, named and sourced.</p>
     </div>
   </section>
 
   <section id="structure">
     <h2>The short version: three layers</h2>
-    <p class="sog-col">Almost every question about "who runs Sagamok" is really a question about which layer you are looking at. The layers are not separate sets of people: many individuals appear in more than one.</p>
+    <p class="sog-col">Almost every question about "who runs Sagamok" is really a question about which layer you are looking at.</p>
     <div class="sog-cards">
       <div class="sog-card is-gov"><h3>1. Governance</h3><p>The Chief and twelve Councillors you elect, plus the committees that advise them. They set direction and approve decisions.</p></div>
-      <div class="sog-card is-adm"><h3>2. Administration</h3><p>The staff side: a senior officer over a set of department directors. Several Councillors also hold paid staff roles here.</p></div>
-      <div class="sog-card is-ent"><h3>3. The companies</h3><p>Band-owned businesses, held mostly through two parents. Most of their boards are made up of sitting Councillors.</p></div>
+      <div class="sog-card is-adm"><h3>2. Administration</h3><p>The staff side: a senior officer over a set of department directors.</p></div>
+      <div class="sog-card is-ent"><h3>3. The companies</h3><p>Band-owned businesses, held mostly through two parent companies.</p></div>
     </div>
-    <p class="sog-pull">The three layers share people. The board grid below shows everywhere each Council member also serves, and the pay chart shows what each is paid.</p>
+    <p class="sog-pull">The board grid below shows the board and director roles each Council member holds.</p>
 
     <h2 style="margin-top: var(--gap-6)">The whole structure, in one chart</h2>
-    <p class="sog-sub">Each item is tagged with its source: <strong>registry</strong> = Ontario Business Registry, <strong>zgamok.ca</strong> = the company's own team page, <strong>minutes</strong> = Council minutes and Band Council Resolutions.</p>
+    <p class="sog-sub">Each item is tagged with its source: <strong>registry</strong> = Ontario Business Registry, <strong>zgamok.ca</strong> = the company's own team page.</p>
 
     <div class="sog-chart">
       <div class="sog-tier t-gov">
-        <div class="sog-tierhead"><div class="sog-bar"></div><div><h3>Governance · the elected layer</h3><span>The government you elect each term. The names sit in the board grid and pay chart below, so they are not repeated here.</span></div></div>
+        <div class="sog-tierhead"><div class="sog-bar"></div><div><h3>Governance · the elected layer</h3><span>The government you elect each term. The names sit in the board grid below, so they are not repeated here.</span></div></div>
         <div class="sog-row" style="margin-bottom: 14px">
           <div class="sog-node lead" style="flex: 1 1 100%"><div class="sog-role">Elected</div><b>Chief and Council</b><small>One Chief and twelve Councillors. They set direction, pass laws and budgets, and appoint members to most of the company boards and committees shown below.</small></div>
         </div>
@@ -274,17 +256,16 @@
           <div class="sog-node"><div class="sog-role">Officer</div><b>Director of Planning &amp; Infrastructure</b></div>
           <div class="sog-node"><div class="sog-role">Officer</div><b>Tax Administrator</b></div>
         </div>
-        <p class="sog-sub" style="margin: 14px 0 0">Per the public remuneration schedule and the Nation's staff directory, these Councillors also draw a Nation salary in a staff role <span class="sog-tag">(confirm)</span>: <strong>Arnelda Bennett</strong> (Economic Development Manager), <strong>Leroy Bennett</strong> (LRE Research &amp; Policy Analyst), <strong>Michael Abitong</strong> (Land-Based Resource Instructor), <strong>Dan Owl</strong> (Infrastructure Manager, Education), and <strong>Sadie Southwind</strong> (Infrastructure Manager, Planning &amp; Infrastructure).</p>
       </div>
 
       <div class="sog-tier t-ent">
         <div class="sog-tierhead"><div class="sog-bar"></div><div><h3>The companies · band-owned enterprises</h3><span>Owned or controlled by the Nation, mostly through two parent companies. Directors and officers named where public.</span></div></div>
         <div class="sog-tree">
           <div class="sog-branch">
-            <div class="sog-node lead"><div class="sog-role">Parent</div><b>Sagamok Development Corporation (SDC)</b><small>The Nation's development corporation; fully consolidated in the audited statements. A senior staff officer also serves as an officer and director (per Council minutes). <span class="sog-tag">minutes</span></small></div>
+            <div class="sog-node lead"><div class="sog-role">Parent</div><b>Sagamok Development Corporation (SDC)</b><small>The Nation's development corporation, consolidated in the audited statements.</small></div>
             <div class="sog-children">
               <div class="sog-node"><b>Ritchie Falls Resort</b><small>2344827 Ontario Inc. Directors per the corporate registry (board static since 2016): Councillor Michael Abitong, with Alan Ozawanimki, Sheldon Toulouse, and Garnette Trudeau (former Council members). <span class="sog-tag">registry</span></small></div>
-              <div class="sog-node"><b>Sagamok Real Estate Holdings LP</b><small>Directors per Band Council Resolution 2025-05-59: Arnelda Bennett, Norma Petahtegoose, Dan Owl. <span class="sog-tag">minutes</span></small></div>
+              <div class="sog-node"><b>Sagamok Real Estate Holdings LP</b><small>The Nation's off-reserve real-estate holding partnership.</small></div>
             </div>
           </div>
           <div class="sog-branch">
@@ -325,36 +306,32 @@
 
   <section id="board">
     <h2>Who sits on which board</h2>
-    <p class="sog-sub">Of the 13 people you elect, <strong>10 hold at least one documented seat</strong> on a band-owned company board or a paid staff role; the most documented holds four. Each dot below is one documented seat; reading across a row shows everywhere a Council member also serves. ZEI includes its related entities (Z'gamok Construction, OCL, Legend Mining).</p>
+    <p class="sog-sub">This grid shows the documented board and director roles for each Council member, drawn from public corporate-registry filings and zgamok.ca. Each dot is one documented role; reading across a row shows the boards a member sits on. ZEI includes its related entities (Z'gamok Construction, OCL, Legend Mining).</p>
     <div class="sog-matrix-wrap">
       <table class="sog-matrix">
-        <caption class="sog-sr">Documented board seats and staff roles by Council member, ordered by number of roles.</caption>
+        <caption class="sog-sr">Documented board and director roles by Council member, from public registry filings and zgamok.ca.</caption>
         <thead>
           <tr>
             <th class="nm" scope="col">Councillor</th>
             <th scope="col">ZEI <small>(+ZCLP / OCL / Legend)</small></th>
             <th scope="col">GR Truss</th>
             <th scope="col">Ritchie Falls</th>
-            <th scope="col">Sagamok Real Estate</th>
-            <th scope="col">Manitoulin Hotel</th>
-            <th scope="col">Band staff role</th>
-            <th scope="col">Roles</th>
           </tr>
         </thead>
         <tbody>
-          <tr><td class="nm">Arnelda Bennett</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td><td><i class="sog-mdot m-sre"></i><span class="sog-sr">Sagamok Real Estate seat</span></td><td><i class="sog-mdot m-mh"></i><span class="sog-sr">Manitoulin Hotel seat</span></td><td><i class="sog-mdot m-staff"></i><span class="sog-sr">band staff role</span></td><td class="cnt hi">4</td></tr>
-          <tr><td class="nm">Norma Petahtegoose</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td><i class="sog-mdot m-grt"></i><span class="sog-sr">GR Truss seat</span></td><td></td><td><i class="sog-mdot m-sre"></i><span class="sog-sr">Sagamok Real Estate seat</span></td><td></td><td></td><td class="cnt hi">3</td></tr>
-          <tr><td class="nm">Michael Abitong</td><td></td><td><i class="sog-mdot m-grt"></i><span class="sog-sr">GR Truss seat</span></td><td><i class="sog-mdot m-rf"></i><span class="sog-sr">Ritchie Falls seat</span></td><td></td><td></td><td><i class="sog-mdot m-staff"></i><span class="sog-sr">band staff role</span></td><td class="cnt hi">3</td></tr>
-          <tr><td class="nm">Leroy Bennett</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td><td></td><td></td><td><i class="sog-mdot m-staff"></i><span class="sog-sr">band staff role</span></td><td class="cnt">2</td></tr>
-          <tr><td class="nm">Dan Owl</td><td></td><td></td><td></td><td><i class="sog-mdot m-sre"></i><span class="sog-sr">Sagamok Real Estate seat</span></td><td></td><td><i class="sog-mdot m-staff"></i><span class="sog-sr">band staff role</span></td><td class="cnt">2</td></tr>
-          <tr><td class="nm">Paul Eshkakogan <small>(ZEI President)</small></td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td><td></td><td></td><td></td><td class="cnt">1</td></tr>
-          <tr><td class="nm">Nelson Toulouse</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td><td></td><td></td><td></td><td class="cnt">1</td></tr>
-          <tr><td class="nm">Lawrence Solomon Sr.</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td><td></td><td></td><td></td><td class="cnt">1</td></tr>
-          <tr class="is-chief"><td class="nm">Angus Toulouse <small>(Chief)</small></td><td></td><td><i class="sog-mdot m-grt"></i><span class="sog-sr">GR Truss seat</span></td><td></td><td></td><td></td><td></td><td class="cnt">1</td></tr>
-          <tr><td class="nm">Sadie Southwind</td><td></td><td></td><td></td><td></td><td></td><td><i class="sog-mdot m-staff"></i><span class="sog-sr">band staff role</span></td><td class="cnt">1</td></tr>
-          <tr><td class="nm">Conrad Toulouse</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="cnt">?</td></tr>
-          <tr><td class="nm">McKenzie Toulouse</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="cnt">0</td></tr>
-          <tr><td class="nm">Veronica Nashkawa</td><td></td><td></td><td></td><td></td><td></td><td></td><td class="cnt">0</td></tr>
+          <tr class="is-chief"><td class="nm">Angus Toulouse <small>(Chief)</small></td><td></td><td><i class="sog-mdot m-grt"></i><span class="sog-sr">GR Truss seat</span></td><td></td></tr>
+          <tr><td class="nm">Arnelda Bennett</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td></tr>
+          <tr><td class="nm">Conrad Toulouse</td><td></td><td></td><td></td></tr>
+          <tr><td class="nm">Dan Owl</td><td></td><td></td><td></td></tr>
+          <tr><td class="nm">Lawrence Solomon Sr.</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td></tr>
+          <tr><td class="nm">Leroy Bennett</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td></tr>
+          <tr><td class="nm">McKenzie Toulouse</td><td></td><td></td><td></td></tr>
+          <tr><td class="nm">Michael Abitong</td><td></td><td><i class="sog-mdot m-grt"></i><span class="sog-sr">GR Truss seat</span></td><td><i class="sog-mdot m-rf"></i><span class="sog-sr">Ritchie Falls seat</span></td></tr>
+          <tr><td class="nm">Nelson Toulouse</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td></tr>
+          <tr><td class="nm">Norma Petahtegoose</td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td><i class="sog-mdot m-grt"></i><span class="sog-sr">GR Truss seat</span></td><td></td></tr>
+          <tr><td class="nm">Paul Eshkakogan <small>(ZEI President)</small></td><td><i class="sog-mdot m-zei"></i><span class="sog-sr">ZEI seat</span></td><td></td><td></td></tr>
+          <tr><td class="nm">Sadie Southwind</td><td></td><td></td><td></td></tr>
+          <tr><td class="nm">Veronica Nashkawa</td><td></td><td></td><td></td></tr>
         </tbody>
       </table>
     </div>
@@ -362,38 +339,10 @@
       <span><i style="background: var(--sog-zei); border-radius: 50%"></i> ZEI board (incl. ZCLP / OCL / Legend)</span>
       <span><i style="background: var(--sog-grt); border-radius: 50%"></i> GR Truss</span>
       <span><i style="background: var(--sog-rf); border-radius: 50%"></i> Ritchie Falls</span>
-      <span><i style="background: var(--sog-sre); border-radius: 50%"></i> Sagamok Real Estate</span>
-      <span><i style="background: var(--sog-mh); border-radius: 50%"></i> Manitoulin Hotel</span>
-      <span><i style="background: var(--sog-staff); border-radius: 50%"></i> band staff role</span>
     </div>
-    <p class="sog-sub" style="margin: 12px 0 0">Sources by column: ZEI board, <a href="https://zgamok.ca/" target="_blank" rel="noopener">zgamok.ca</a>; GR Truss and Ritchie Falls, the Ontario Business Registry; Sagamok Real Estate and Manitoulin Hotel, Council minutes and Band Council Resolutions; band staff role, the FNFTA remuneration schedule and the Nation's staff directory. A blank means not documented, not that no one serves; "?" means a role may exist but is not documented here; "0" means none found.</p>
+    <p class="sog-sub" style="margin: 12px 0 0">Sources by column: ZEI board, <a href="https://zgamok.ca/" target="_blank" rel="noopener">zgamok.ca</a>; GR Truss and Ritchie Falls, the Ontario Business Registry. A blank means no board or director role is documented for that member in these public sources.</p>
     <p class="sog-sub" style="margin: 10px 0 0"><strong>Boards not yet mapped here.</strong> Several band entities and committees exist but are left out of the grid because no public director roster has been gathered for them yet: <strong>Sagamok Development Corporation, Legend Mining Inc., Robinson Huron Forestry Company Inc., Great Lakes Hospitality Group LP, and Aki-eh Dibinwewziwin LP</strong>, plus the <strong>Finance and Audit, Governance, and Community Justice committees</strong>. Their corporate profiles are paywalled in the Ontario Business Registry and have not been purchased, and committee membership is not published. These are the gaps a records request to Council, or the remaining registry profiles, would fill.</p>
 
-  </section>
-
-  <section id="pay">
-    <h2>What Council is paid</h2>
-    <p class="sog-sub">FY2025 remuneration for the Chief and Councillors, public under the First Nations Financial Transparency Act (the Schedule of Remuneration and Expenses), sorted highest to lowest. Bars show the actual dollars reported, <strong>not annualized</strong>: seven members took office after the 2024 election and so are paid for roughly seven months, marked below. Read honestly, that means the <strong>top Councillor out-earns the Chief</strong>, and the partial-year figures would be higher over a full year.</p>
-    <div class="sog-paychart">
-      <div class="sog-payrow"><div class="sog-paylabel">Paul Eshkakogan<span class="pr">Councillor · ZEI President</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 100%"></div></div><div class="sog-payval">$200,365</div></div></div>
-      <div class="sog-payrow is-chief"><div class="sog-paylabel">Angus Toulouse<span class="pr">Chief</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 92.9%"></div></div><div class="sog-payval">$186,081</div></div></div>
-      <div class="sog-payrow"><div class="sog-paylabel">Arnelda Bennett<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 64.4%"></div></div><div class="sog-payval">$129,034</div></div></div>
-      <div class="sog-payrow is-partial"><div class="sog-paylabel">Conrad Toulouse<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 53.5%"></div></div><div class="sog-payval">$107,250<span class="sog-pill">7 mo</span></div></div></div>
-      <div class="sog-payrow"><div class="sog-paylabel">Leroy Bennett<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 49.5%"></div></div><div class="sog-payval">$99,274</div></div></div>
-      <div class="sog-payrow"><div class="sog-paylabel">Michael Abitong<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 49.4%"></div></div><div class="sog-payval">$98,892</div></div></div>
-      <div class="sog-payrow is-partial"><div class="sog-paylabel">Dan Owl<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 49.2%"></div></div><div class="sog-payval">$98,580<span class="sog-pill">7 mo</span></div></div></div>
-      <div class="sog-payrow is-partial"><div class="sog-paylabel">Sadie Southwind<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 46.3%"></div></div><div class="sog-payval">$92,684<span class="sog-pill">7 mo</span></div></div></div>
-      <div class="sog-payrow"><div class="sog-paylabel">McKenzie Toulouse<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 24.9%"></div></div><div class="sog-payval">$49,846</div></div></div>
-      <div class="sog-payrow"><div class="sog-paylabel">Lawrence Solomon Sr.<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 21.1%"></div></div><div class="sog-payval">$42,200</div></div></div>
-      <div class="sog-payrow"><div class="sog-paylabel">Nelson Toulouse<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 20.0%"></div></div><div class="sog-payval">$40,100</div></div></div>
-      <div class="sog-payrow is-partial"><div class="sog-paylabel">Norma Petahtegoose<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 14.1%"></div></div><div class="sog-payval">$28,300<span class="sog-pill">7 mo</span></div></div></div>
-      <div class="sog-payrow is-partial"><div class="sog-paylabel">Veronica Nashkawa<span class="pr">Councillor</span></div><div class="sog-paybar"><div class="sog-paytrack"><div class="sog-payfill" style="width: 11.4%"></div></div><div class="sog-payval">$22,850<span class="sog-pill">7 mo</span></div></div></div>
-      <div class="sog-paykey">
-        <span><i style="background: var(--accent-deep)"></i> Chief</span>
-        <span><i style="background: var(--accent)"></i> Councillor, full year</span>
-        <span><i class="partial"></i> partial year (~7 months, not annualized)</span>
-      </div>
-    </div>
   </section>
 
   <section id="ask">
