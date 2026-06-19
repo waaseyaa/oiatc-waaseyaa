@@ -70,7 +70,7 @@ final class AppServiceProvider extends ServiceProvider
             $this->petitionRepository()->ensureCampaign(
                 'sagamok-data-governance',
                 'Member data governance at Sagamok',
-                'Ask Sagamok Chief and Council to take up member data governance: acknowledge the exposure, notify members, and move our data onto infrastructure we control.',
+                'Ask Sagamok Chief and Council to build on the fix to the members-portal issue: confirm what was affected, notify members, and move member data onto infrastructure the community controls.',
                 'Sagamok Chief and Council',
             );
             $this->petitionRepository()->ensureCampaign(

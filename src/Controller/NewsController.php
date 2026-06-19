@@ -130,6 +130,7 @@ final class NewsController
         $changed = $this->reconcileManagedPost($entities, $this->programsRestructurePost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->sovereignAiPositionPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->councilMembersPost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->sagamokPortalDisclosurePost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
         if ($changed) {
             $entities = $this->repository->findBy([]);
@@ -415,6 +416,27 @@ final class NewsController
     }
 
     /**
+     * The Sagamok members-portal responsible-disclosure announcement. The issue
+     * was reported and has since been fixed; this post is reconciled (not just
+     * ensured by slug) so a wording change reaches an already-seeded live row.
+     * Body is HTML so it renders through {{ post.body|raw }}.
+     *
+     * @return array<string, mixed>
+     */
+    private function sagamokPortalDisclosurePost(): array
+    {
+        return [
+            'title' => 'A members-portal issue at Sagamok, reported and resolved',
+            'slug' => 'sagamok-portal-disclosure',
+            'body' => '<p>OIATC published a responsible disclosure: for a period, the Sagamok members-only portal loaded member content before its login appeared, because the gate was client-side only. It was reported to the Nation and has since been fixed. The public page carries no URLs, passwords, or member content.</p>',
+            // 2026-05-31 00:00:00 UTC
+            'published_at' => 1780185600,
+            'related_explainer' => 'sagamok-portal',
+            'status' => true,
+        ];
+    }
+
+    /**
      * One-time, self-healing rename of the first-ship announcement. The project
      * shipped first as a practice case study with slug
      * `anishinaabemowin-program-published`; it is now a top-level project. Where
@@ -602,15 +624,7 @@ final class NewsController
                 'related_explainer' => 'counter-disinformation',
                 'status' => true,
             ],
-            [
-                'title' => 'A responsible disclosure on the Sagamok members portal',
-                'slug' => 'sagamok-portal-disclosure',
-                'body' => '<p>OIATC has published a responsible disclosure. The Sagamok members-only portal serves member content to anyone, because the login gate is client-side only. The public page carries no URLs, passwords, or member content.</p>',
-                // 2026-05-31 00:00:00 UTC
-                'published_at' => 1780185600,
-                'related_explainer' => 'sagamok-portal',
-                'status' => true,
-            ],
+            $this->sagamokPortalDisclosurePost(),
             [
                 'title' => "Where does your community's data actually live?",
                 'slug' => 'where-your-data-lives-explainer',
