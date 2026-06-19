@@ -229,6 +229,40 @@
     .sources li:last-child { border-bottom: none; }
     .sources a { word-break: break-word; }
 
+    .checklist {
+      list-style: none;
+      padding: 0;
+      margin: var(--gap-4) 0 0;
+    }
+    .checklist li {
+      position: relative;
+      padding: 14px 0 14px 38px;
+      border-bottom: 1px solid var(--rule-soft);
+      font-size: 15px;
+      line-height: 1.55;
+      color: var(--ink-soft);
+    }
+    .checklist li:last-child { border-bottom: none; }
+    .checklist li::before {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 17px;
+      width: 16px;
+      height: 16px;
+      border: 1.5px solid var(--accent-soft);
+      border-radius: 3px;
+      background: var(--surface);
+    }
+    .checklist strong {
+      display: block;
+      font-family: var(--sans);
+      font-weight: 600;
+      font-size: 14px;
+      color: var(--ink);
+      margin-bottom: 3px;
+    }
+
     .end {
       padding: 64px 0 0;
       font-family: var(--sans);
@@ -263,7 +297,7 @@
       .sec { page-break-inside: avoid; padding: 28pt 0; border-bottom: none; }
       .cover { padding: 0 0 28pt; }
       .cover__title { font-size: 32pt; }
-      .principles, .sources { break-inside: avoid; }
+      .principles, .sources, .checklist { break-inside: avoid; }
       a { color: var(--ink); border-bottom: none; }
     }
   </style>
@@ -354,9 +388,31 @@
       </div>
     </section>
 
-    <section class="sec" id="not-saying">
+    <section class="sec" id="the-solution">
       <div class="sec__head">
         <div class="sec__num">05</div>
+        <h2 class="sec__title">The solution: the Nation holds the controls.</h2>
+      </div>
+      <div class="sec__body">
+        <p>The fix for a system chosen from above is not a better system chosen from above. It is digital self-determination: a community chooses and governs its own systems, and holds the controls, the data, the rights, and the off-switch, instead of receiving them on someone else's terms.</p>
+        <p>Most of that is decided before anything is signed. Here is a checklist a Nation can run on any vendor or system before it commits. If the answers come back wrong, the time to learn that is now, not after the data is already inside.</p>
+        <ul class="checklist">
+          <li><strong>Ownership</strong> Do we own our data, and where is it stored?</li>
+          <li><strong>Exit</strong> Can we leave at any time with all of our data, and at what cost?</li>
+          <li><strong>Kill switch</strong> Who can change, suspend, or switch it off, and can anyone outside the Nation?</li>
+          <li><strong>Governance</strong> Does it meet OCAP, who decides how our data is used, and can it be used to train someone else's model?</li>
+          <li><strong>Consent</strong> Whose consent is required to add or share member data?</li>
+          <li><strong>Lock-in</strong> Are we stranded if the vendor vanishes or raises the price, and is it open or a single supplier?</li>
+          <li><strong>Transparency</strong> Can we see what it does with our data, and is there an audit log we control?</li>
+          <li><strong>True cost</strong> What is the real total cost, including the cost to leave?</li>
+        </ul>
+        <p><a href="/programs/anokii">Anokii</a> is OIATC's reference answer to this checklist, built so a community can answer yes down the whole list. The checklist also stands on its own: a Nation can run it against any vendor, including ones OIATC has nothing to do with.</p>
+      </div>
+    </section>
+
+    <section class="sec" id="not-saying">
+      <div class="sec__head">
+        <div class="sec__num">06</div>
         <h2 class="sec__title">What we are not saying</h2>
       </div>
       <div class="sec__body">
@@ -366,7 +422,7 @@
 
     <section class="sec" id="sources">
       <div class="sec__head">
-        <div class="sec__num">06</div>
+        <div class="sec__num">07</div>
         <h2 class="sec__title">Sources</h2>
       </div>
       <div class="sec__body">
