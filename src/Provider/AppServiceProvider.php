@@ -15,11 +15,6 @@ use App\Controller\ChatController;
 use App\Controller\CollectController;
 use App\Controller\HomeController;
 use App\Controller\PageStatsController;
-use App\Controller\PetitionAdminController;
-use App\Controller\PetitionController;
-use App\Petition\PetitionAdminAuth;
-use App\Petition\PetitionRepository;
-use App\Petition\PetitionSchema;
 use App\Support\ChatPromptBuilder;
 use App\Support\GraphRetriever;
 use App\Support\SqliteRateLimiter;
@@ -61,49 +56,7 @@ final class AppServiceProvider extends ServiceProvider
         // (no kernel) skip analytics entirely. See upstream note #018.
         if ($this->tryResolveDatabase() !== null) {
             new AnalyticsSchema($this->persistentDatabase())->ensure();
-
-            // Petition tables + the seed campaign. Idempotent: the schema is
-            // guarded by tableExists() and ensureCampaign() only inserts when
-            // the slug is absent. Storage is OIATC's own SQLite on the storage
-            // volume (sovereign at rest); see PetitionSchema for the OCAP note.
-            new PetitionSchema($this->persistentDatabase())->ensure();
-            $this->petitionRepository()->ensureCampaign(
-                'sagamok-data-governance',
-                'Member data governance at Sagamok',
-                'Ask Sagamok Chief and Council to build on the fix to the members-portal issue: confirm what was affected, notify members, and move member data onto infrastructure the community controls.',
-                'Sagamok Chief and Council',
-            );
-            $this->petitionRepository()->ensureCampaign(
-                'records-request-support',
-                'Support the member records request',
-                'We, the undersigned members of Sagamok Anishnawbek, support the records request submitted to Chief and Council. We want clear answers, on the record, to one question: when the Nation invests in businesses and ventures, what are the benefits to the membership, and who is being served? We ask Council to provide the records and respond to the membership.',
-                'Sagamok Chief and Council',
-            );
-            // Signatures collected on paper and physically handed in count toward
-            // the public total alongside the online rows. Code-managed and dated:
-            // bump this when another batch is handed in. Aggregate only, no PII.
-            $this->petitionRepository()->setPaperCount(
-                'records-request-support',
-                16,
-                'Includes signatures collected on paper and handed to the Sagamok band office (political office) on June 15, 2026.',
-            );
         }
-    }
-
-    private ?PetitionRepository $petitionRepository = null;
-
-    /**
-     * The petition repository, pinned to the persistent SQLite file (same
-     * reasoning as analytics/rate-limiter: resolve(DatabaseInterface) at
-     * boot/route-build can hand back an ephemeral connection). The hash secret
-     * salts the rate-limit-only IP/UA hashes.
-     */
-    private function petitionRepository(): PetitionRepository
-    {
-        return $this->petitionRepository ??= new PetitionRepository(
-            $this->persistentDatabase(),
-            getenv('WAASEYAA_PETITION_SECRET') ?: (getenv('WAASEYAA_JWT_SECRET') ?: 'oiatc-petition'),
-        );
     }
 
     /**
@@ -276,10 +229,13 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // RHT and Sagamok/Massey content moved to rhtcircle.ca (the Circle is now
+        // the single source for that material and the petition data). These paths
+        // 301 to their new homes; the old templates and corpus entries are removed.
         $router->addRoute(
             'explainers.robinson-huron-treaty',
             RouteBuilder::create('/explainers/robinson-huron-treaty')
-                ->controller(fn() => $controller->robinsonHuronTreatyExplainer())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/treaty-wide/the-treaty', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -288,7 +244,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.robinson-huron-treaty.distribution-models',
             RouteBuilder::create('/explainers/robinson-huron-treaty/distribution-models')
-                ->controller(fn() => $controller->robinsonHuronTreatyDistributionModels())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/treaty-wide/distribution-models', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -297,7 +253,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project',
             RouteBuilder::create('/explainers/massey-solar-project')
-                ->controller(fn() => $controller->masseySolarProjectExplainer())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -306,7 +262,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project.what-youve-heard',
             RouteBuilder::create('/explainers/massey-solar-project/what-youve-heard')
-                ->controller(fn() => $controller->masseySolarProjectWhatYouveHeard())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey-what-youve-heard', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -315,7 +271,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project.voices',
             RouteBuilder::create('/explainers/massey-solar-project/voices')
-                ->controller(fn() => $controller->masseySolarProjectVoices())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey-voices', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -324,7 +280,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project.climate-and-environment',
             RouteBuilder::create('/explainers/massey-solar-project/climate-and-environment')
-                ->controller(fn() => $controller->masseySolarProjectClimateAndEnvironment())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey-climate', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -447,16 +403,18 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.how-sagamok-is-organized',
             RouteBuilder::create('/explainers/how-sagamok-is-organized')
-                ->controller(fn() => $controller->howSagamokIsOrganized())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/how-its-organized', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
         );
 
+        // The records request and its full-letter page now live on rhtcircle.ca,
+        // where the campaign and its signature data are hosted. Both 301 there.
         $router->addRoute(
             'support.records-request',
             RouteBuilder::create('/support/records-request')
-                ->controller(fn() => $controller->recordsRequestSupport())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/standard/records-request', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -465,7 +423,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'support.records-request-letter',
             RouteBuilder::create('/support/records-request-letter')
-                ->controller(fn() => $controller->recordsRequestLetter())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/standard/records-request', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -560,85 +518,6 @@ final class AppServiceProvider extends ServiceProvider
                     ->controller(fn(Request $request) => $pageStats->stats($request))
                     ->allowAll()
                     ->methods('GET')
-                    ->build(),
-            );
-
-            // Petition / "Add your voice". Public sign + live count + remove +
-            // privacy; authenticated admin (list, CSV export, create/deactivate).
-            // All signature data stays in OIATC's own database.
-            $petitions = $this->petitionRepository();
-            $petition = new PetitionController($petitions);
-            $petitionAdmin = new PetitionAdminController($petitions, PetitionAdminAuth::fromEnv());
-
-            // Sign takes a JSON body (CSRF auto-skipped, like chat/collect).
-            $router->addRoute(
-                'petition.sign',
-                RouteBuilder::create('/api/petition/sign')
-                    ->controller(fn(Request $request) => $petition->sign($request))
-                    ->allowAll()
-                    ->methods('POST')
-                    ->build(),
-            );
-
-            $router->addRoute(
-                'petition.info',
-                RouteBuilder::create('/api/petition/{slug}')
-                    ->controller(fn(Request $request, string $slug) => $petition->info($slug))
-                    ->allowAll()
-                    ->methods('GET')
-                    ->build(),
-            );
-
-            $router->addRoute(
-                'petition.remove',
-                RouteBuilder::create('/petition/remove/{token}')
-                    ->controller(fn(Request $request, string $token) => $petition->remove($token))
-                    ->allowAll()
-                    ->methods('GET')
-                    ->build(),
-            );
-
-            $router->addRoute(
-                'petition.privacy',
-                RouteBuilder::create('/petition/privacy')
-                    ->controller(fn() => $petition->privacy())
-                    ->allowAll()
-                    ->methods('GET')
-                    ->build(),
-            );
-
-            // /admin/* currently has no edge auth and an admin_spa catch-all at
-            // priority 0; priority(10) wins here and PetitionAdminAuth (HTTP
-            // Basic, fails closed) gates every petition-admin action.
-            $router->addRoute(
-                'petition.admin',
-                RouteBuilder::create('/admin/petitions')
-                    ->controller(fn(Request $request) => $request->isMethod('POST')
-                        ? $petitionAdmin->create($request)
-                        : $petitionAdmin->index($request))
-                    ->allowAll()
-                    ->methods('GET', 'POST')
-                    ->priority(10)
-                    ->build(),
-            );
-
-            $router->addRoute(
-                'petition.admin.active',
-                RouteBuilder::create('/admin/petitions/{slug}/active')
-                    ->controller(fn(Request $request, string $slug) => $petitionAdmin->setActive($request, $slug))
-                    ->allowAll()
-                    ->methods('POST')
-                    ->priority(10)
-                    ->build(),
-            );
-
-            $router->addRoute(
-                'petition.admin.export',
-                RouteBuilder::create('/admin/petitions/{slug}/export.csv')
-                    ->controller(fn(Request $request, string $slug) => $petitionAdmin->export($request, $slug))
-                    ->allowAll()
-                    ->methods('GET')
-                    ->priority(10)
                     ->build(),
             );
         }

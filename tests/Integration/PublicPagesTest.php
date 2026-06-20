@@ -264,47 +264,32 @@ final class PublicPagesTest extends TestCase
     }
 
     #[Test]
-    public function massey_climate_companion_route_is_registered_and_linked_from_the_main_explainer(): void
+    public function migrated_rht_and_sagamok_pages_redirect_to_rhtcircle_with_301(): void
     {
+        // The RHT/Sagamok/Massey content and the records-request campaign now live
+        // on rhtcircle.ca. Each old path stays routed but 301s to its new home.
         $router = new WaaseyaaRouter();
         new AppServiceProvider()->routes($router);
 
-        $this->assertSame(
-            'explainers.massey-solar-project.climate-and-environment',
-            $router->match('/explainers/massey-solar-project/climate-and-environment')['_route'] ?? null,
-        );
+        $expected = [
+            '/explainers/robinson-huron-treaty' => 'https://rhtcircle.ca/treaty-wide/the-treaty',
+            '/explainers/robinson-huron-treaty/distribution-models' => 'https://rhtcircle.ca/treaty-wide/distribution-models',
+            '/explainers/massey-solar-project' => 'https://rhtcircle.ca/communities/sagamok/massey',
+            '/explainers/massey-solar-project/what-youve-heard' => 'https://rhtcircle.ca/communities/sagamok/massey-what-youve-heard',
+            '/explainers/massey-solar-project/voices' => 'https://rhtcircle.ca/communities/sagamok/massey-voices',
+            '/explainers/massey-solar-project/climate-and-environment' => 'https://rhtcircle.ca/communities/sagamok/massey-climate',
+            '/explainers/how-sagamok-is-organized' => 'https://rhtcircle.ca/communities/sagamok/how-its-organized',
+            '/support/records-request' => 'https://rhtcircle.ca/standard/records-request',
+            '/support/records-request-letter' => 'https://rhtcircle.ca/standard/records-request',
+        ];
 
-        // The main explainer carries the companion nav card and the one-line pointer.
-        $main = (string) new HomeController()->masseySolarProjectExplainer()->getContent();
-        $this->assertStringContainsString('/explainers/massey-solar-project/climate-and-environment', $main);
-    }
-
-    #[Test]
-    public function massey_climate_companion_renders_neutral_sourced_content_indexable_and_without_em_dashes(): void
-    {
-        $response = new HomeController()->masseySolarProjectClimateAndEnvironment();
-        $html = (string) $response->getContent();
-
-        $this->assertSame(200, $response->getStatusCode());
-        $this->assertStringContainsString('Climate and environment context', $html);
-        // Public and indexable (unlike the unlisted demo).
-        $this->assertStringContainsString('content="index,follow"', $html);
-        // Neutral framing and sourcing retained.
-        $this->assertStringContainsString('does not take a position', $html);
-        $this->assertStringContainsString('Renewable Energy Approval', $html);
-        $this->assertStringContainsString('ieso.ca', $html);
-        // Source citations point at specific source pages, open in a new tab with
-        // rel="noopener", and never link a bare domain root.
-        $this->assertStringContainsString('href="https://www.ieso.ca/en/Learn/Ontario-Electricity-Grid/Supply-Mix-and-Generation" target="_blank" rel="noopener"', $html);
-        $this->assertStringContainsString('href="https://www.ontario.ca/document/technical-guide-renewable-energy-approvals-0/chapter-7-guidance-preparing-decommissioning" target="_blank" rel="noopener"', $html);
-        $this->assertStringNotContainsString('href="https://www.ieso.ca"', $html, 'No bare domain-root source links.');
-        $this->assertStringNotContainsString('href="https://www.ipcc.ch"', $html);
-        // In-text references to the main explainer link to it.
-        $this->assertStringContainsString('href="/explainers/massey-solar-project"', $html);
-        // Standard cluster byline/footer.
-        $this->assertStringContainsString('Chi-miigwech for reading.', $html);
-        // No em dashes anywhere on this page.
-        $this->assertStringNotContainsString("\u{2014}", $html, 'No em dashes on the climate companion.');
-        $this->assertStringNotContainsString('{%', $html, 'No raw Twig tags leaked.');
+        foreach ($expected as $path => $target) {
+            $controller = $router->match($path)['_controller'] ?? null;
+            $this->assertIsCallable($controller, sprintf('%s should resolve to a controller.', $path));
+            $response = $controller();
+            $this->assertInstanceOf(RedirectResponse::class, $response, sprintf('%s should redirect.', $path));
+            $this->assertSame(301, $response->getStatusCode(), sprintf('%s should be a 301.', $path));
+            $this->assertSame($target, $response->getTargetUrl(), sprintf('%s should point at the Circle.', $path));
+        }
     }
 }

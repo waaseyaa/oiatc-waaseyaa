@@ -35,36 +35,6 @@ final class HomeController
         return $this->renderTemplate('positions/sovereign-ai.html.twig');
     }
 
-    public function robinsonHuronTreatyExplainer(): Response
-    {
-        return $this->renderTemplate('explainers/robinson-huron-treaty.html.twig');
-    }
-
-    public function robinsonHuronTreatyDistributionModels(): Response
-    {
-        return $this->renderTemplate('explainers/robinson-huron-treaty-distribution-models.html.twig');
-    }
-
-    public function masseySolarProjectExplainer(): Response
-    {
-        return $this->renderTemplate('explainers/massey-solar-project.html.twig');
-    }
-
-    public function masseySolarProjectWhatYouveHeard(): Response
-    {
-        return $this->renderTemplate('explainers/massey-solar-project-what-youve-heard.html.twig');
-    }
-
-    public function masseySolarProjectVoices(): Response
-    {
-        return $this->renderTemplate('explainers/massey-solar-project-voices.html.twig');
-    }
-
-    public function masseySolarProjectClimateAndEnvironment(): Response
-    {
-        return $this->renderTemplate('explainers/massey-solar-project-climate-and-environment.html.twig');
-    }
-
     public function practiceAiInCoursework(): Response
     {
         return $this->renderTemplate('practice/ai-in-coursework.html.twig');
@@ -128,21 +98,6 @@ final class HomeController
     public function whereYourDataLives(): Response
     {
         return $this->renderTemplate('explainers/where-your-data-lives.html.twig');
-    }
-
-    public function howSagamokIsOrganized(): Response
-    {
-        return $this->renderTemplate('explainers/how-sagamok-is-organized.html.twig');
-    }
-
-    public function recordsRequestSupport(): Response
-    {
-        return $this->renderTemplate('support/records-request.html.twig');
-    }
-
-    public function recordsRequestLetter(): Response
-    {
-        return $this->renderTemplate('support/records-request-letter.html.twig');
     }
 
     public function redirectToHome(): RedirectResponse

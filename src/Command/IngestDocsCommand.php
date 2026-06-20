@@ -35,18 +35,9 @@ final class IngestDocsCommand
         // partial directly so chunks carry the canonical /anokii/sagamok source_url
         // without the shell chrome.
         '/anokii/sagamok' => 'anokii/_sagamok-resources.html.twig',
-        '/explainers/robinson-huron-treaty' => 'explainers/robinson-huron-treaty.html.twig',
-        // Massey corpus: the explainer cluster only (no news post in this environment).
-        '/explainers/massey-solar-project' => 'explainers/massey-solar-project.html.twig',
-        '/explainers/massey-solar-project-voices' => 'explainers/massey-solar-project-voices.html.twig',
-        '/explainers/massey-solar-project-what-youve-heard' => 'explainers/massey-solar-project-what-youve-heard.html.twig',
-        // Neutral climate/environment companion. Slash source_url matches its live
-        // route and canonical, and still starts with /explainers/massey-solar-project
-        // so app:seed-graph links its chunks to the shared Massey Solar project
-        // (reachable from the Massey vantage).
-        '/explainers/massey-solar-project/climate-and-environment' => 'explainers/massey-solar-project-climate-and-environment.html.twig',
+        // The RHT and Sagamok/Massey explainers moved to rhtcircle.ca and are no
+        // longer served here, so they are out of the corpus too.
         '/explainers/where-your-data-lives' => 'explainers/where-your-data-lives.html.twig',
-        '/explainers/how-sagamok-is-organized' => 'explainers/how-sagamok-is-organized.html.twig',
         '/positions/counter-disinformation' => 'positions/counter-disinformation.html.twig',
         '/positions/prescribeit' => 'positions/prescribeit.html.twig',
         '/positions/sovereign-ai' => 'positions/sovereign-ai.html.twig',
