@@ -253,7 +253,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project',
             RouteBuilder::create('/explainers/massey-solar-project')
-                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey', 301))
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/land/massey-solar-project', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -262,7 +262,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project.what-youve-heard',
             RouteBuilder::create('/explainers/massey-solar-project/what-youve-heard')
-                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey-what-youve-heard', 301))
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/land/massey-solar-project/what-youve-heard', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -271,7 +271,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project.voices',
             RouteBuilder::create('/explainers/massey-solar-project/voices')
-                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey-voices', 301))
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/land/massey-solar-project/voices', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -280,7 +280,7 @@ final class AppServiceProvider extends ServiceProvider
         $router->addRoute(
             'explainers.massey-solar-project.climate-and-environment',
             RouteBuilder::create('/explainers/massey-solar-project/climate-and-environment')
-                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/massey-climate', 301))
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/land/massey-solar-project/climate', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
