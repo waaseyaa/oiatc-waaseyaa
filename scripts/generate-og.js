@@ -50,10 +50,6 @@ const overrides = {
   '__default__': { template: 'og-template.html', output: 'og-default.png' },
 
   // Per-page bespoke cards.
-  'explainers/massey-solar-project.html.twig': {
-    template: 'og-template-massey-solar.html',
-    output: 'og-massey-solar-project.png',
-  },
   'disclosure/sagamok-portal.html.twig': {
     template: 'og-template-sagamok-portal.html',
     output: 'og-sagamok-portal.png',

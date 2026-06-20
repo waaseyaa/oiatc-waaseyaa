@@ -472,6 +472,21 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // The petition admin was retired with the petition feature. Without its
+        // route, /admin/petitions fell through to the framework admin-SPA
+        // catch-all (/admin/{path}, priority 0), which served an empty shell
+        // there. Shadow that exact path with a 301 to the admin root so no
+        // orphaned shell remains. priority(10) wins over the catch-all.
+        $router->addRoute(
+            'admin.petitions.retired',
+            RouteBuilder::create('/admin/petitions')
+                ->controller(fn() => new RedirectResponse('/admin', 301))
+                ->allowAll()
+                ->methods('GET')
+                ->priority(10)
+                ->build(),
+        );
+
         if ($this->tryResolveDatabase() !== null) {
             // Pin analytics to the persistent SQLite file. resolve(DatabaseInterface)
             // here returns an ephemeral connection (the route/controller closure is
