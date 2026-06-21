@@ -191,10 +191,6 @@ final class SeedGraphCommand
             return ['service', $service];
         }
 
-        if (str_starts_with($url, '/explainers/massey-solar-project')) {
-            return ['project', 'massey-solar'];
-        }
-
         return ['', '']; // general OIATC content
     }
 
@@ -383,7 +379,10 @@ final class SeedGraphCommand
                 'relates_to' => json_encode(['sagamok', 'massey'], JSON_THROW_ON_ERROR),
                 'located_at' => 'massey',
                 'has_topic' => 'energy-solar',
-                'source_url' => '/explainers/massey-solar-project',
+                // The Massey explainers moved to the independent RHT Members'
+                // Transparency Circle; cite their live home there, not the old
+                // (now 301) oiatc path. No Massey pages are ingested here anymore.
+                'source_url' => 'https://rhtcircle.ca/land/massey-solar-project',
             ],
         ];
     }

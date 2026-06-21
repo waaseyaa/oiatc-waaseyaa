@@ -120,14 +120,10 @@ final class NewsController
     private function publishedPosts(): array
     {
         $entities = $this->repository->findBy([]);
-        $changed = $this->healLegacyExample($entities);
-        $changed = $this->reconcileManagedPost($entities, $this->potentiaPost()) || $changed;
-        $changed = $this->reconcileManagedPost($entities, $this->prescribeitPost()) || $changed;
-        $changed = $this->reconcileManagedPost($entities, $this->masseyConsultationPost()) || $changed;
+        $changed = $this->reconcileManagedPost($entities, $this->prescribeitPost());
         $changed = $this->healRenamedLanguagePost($entities) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->languageProjectPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->languageDollPost()) || $changed;
-        $changed = $this->reconcileManagedPost($entities, $this->programsRestructurePost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->sovereignAiPositionPost()) || $changed;
         $changed = $this->reconcileManagedPost($entities, $this->councilMembersPost()) || $changed;
         $changed = $this->ensureAnnouncements($entities) || $changed;
@@ -183,76 +179,6 @@ final class NewsController
     }
 
     /**
-     * One-time, self-healing replacement of the retired bootstrap example post.
-     * The old row shares the massey-solar-ieso-contract-awarded slug, which the
-     * ensure-by-slug pass will not overwrite, so where that placeholder row still
-     * exists we update it in place to the real, permanent copy. After this runs
-     * once the placeholder is gone and the check is a no-op.
-     *
-     * @param list<EntityInterface> $entities
-     */
-    private function healLegacyExample(array $entities): bool
-    {
-        foreach ($entities as $entity) {
-            if ($entity instanceof NewsPost && str_contains($entity->getBody(), 'This is an example news post')) {
-                foreach ($this->masseyContractPost() as $field => $value) {
-                    $entity->set($field, $value);
-                }
-                $this->repository->save($entity);
-
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * The real, permanent Massey IESO contract post (stable slug).
-     *
-     * @return array<string, mixed>
-     */
-    private function masseyContractPost(): array
-    {
-        return [
-            'title' => 'Massey Solar clears its IESO contract milestone',
-            'slug' => 'massey-solar-ieso-contract-awarded',
-            'body' => '<p>The Massey Solar Project was awarded a 20-year IESO contract on April 10, 2026, moving it from a proposal to a financed project. The environmental review under Regulation 359/09 still has to happen before construction can begin.</p>',
-            // 2026-04-10 00:00:00 UTC
-            'published_at' => 1775779200,
-            'related_explainer' => 'massey-solar-project',
-            'status' => true,
-        ];
-    }
-
-    /**
-     * The comprehensive, self-contained Potentia response post (long-form).
-     * Body is HTML so it renders as paragraphs through {{ post.body|raw }}.
-     *
-     * @return array<string, mixed>
-     */
-    private function potentiaPost(): array
-    {
-        return [
-            'title' => 'Potentia responds to our Massey questions',
-            'slug' => 'potentia-responds-massey',
-            'body' => '<p>Potentia Renewables responded in writing to OIATC\'s five questions about the Massey Solar Project, a proposed 141-megawatt solar farm about 14 kilometres from Massey that holds a 20-year provincial electricity contract but still needs Ontario\'s environmental approval before construction. The questions covered ownership and equity, how the two First Nation partners were chosen and whether Sagamok was approached, the consultation plan for the provincial review, the response to local water and wildlife concerns, and the construction timeline. Patrick Russell, a project manager at Potentia, sent the response on June 2, 2026. Here is what the company said.</p>'
-                . '<p><strong>Ownership.</strong> Massey Solar Inc. is an Ontario corporation. 51 per cent is held collectively through subsidiaries of Wahnapitae First Nation and Atikameksheng Anishnawbek. 49 per cent is held through subsidiaries of Power Sustainable Energy Infrastructure Partnership (PSEIP), a private renewable energy fund. Potentia is an affiliate of PSEIP and acts as the developer and construction-services provider, not the 49 per cent owner. The split between the two First Nations inside the 51 per cent was not disclosed. This puts the common "Power Corporation project" description in perspective. The project company is majority First Nations held, while the 49 per cent minority sits with PSEIP, which is managed by Power Sustainable, a wholly owned subsidiary of Power Corporation of Canada.</p>'
-                . '<p><strong>Why these two Nations.</strong> Potentia said Atikameksheng and Wahnapitae were chosen as Robinson Huron Treaty signatories for the treaty area where the project sits.</p>'
-                . '<p><strong>Sagamok.</strong> Potentia said it has been in discussions with Sagamok Anishnawbek since the fall of 2025 about economic benefit opportunities, and is exploring all forms of economic benefit, which can include equity in the project. It said it intends to continue through the approval process. Sagamok\'s reserve and territory sit closer to the site than either equity partner\'s.</p>'
-                . '<p><strong>The environmental review.</strong> Potentia said specialist consultants have begun the studies required for the Renewable Energy Approval: natural environment surveys, species-at-risk screening, wetland confirmation, noise modelling, water and drainage assessments, and archaeological and cultural heritage work. The application itself has not been filed.</p>'
-                . '<p><strong>On local concerns.</strong> Potentia said it will run a detailed hydrogeological study, that panel materials are non-hazardous, and that solar facilities pose minimal risk to drinking water. It said vegetation will be managed mainly by mechanical methods such as mowing and trimming, with low-impact approaches that may include native plantings and managed grazing. Potentia said it does not intend to use herbicides at the site, and would turn to them only if invasive species required control and only in agreement with the municipality and landowners.</p>'
-                . '<p><strong>Timeline.</strong> Potentia said the timeline runs studies through 2026 into 2027, permitting to 2028, construction beginning in 2028, and operation in 2029, if all approvals are received.</p>'
-                . '<p>A few things were not addressed. Potentia did not detail the public and Indigenous consultation plan for the approval, or say whether pre-application discussions with the ministry have begun. Sagamok has not published a formal public position on the project.</p>'
-                . '<p>Potentia declined a live interview for now, but welcomed talking with OIATC at the upcoming community drop-in sessions.</p>',
-            // 2026-06-02 00:00:00 UTC
-            'published_at' => 1780358400,
-            'related_explainer' => 'massey-solar-project',
-            'status' => true,
-        ];
-    }
-
-    /**
      * The comprehensive, self-contained PrescribeIT post (long-form). Body is
      * HTML so it renders as paragraphs through {{ post.body|raw }}.
      *
@@ -274,29 +200,6 @@ final class NewsController
             // 2026-06-02 00:00:00 UTC
             'published_at' => 1780358400,
             'related_explainer' => 'prescribeit',
-            'status' => true,
-        ];
-    }
-
-    /**
-     * The Massey Solar consultation venue pause post (long-form, flowing
-     * paragraphs). Body is HTML so it renders through {{ post.body|raw }}.
-     *
-     * @return array<string, mixed>
-     */
-    private function masseyConsultationPost(): array
-    {
-        return [
-            'title' => 'Massey Solar\'s first public open houses are paused over the venue',
-            'slug' => 'massey-solar-open-houses-paused',
-            'body' => '<p>The public consultation for the Massey Solar Project was set to begin this month, and its first step is already on hold. Potentia Renewables scheduled two open houses, on June 10 and 11 at the Massey Public Library, as the start of public consultation for the proposed 141-megawatt solar farm near Massey. Those sessions have been paused while the company looks for a new venue.</p>'
-                . '<p>As reported by <a href="https://www.myespanolanow.com/author/rosalind/" target="_blank" rel="noopener">Rosalind Russell</a>, the library was considered an unsuitable location because the sessions could disrupt library services, and Potentia is now seeking another venue.</p>'
-                . '<p>The open houses are part of the Renewable Energy Approval, the provincial environmental review that OIATC\'s explainer has pointed to as the stage where the groundwater, wildlife, and consultation questions are formally studied. The project holds a 20-year provincial electricity contract but still needs that approval before it can be built.</p>'
-                . '<p>Opposition has been steady. The Massey Wildlife Conservation Committee says it gathered more than 2,000 signatures asking the township to withdraw its support, and the Ontario Federation of Agriculture, the Manitoulin North Shore Federation of Agriculture, and the Massey Agricultural Society have raised concerns. Council voted in March against rescinding its support. Some residents have also questioned why the library was chosen in the first place, reading it as a way to manage the setting; the reported reason for the pause is the disruption to library services.</p>'
-                . '<p>OIATC will keep tracking the consultation as it proceeds.</p>',
-            // 2026-06-02 00:00:00 UTC
-            'published_at' => 1780358400,
-            'related_explainer' => 'massey-solar-project',
             'status' => true,
         ];
     }
@@ -342,27 +245,6 @@ final class NewsController
             // 2026-06-12 12:00:00 UTC (after the project-section post on the same day)
             'published_at' => 1781265600,
             'related_explainer' => 'anishinaabemowin-doll',
-            'status' => true,
-        ];
-    }
-
-    /**
-     * The site-restructure announcement (short, two paragraphs). Body is HTML so
-     * it renders through {{ post.body|raw }}; related_explainer 'programs' points
-     * the post CTA at the /programs index.
-     *
-     * @return array<string, mixed>
-     */
-    private function programsRestructurePost(): array
-    {
-        return [
-            'title' => 'OIATC is now organized around four programs',
-            'slug' => 'site-programs-restructure',
-            'body' => '<p>OIATC has reorganized oiatc.ca around four named programs: Anishinaabemowin, Anokii, community knowledge, and transparency and member resources. The work was always there. The new frame makes it legible, because each program has shipped work behind it, and each one says what funding would unlock.</p>'
-                . '<p>The change is for the people who want to understand and support this work. There is an about page, a support page, and a page for each program. Start at <a href="/programs">/programs</a>.</p>',
-            // 2026-06-12 16:00:00 UTC (after the doll post on the same day)
-            'published_at' => 1781280000,
-            'related_explainer' => 'programs',
             'status' => true,
         ];
     }
@@ -503,13 +385,9 @@ final class NewsController
     private function explicitMeta(string $slug): ?string
     {
         return match ($slug) {
-            'add-your-voice' => 'OIATC has built a simple way for members to weigh in on the questions that matter. The first one: where our data actually lives.',
             'prescribeit-governance-failure' => 'Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.',
-            'massey-solar-open-houses-paused' => 'Potentia\'s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.',
-            'massey-solar-drop-in-sessions-fire-hall' => 'Potentia has moved the Massey Solar Project\'s community drop-in sessions to the Massey Fire Hall, with dates in June and July 2026.',
             'anishinaabemowin-project-published' => 'OIATC has published a project section for Anishinaabemowin, a live, community-owned effort to record fluent speakers and keep the language alive.',
             'anishinaabemowin-doll-plan' => 'OIATC has published the plan for a doll that speaks Anishinaabemowin: a fluent Elder\'s voice in a child\'s hands, offline, recordings held by the community.',
-            'site-programs-restructure' => 'OIATC has reorganized its site around four named programs, each with shipped work and a clear funding ask.',
             'sovereign-ai-position' => 'OIATC\'s position on a US export order that switched off two major AI models worldwide overnight, and what it means for First Nations sovereignty.',
             'council-elder-and-director' => 'OIATC has added two people to the council as it incorporates: Steven Bennett as Elder and Knowledge Keeper, and Oliver Zielke as a director.',
             default => null,
@@ -583,16 +461,6 @@ final class NewsController
     private function announcementPosts(): array
     {
         return [
-            $this->masseyContractPost(),
-            [
-                'title' => 'A member resource on the Robinson Huron Treaty',
-                'slug' => 'robinson-huron-treaty-explainer',
-                'body' => '<p>OIATC has published a plain-language explainer on the Robinson Huron Treaty, the annuity settlement, and what it means for members. It is a living resource, updated as the picture changes.</p>',
-                // 2026-05-14 00:00:00 UTC
-                'published_at' => 1778716800,
-                'related_explainer' => 'robinson-huron-treaty',
-                'status' => true,
-            ],
             [
                 'title' => 'Our position on counter-disinformation',
                 'slug' => 'counter-disinformation-position',
@@ -605,8 +473,8 @@ final class NewsController
             [
                 'title' => "Where does your community's data actually live?",
                 'slug' => 'where-your-data-lives-explainer',
-                'body' => '<p>A new explainer maps where community data physically goes, from origin servers to global copies, and what the US CLOUD Act and OCAP mean for it. It is a companion to the Sagamok portal disclosure.</p>',
-                // 2026-05-31 01:00:00 UTC (after the disclosure post on the same day)
+                'body' => '<p>A new explainer maps where community data physically goes, from origin servers to global copies, and what the US CLOUD Act and OCAP mean for it.</p>',
+                // 2026-05-31 01:00:00 UTC
                 'published_at' => 1780189200,
                 'related_explainer' => 'where-your-data-lives',
                 'status' => true,
@@ -620,37 +488,11 @@ final class NewsController
                 'related_explainer' => 'anokii',
                 'status' => true,
             ],
-            $this->potentiaPost(),
             $this->prescribeitPost(),
-            $this->masseyConsultationPost(),
             $this->languageProjectPost(),
             $this->languageDollPost(),
-            $this->programsRestructurePost(),
             $this->sovereignAiPositionPost(),
             $this->councilMembersPost(),
-            [
-                'title' => 'Add your voice, and a tool built to keep your data home',
-                'slug' => 'add-your-voice',
-                'body' => '<p>Understanding how a community is run is the first step. Acting on it is the next. OIATC has built a simple way for members to do that: add your voice to a question and have it counted.</p>'
-                    . '<p>The first campaign is the one that prompted the tool, our own data. When you sign up to a community website, where does your information actually go, whose laws can reach it, and who controls it? Our plain-language explainer walks through <a href="/explainers/where-your-data-lives">where your data lives</a>.</p>'
-                    . '<p>The tool itself is built the way that explainer argues data should be handled. It runs on OIATC\'s own server, in Canada, under our control, and it asks for the least it can. No US platform sits in the middle, and nothing tracks you. The data stays home.</p>'
-                    . '<p>Read the explainer, and when you are ready, <a href="/explainers/where-your-data-lives">add your voice</a>.</p>',
-                // 2026-06-04 00:00:00 UTC
-                'published_at' => 1780531200,
-                'related_explainer' => 'where-your-data-lives',
-                'status' => true,
-            ],
-            [
-                'title' => 'Massey Solar\'s drop-in sessions move to the Massey Fire Hall',
-                'slug' => 'massey-solar-drop-in-sessions-fire-hall',
-                'body' => '<p>The Massey Solar Project\'s community drop-in sessions, paused in early June over the venue, now have a new home. Potentia Renewables has notified the community that the sessions will take place at the Massey Fire Hall (Imperial St N, Massey), moved from the Massey Public Library to accommodate the number of community members interested in attending.</p>'
-                    . '<p>The schedule: Wednesday June 10 and Wednesday July 22 from 4:00pm to 7:00pm, and Thursday June 11 and Thursday July 23 from 11:00am to 2:00pm. The company says the times are unchanged from the original notice; only the venue has moved. Questions can go to info@masseysolar.ca.</p>'
-                    . '<p>These drop-in sessions are part of the project\'s public engagement. The Massey Solar Project holds a 20-year provincial electricity contract but still needs Ontario\'s Renewable Energy Approval, the environmental review where the groundwater, wildlife, wetland, and consultation questions are formally studied, before it can be built.</p>',
-                // 2026-06-09 00:00:00 UTC
-                'published_at' => 1780963200,
-                'related_explainer' => 'massey-solar-project',
-                'status' => true,
-            ],
         ];
     }
 

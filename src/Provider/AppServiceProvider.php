@@ -576,6 +576,29 @@ final class AppServiceProvider extends ServiceProvider
                     ->build(),
             );
 
+            // News posts retired with the RHT/Sagamok migration and the program
+            // fold. Each 301s to the subject's live home. Literal routes before
+            // /news/{slug} so the param cannot swallow them.
+            $retiredNews = [
+                'massey-solar-ieso-contract-awarded' => 'https://rhtcircle.ca/land/massey-solar-project',
+                'potentia-responds-massey' => 'https://rhtcircle.ca/land/massey-solar-project',
+                'massey-solar-open-houses-paused' => 'https://rhtcircle.ca/land/massey-solar-project',
+                'massey-solar-drop-in-sessions-fire-hall' => 'https://rhtcircle.ca/land/massey-solar-project',
+                'robinson-huron-treaty-explainer' => 'https://rhtcircle.ca/treaty-wide/the-treaty',
+                'add-your-voice' => 'https://rhtcircle.ca/standard/records-request',
+                'site-programs-restructure' => '/programs',
+            ];
+            foreach ($retiredNews as $slug => $target) {
+                $router->addRoute(
+                    'news.retired.' . $slug,
+                    RouteBuilder::create('/news/' . $slug)
+                        ->controller(fn() => new RedirectResponse($target, 301))
+                        ->allowAll()
+                        ->methods('GET')
+                        ->build(),
+                );
+            }
+
             $router->addRoute(
                 'news.post',
                 RouteBuilder::create('/news/{slug}')

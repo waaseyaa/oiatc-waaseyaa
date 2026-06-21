@@ -180,15 +180,17 @@ final class PublicPagesTest extends TestCase
     }
 
     #[Test]
-    public function massey_resources_module_lists_the_full_explainer_cluster(): void
+    public function massey_resources_module_links_the_cluster_at_rhtcircle(): void
     {
         $massey = (string) new AnokiiController()->massey()->getContent();
 
-        // All four cluster links, including the climate and environment companion.
-        $this->assertStringContainsString('href="/explainers/massey-solar-project">The Massey Solar Project in 2026, a guide</a>', $massey);
-        $this->assertStringContainsString('href="/explainers/massey-solar-project-what-youve-heard">What you\'ve heard, checked against the record</a>', $massey);
-        $this->assertStringContainsString('href="/explainers/massey-solar-project-voices">Voices from the community</a>', $massey);
-        $this->assertStringContainsString('href="/explainers/massey-solar-project/climate-and-environment">The climate and environment context</a>', $massey);
+        // The Massey explainers moved to rhtcircle; the lens points there now, and
+        // no longer to the retired oiatc /explainers paths.
+        $this->assertStringContainsString('href="https://rhtcircle.ca/land/massey-solar-project" target="_blank" rel="noopener">The Massey Solar Project in 2026, a guide</a>', $massey);
+        $this->assertStringContainsString('href="https://rhtcircle.ca/land/massey-solar-project/what-youve-heard" target="_blank" rel="noopener">What you\'ve heard, checked against the record</a>', $massey);
+        $this->assertStringContainsString('href="https://rhtcircle.ca/land/massey-solar-project/voices" target="_blank" rel="noopener">Voices from the community</a>', $massey);
+        $this->assertStringContainsString('href="https://rhtcircle.ca/land/massey-solar-project/climate" target="_blank" rel="noopener">The climate and environment context</a>', $massey);
+        $this->assertStringNotContainsString('/explainers/massey-solar-project', $massey);
     }
 
     #[Test]

@@ -82,13 +82,13 @@ final class ChatControllerTest extends TestCase
     }
 
     #[Test]
-    public function massey_vantage_refusal_points_to_the_explainers(): void
+    public function massey_vantage_refusal_points_to_the_circle(): void
     {
         $request = Request::create('/api/chat', 'POST', [], [], [], ['REMOTE_ADDR' => '203.0.113.9'], json_encode(['question' => 'mental health help', 'community' => 'massey']));
         $response = $this->controller(retriever: $this->retriever([]), provider: $this->provider(), configured: true)->handle($request);
 
         $out = $this->capture($response);
-        self::assertStringContainsString('/explainers/massey-solar-project', $out, 'Massey refusal points to the explainers.');
+        self::assertStringContainsString('https://rhtcircle.ca/land/massey-solar-project', $out, 'Massey refusal points to the Circle.');
         self::assertStringContainsString('limited', $out, 'Massey refusal names the thin corpus.');
     }
 

@@ -17,8 +17,8 @@ final class ChatPromptBuilder
     /** Standard refusal (Sagamok vantage), also used directly when retrieval finds nothing. */
     public const NO_ANSWER = "I don't know from the OIATC site. For this, contact the band directly, and use the official Sagamok directory at sagamokanishnawbek.com.";
 
-    /** Massey vantage refusal: the corpus is thin, so it points to the explainers. */
-    public const NO_ANSWER_MASSEY = "I don't know that from the Anokii content for Massey yet, which is limited right now. For the Massey Solar Project, see the explainers at /explainers/massey-solar-project. For other matters, contact your community office directly.";
+    /** Massey vantage refusal: the corpus is thin, so it points to the Circle's Massey pages. */
+    public const NO_ANSWER_MASSEY = "I don't know that from the Anokii content for Massey yet, which is limited right now. For the Massey Solar Project, see the RHT Members' Transparency Circle at https://rhtcircle.ca/land/massey-solar-project. For other matters, contact your community office directly.";
 
     public function system(string $community = 'sagamok', bool $webResearch = false): string
     {
@@ -99,7 +99,7 @@ final class ChatPromptBuilder
 
     /**
      * The exact refusal text for a vantage community: Sagamok points to the band
-     * directory; Massey, whose corpus is thin, points to the Massey explainers.
+     * directory; Massey, whose corpus is thin, points to the Circle's Massey pages.
      */
     public function noAnswerFor(string $community): string
     {

@@ -23,7 +23,7 @@ final class ChatQueryLogTest extends TestCase
         $log->record('sagamok', 'How do I apply for housing?', 'answered', 'housing', ['/anokii/sagamok']);
         $log->record('sagamok', 'fishing license in toronto', 'no_match', 'lands-environment', []);
         $log->record('sagamok', 'do you sell concert tickets', 'refused', null, []);
-        $log->record('massey', 'what is the solar project', 'answered', 'energy-solar', ['/explainers/massey-solar-project']);
+        $log->record('massey', 'what is the solar project', 'answered', 'energy-solar', ['https://rhtcircle.ca/land/massey-solar-project']);
 
         $today = gmdate('Y-m-d');
         $report = new AnalyticsReport($db)->chatGaps($today, $today);

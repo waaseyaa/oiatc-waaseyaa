@@ -30,87 +30,26 @@ final class NewsControllerTest extends TestCase
         // resolves to the right base path, never to /explainers/ for a non-explainer.
         self::assertStringContainsString('href="/anokii"', $html);
         self::assertStringContainsString('href="/positions/counter-disinformation"', $html);
-        self::assertStringContainsString('href="/explainers/robinson-huron-treaty"', $html);
+        self::assertStringContainsString('href="/explainers/where-your-data-lives"', $html);
         self::assertStringNotContainsString('href="/explainers/anokii"', $html);
         self::assertStringNotContainsString('href="/anokii/anokii"', $html);
-        // The retired Sagamok disclosure post no longer appears or links internally.
+        // Retired/migrated posts no longer appear or link internally.
         self::assertStringNotContainsString('href="/disclosure/sagamok-portal"', $html);
-    }
-
-    #[Test]
-    public function the_potentia_post_renders_long_form_and_reconciles_an_existing_row(): void
-    {
-        // A pre-existing short row, as ensure-by-slug first created it.
-        $short = new NewsPost([
-            'title' => 'Potentia responds on the record to our Massey questions',
-            'slug' => 'potentia-responds-massey',
-            'body' => '<p>Short prior body that must be replaced.</p>',
-            'published_at' => 1780358400,
-            'related_explainer' => 'massey-solar-project',
-            'status' => true,
-        ]);
-        $repo = $this->repository([$short]);
-
-        $html = (string) new NewsController($repo)->show('potentia-responds-massey')->getContent();
-
-        // Long-form: multiple paragraphs with bolded section labels.
-        self::assertStringContainsString('<strong>Ownership.</strong>', $html);
-        self::assertStringContainsString('<strong>Sagamok.</strong>', $html);
-        self::assertStringContainsString('<strong>Timeline.</strong>', $html);
-        self::assertStringContainsString('community drop-in sessions', $html);
-        // Corrected copy: the perspective version of the Power Corporation point.
-        self::assertStringContainsString('puts the common "Power Corporation project" description in perspective', $html);
-        self::assertStringContainsString('wholly owned subsidiary of Power Corporation of Canada', $html);
-        // Lead now describes the project, then recaps the five questions.
-        self::assertStringContainsString('a proposed 141-megawatt solar farm about 14 kilometres from Massey', $html);
-        self::assertStringContainsString('The questions covered ownership and equity', $html);
-        // Reported speech ("said"), and the "on the record" phrasing is gone.
-        self::assertStringContainsString('Here is what the company said', $html);
-        self::assertStringNotContainsString('Potentia says', $html);
-        // "on the record" is gone from both the title and the body now.
-        self::assertStringNotContainsString('on the record', $html);
-        // The new "not addressed" paragraph and the Sagamok-no-position line.
-        self::assertStringContainsString('A few things were not addressed', $html);
-        self::assertStringContainsString('Sagamok has not published a formal public position', $html);
-        // Corrected source characterizations: equity is possible, herbicides not intended.
-        self::assertStringContainsString('which can include equity in the project', $html);
-        self::assertStringContainsString('does not intend to use herbicides at the site', $html);
-        self::assertStringNotContainsString('not equity', $html);
-        self::assertStringNotContainsString('not a commitment to never use herbicide', $html);
-        // Meta description is the first sentence only (not the recap).
-        self::assertStringContainsString('name="description" content="Potentia Renewables responded in writing to OIATC&#039;s five questions about the Massey Solar Project.">', $html);
-        // The stored short row was reconciled in place, not left stale.
-        self::assertStringNotContainsString('Short prior body', $html);
-        // The explainer back-link CTA is preserved, with the label and title
-        // separated (not run together as "explainerMassey").
-        self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
-        self::assertStringContainsString('<span class="news-cta__k">Read the full explainer</span>', $html);
-        // The new headline reads in the H1, the <title>, and og:title; the stale
-        // old title was reconciled away.
-        self::assertStringContainsString('<h1>Potentia responds to our Massey questions</h1>', $html);
-        self::assertStringContainsString('<title>Potentia responds to our Massey questions ', $html);
-        self::assertStringContainsString('<meta property="og:title" content="Potentia responds to our Massey questions">', $html);
-        // The per-post social card (generated by scripts/generate-og.js and
-        // committed) is referenced for og:image and twitter:image.
-        self::assertStringContainsString('<meta property="og:image" content="https://oiatc.ca/images/og/news/potentia-responds-massey.png">', $html);
-        self::assertStringContainsString('<meta name="twitter:image" content="https://oiatc.ca/images/og/news/potentia-responds-massey.png">', $html);
-        self::assertStringContainsString('<meta name="twitter:card" content="summary_large_image">', $html);
-        self::assertStringNotContainsString('responds on the record', $html);
-        // No em dashes anywhere in the rendered post.
-        self::assertStringNotContainsString("\u{2014}", $html);
+        self::assertStringNotContainsString('href="/explainers/robinson-huron-treaty"', $html);
+        self::assertStringNotContainsString('href="/explainers/massey-solar-project"', $html);
     }
 
     #[Test]
     public function reconcile_updates_the_title_in_place_when_only_the_title_differs(): void
     {
-        // Seed the canonical post, then simulate a live row that has the current
+        // Seed the canonical posts, then simulate a live row that has the current
         // body but the old title (the body-only reconcile check would miss this).
         $repo = $this->repository([]);
         $controller = new NewsController($repo);
         $controller->rss();
         foreach ($repo->findBy([]) as $entity) {
-            if ($entity instanceof NewsPost && $entity->getSlug() === 'potentia-responds-massey') {
-                $entity->set('title', 'Potentia responds on the record to our Massey questions');
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'prescribeit-governance-failure') {
+                $entity->set('title', 'A $300-million lesson in who governs the system');
             }
         }
 
@@ -118,46 +57,18 @@ final class NewsControllerTest extends TestCase
 
         $titles = [];
         foreach ($repo->findBy([]) as $entity) {
-            if ($entity instanceof NewsPost && $entity->getSlug() === 'potentia-responds-massey') {
+            if ($entity instanceof NewsPost && $entity->getSlug() === 'prescribeit-governance-failure') {
                 $titles[] = $entity->getTitle();
             }
         }
-        self::assertContains('Potentia responds to our Massey questions', $titles);
-        self::assertNotContains('Potentia responds on the record to our Massey questions', $titles);
-    }
-
-    #[Test]
-    public function the_legacy_example_post_is_replaced_in_place_with_real_copy(): void
-    {
-        $legacy = new NewsPost([
-            'title' => 'Massey Solar Project clears its IESO contract milestone',
-            'slug' => 'massey-solar-ieso-contract-awarded',
-            'body' => '<p>This is an example news post. Replace this post through the admin, or delete it.</p>',
-            'published_at' => 100,
-            'related_explainer' => 'massey-solar-project',
-            'status' => true,
-        ]);
-        $repo = $this->repository([$legacy]);
-
-        new NewsController($repo)->rss();
-
-        $found = null;
-        foreach ($repo->findBy([]) as $entity) {
-            if ($entity instanceof NewsPost && $entity->getSlug() === 'massey-solar-ieso-contract-awarded') {
-                $found = $entity;
-            }
-        }
-        self::assertNotNull($found);
-        self::assertSame('Massey Solar clears its IESO contract milestone', $found->getTitle());
-        self::assertStringNotContainsString('example', $found->getBody());
-        self::assertStringContainsString('20-year IESO contract on April 10, 2026', $found->getBody());
-        self::assertSame(1775779200, $found->getPublishedAt());
+        self::assertContains('Ottawa shut down its $298-million e-prescribing program', $titles);
+        self::assertNotContains('A $300-million lesson in who governs the system', $titles);
     }
 
     #[Test]
     public function a_post_without_a_generated_card_falls_back_to_the_default_og_image(): void
     {
-        $repo = $this->repository([$this->post('No card', 'totally-unknown-card-slug', 'massey-solar-project', 1)]);
+        $repo = $this->repository([$this->post('No card', 'totally-unknown-card-slug', 'where-your-data-lives', 1)]);
 
         $html = (string) new NewsController($repo)->show('totally-unknown-card-slug')->getContent();
 
@@ -174,7 +85,7 @@ final class NewsControllerTest extends TestCase
             $this->post('New demo', 'new-demo', 'demo-explainer', 400),
             $this->post('Mid demo', 'mid-demo', 'demo-explainer', 300),
             $this->post('Oldest demo', 'oldest-demo', 'demo-explainer', 50),
-            $this->post('RHT post', 'rht-post', 'robinson-huron-treaty', 500),
+            $this->post('Other post', 'other-post', 'where-your-data-lives', 500),
             $this->post('Unpublished demo', 'hidden', 'demo-explainer', 999, false),
         ]));
 
@@ -192,7 +103,7 @@ final class NewsControllerTest extends TestCase
     public function explainer_updates_is_empty_without_a_match(): void
     {
         $controller = new NewsController($this->repository([
-            $this->post('RHT', 'rht', 'robinson-huron-treaty', 100),
+            $this->post('Other', 'other', 'where-your-data-lives', 100),
         ]));
 
         $response = $controller->explainerUpdates(Request::create('/api/explainer-updates?explainer=no-such-explainer'));
@@ -204,9 +115,9 @@ final class NewsControllerTest extends TestCase
     public function rss_lists_published_posts_newest_first_with_escaping(): void
     {
         $controller = new NewsController($this->repository([
-            $this->post('Older', 'older', 'massey-solar-project', 100),
-            $this->post('Tom & Jerry', 'amp', 'massey-solar-project', 200),
-            $this->post('Hidden', 'hidden', 'massey-solar-project', 300, false),
+            $this->post('Older', 'older', 'where-your-data-lives', 100),
+            $this->post('Tom & Jerry', 'amp', 'where-your-data-lives', 200),
+            $this->post('Hidden', 'hidden', 'where-your-data-lives', 300, false),
         ]));
 
         $response = $controller->rss();
@@ -225,7 +136,7 @@ final class NewsControllerTest extends TestCase
     #[Test]
     public function the_prescribeit_announcement_is_ensured_by_slug_even_when_other_posts_exist(): void
     {
-        $repo = $this->repository([$this->post('Existing', 'existing', 'massey-solar-project', 100)]);
+        $repo = $this->repository([$this->post('Existing', 'existing', 'where-your-data-lives', 100)]);
         $controller = new NewsController($repo);
 
         $xml = (string) $controller->rss()->getContent();
@@ -277,29 +188,6 @@ final class NewsControllerTest extends TestCase
         self::assertStringContainsString('name="description" content="Ottawa has shut down PrescribeIT, its federal e-prescribing program, after spending close to $300-million.">', $html);
         // Past tense, no "on the record", no em dashes.
         self::assertStringNotContainsString('on the record', $html);
-        self::assertStringNotContainsString("\u{2014}", $html);
-    }
-
-    #[Test]
-    public function the_massey_consultation_post_renders_and_links_to_the_explainer(): void
-    {
-        $html = (string) new NewsController($this->repository([]))->show('massey-solar-open-houses-paused')->getContent();
-
-        // Title in H1, <title>, og:title (apostrophe is HTML-escaped on render).
-        self::assertStringContainsString('<h1>Massey Solar&#039;s first public open houses are paused over the venue</h1>', $html);
-        self::assertStringContainsString('<title>Massey Solar&#039;s first public open houses are paused over the venue ', $html);
-        self::assertStringContainsString('<meta property="og:title" content="Massey Solar&#039;s first public open houses are paused over the venue">', $html);
-        // Body content (flowing paragraphs, no bold labels).
-        self::assertStringContainsString('June 10 and 11 at the Massey Public Library', $html);
-        self::assertStringContainsString('paused while the company looks for a new venue', $html);
-        self::assertStringContainsString('As reported by <a href="https://www.myespanolanow.com/author/rosalind/" target="_blank" rel="noopener">Rosalind Russell</a>', $html);
-        // CTA to the explainer.
-        self::assertStringContainsString('href="/explainers/massey-solar-project"', $html);
-        self::assertStringContainsString('Read the full explainer', $html);
-        // Explicit short meta description.
-        self::assertStringContainsString('name="description" content="Potentia&#039;s first public open houses for the Massey Solar Project, set for June 10 and 11, have been paused while the company seeks a new venue.">', $html);
-        // Per-post OG card and no em dashes.
-        self::assertStringContainsString('<meta property="og:image" content="https://oiatc.ca/images/og/news/massey-solar-open-houses-paused.png">', $html);
         self::assertStringNotContainsString("\u{2014}", $html);
     }
 

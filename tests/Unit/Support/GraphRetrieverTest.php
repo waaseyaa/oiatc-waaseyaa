@@ -73,7 +73,7 @@ final class GraphRetrieverTest extends TestCase
         $top = $this->retriever()->retrieve('solar energy battery project', 'sagamok', 3);
 
         self::assertNotSame([], $top);
-        self::assertSame('/explainers/massey-solar-project', $top[0]->sourceUrl);
+        self::assertSame('https://rhtcircle.ca/land/massey-solar-project', $top[0]->sourceUrl);
         self::assertStringContainsString('shared project', $top[0]->relationship);
     }
 
@@ -83,13 +83,13 @@ final class GraphRetrieverTest extends TestCase
         $top = $this->retriever()->retrieve('robinson huron treaty annuity', 'sagamok', 3);
 
         self::assertNotSame([], $top);
-        self::assertSame('/explainers/robinson-huron-treaty', $top[0]->sourceUrl);
+        self::assertSame('https://rhtcircle.ca/treaty-wide/the-treaty', $top[0]->sourceUrl);
         self::assertSame('OIATC', $top[0]->relationship);
         // The dedicated explainer is genuinely the most relevant; a related entity
         // that only mentions the treaty in passing (the solar project) must not be
         // dropped-in-its-place nor cited over it.
         $urls = array_map(static fn(Passage $p): string => $p->sourceUrl, $top);
-        self::assertNotContains('/explainers/massey-solar-project', $urls);
+        self::assertNotContains('https://rhtcircle.ca/land/massey-solar-project', $urls);
     }
 
     #[Test]
@@ -111,8 +111,8 @@ final class GraphRetrieverTest extends TestCase
             array_values(array_unique($urls)),
             'only the on-topic District Services Boards are cited',
         );
-        self::assertNotContains('/explainers/massey-solar-project', $urls, 'off-topic shared project must not be cited');
-        self::assertNotContains('/explainers/robinson-huron-treaty', $urls, 'off-topic treaty page must not be cited');
+        self::assertNotContains('https://rhtcircle.ca/land/massey-solar-project', $urls, 'off-topic shared project must not be cited');
+        self::assertNotContains('https://rhtcircle.ca/treaty-wide/the-treaty', $urls, 'off-topic treaty page must not be cited');
 
         // Cross-community reach is intact: both region DSBs are present and labelled.
         $labels = array_map(static fn(Passage $p): string => $p->relationship, $top);
@@ -140,7 +140,7 @@ final class GraphRetrieverTest extends TestCase
 
         $urls = array_map(static fn(Passage $p): string => $p->sourceUrl, $top);
         self::assertNotContains('/explainers/where-your-data-lives', $urls, 'data-sovereignty page must not be cited');
-        self::assertNotContains('/explainers/robinson-huron-treaty', $urls, 'RHT page must not be cited');
+        self::assertNotContains('https://rhtcircle.ca/treaty-wide/the-treaty', $urls, 'RHT page must not be cited');
         self::assertSame(['/anokii/sagamok'], array_values(array_unique($urls)), 'only the on-topic Sagamok source remains');
     }
 
@@ -195,14 +195,14 @@ final class GraphRetrieverTest extends TestCase
         // Mentions the treaty only in passing (one overlapping term), so a treaty
         // query matches it weakly; the dedicated RHT explainer must win and this
         // incidental mention must be gated out, not cited over it.
-        $this->chunk($db, 'The project itself', 'The Massey Solar Project is a solar energy and battery storage project near treaty lands.', '/explainers/massey-solar-project', 'project', 'massey-solar');
+        $this->chunk($db, 'The project itself', 'The Massey Solar Project is a solar energy and battery storage project near treaty lands.', 'https://rhtcircle.ca/land/massey-solar-project', 'project', 'massey-solar');
         // Two general OIATC pages that weakly overlap the housing query (they
         // contain "apply" but not "housing"); the relevance gate must drop them.
         // The treaty page also mentions Ontario Works terms in passing here, so it
         // clears the keyword gate for an Ontario Works question; being a general
         // page (no topic), the topic gate must drop it from that answer while it
         // still wins a genuine treaty question.
-        $this->chunk($db, 'The annuity', 'The Robinson Huron Treaty annuity case concerns the treaty. Members can apply for the Ontario Works distribution and income support.', '/explainers/robinson-huron-treaty', '', '');
+        $this->chunk($db, 'The annuity', 'The Robinson Huron Treaty annuity case concerns the treaty. Members can apply for the Ontario Works distribution and income support.', 'https://rhtcircle.ca/treaty-wide/the-treaty', '', '');
         $this->chunk($db, 'Where your data lives', 'Where your community data actually lives. You can apply data-sovereignty principles.', '/explainers/where-your-data-lives', '', '');
         // Income-support region services (District Services Boards) that answer an
         // Ontario Works question on topic.

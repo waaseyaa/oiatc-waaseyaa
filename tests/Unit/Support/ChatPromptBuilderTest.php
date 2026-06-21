@@ -98,7 +98,8 @@ final class ChatPromptBuilderTest extends TestCase
         self::assertStringContainsString('sagamokanishnawbek.com', $prompts->noAnswerFor('sagamok'));
 
         $massey = $prompts->noAnswerFor('massey');
-        self::assertStringContainsString('/explainers/massey-solar-project', $massey, 'Massey refusal points to the explainers.');
+        self::assertStringContainsString('https://rhtcircle.ca/land/massey-solar-project', $massey, 'Massey refusal points to the Circle.');
+        self::assertStringNotContainsString('/explainers/massey-solar-project', $massey);
         self::assertStringContainsString('limited', $massey);
 
         // The Massey system prompt embeds the Massey refusal verbatim.
