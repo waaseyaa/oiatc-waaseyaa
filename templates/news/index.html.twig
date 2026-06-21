@@ -64,8 +64,6 @@
           {% set rel_href = '/' ~ post.related_explainer %}
         {% elseif post.related_explainer in ['prescribeit', 'counter-disinformation'] %}
           {% set rel_href = '/positions/' ~ post.related_explainer %}
-        {% elseif post.related_explainer in ['sagamok-portal'] %}
-          {% set rel_href = '/disclosure/' ~ post.related_explainer %}
         {% else %}
           {% set rel_href = '/explainers/' ~ post.related_explainer %}
         {% endif %}

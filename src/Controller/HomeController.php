@@ -85,16 +85,6 @@ final class HomeController
         return $this->renderTemplate('programs/community-knowledge.html.twig');
     }
 
-    public function programMemberResources(): Response
-    {
-        return $this->renderTemplate('programs/member-resources.html.twig');
-    }
-
-    public function sagamokPortalDisclosure(): Response
-    {
-        return $this->renderTemplate('disclosure/sagamok-portal.html.twig');
-    }
-
     public function whereYourDataLives(): Response
     {
         return $this->renderTemplate('explainers/where-your-data-lives.html.twig');

@@ -48,12 +48,6 @@ const overrides = {
   // Site default (not actually tied to a single template — rendered for the
   // failsafe and the "framework default" feel).
   '__default__': { template: 'og-template.html', output: 'og-default.png' },
-
-  // Per-page bespoke cards.
-  'disclosure/sagamok-portal.html.twig': {
-    template: 'og-template-sagamok-portal.html',
-    output: 'og-sagamok-portal.png',
-  },
 };
 
 // Routes that aren't directly derivable from a template path. For most pages

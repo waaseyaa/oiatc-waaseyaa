@@ -26,15 +26,15 @@ final class NewsControllerTest extends TestCase
     {
         $html = (string) new NewsController($this->repository([]))->index(Request::create('/news'))->getContent();
 
-        // The ensured announcements link to four different sections; each back-link
+        // The ensured announcements link to several sections; each back-link
         // resolves to the right base path, never to /explainers/ for a non-explainer.
-        self::assertStringContainsString('href="/disclosure/sagamok-portal"', $html);
         self::assertStringContainsString('href="/anokii"', $html);
         self::assertStringContainsString('href="/positions/counter-disinformation"', $html);
         self::assertStringContainsString('href="/explainers/robinson-huron-treaty"', $html);
-        self::assertStringNotContainsString('href="/explainers/sagamok-portal"', $html);
         self::assertStringNotContainsString('href="/explainers/anokii"', $html);
         self::assertStringNotContainsString('href="/anokii/anokii"', $html);
+        // The retired Sagamok disclosure post no longer appears or links internally.
+        self::assertStringNotContainsString('href="/disclosure/sagamok-portal"', $html);
     }
 
     #[Test]
@@ -162,16 +162,6 @@ final class NewsControllerTest extends TestCase
         $html = (string) new NewsController($repo)->show('totally-unknown-card-slug')->getContent();
 
         self::assertStringContainsString('<meta property="og:image" content="https://oiatc.ca/images/og-default.png">', $html);
-    }
-
-    #[Test]
-    public function a_disclosure_post_page_links_back_to_the_disclosure_section(): void
-    {
-        $html = (string) new NewsController($this->repository([]))->show('sagamok-portal-disclosure')->getContent();
-
-        self::assertStringContainsString('href="/disclosure/sagamok-portal"', $html);
-        self::assertStringContainsString('Read the disclosure', $html);
-        self::assertStringNotContainsString('href="/explainers/sagamok-portal"', $html);
     }
 
     #[Test]

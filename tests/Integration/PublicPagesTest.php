@@ -220,20 +220,14 @@ final class PublicPagesTest extends TestCase
         $this->assertStringContainsString('is not legal advice', $html);
         $this->assertStringContainsString('Independent of Sagamok Chief and Council', $html);
 
-        // Sources retained (CLOUD Act, OCAP/FNIGC) and the reciprocal link to the disclosure.
+        // Sources retained (CLOUD Act, OCAP/FNIGC) and the reciprocal link to the
+        // disclosure, which now lives on rhtcircle.ca.
         $this->assertStringContainsString('CLOUD Act', $html);
         $this->assertStringContainsString('fnigc.ca', $html);
-        $this->assertStringContainsString('/disclosure/sagamok-portal', $html);
+        $this->assertStringContainsString('https://rhtcircle.ca/communities/sagamok/members-website-issue', $html);
+        $this->assertStringNotContainsString('/disclosure/sagamok-portal', $html);
 
         $this->assertStringNotContainsString('{%', $html);
-    }
-
-    #[Test]
-    public function disclosure_links_back_to_the_data_sovereignty_explainer(): void
-    {
-        $html = (string) new HomeController()->sagamokPortalDisclosure()->getContent();
-
-        $this->assertStringContainsString('/explainers/where-your-data-lives', $html, 'Disclosure must link to the companion explainer.');
     }
 
     #[Test]
@@ -281,6 +275,8 @@ final class PublicPagesTest extends TestCase
             '/explainers/how-sagamok-is-organized' => 'https://rhtcircle.ca/communities/sagamok/how-its-organized',
             '/support/records-request' => 'https://rhtcircle.ca/standard/records-request',
             '/support/records-request-letter' => 'https://rhtcircle.ca/standard/records-request',
+            // The Sagamok members-website disclosure moved out to rhtcircle.
+            '/disclosure/sagamok-portal' => 'https://rhtcircle.ca/communities/sagamok/members-website-issue',
         ];
 
         foreach ($expected as $path => $target) {
@@ -290,6 +286,22 @@ final class PublicPagesTest extends TestCase
             $this->assertInstanceOf(RedirectResponse::class, $response, sprintf('%s should redirect.', $path));
             $this->assertSame(301, $response->getStatusCode(), sprintf('%s should be a 301.', $path));
             $this->assertSame($target, $response->getTargetUrl(), sprintf('%s should point at the Circle.', $path));
+        }
+    }
+
+    #[Test]
+    public function folded_transparency_program_paths_redirect_to_the_programs_index(): void
+    {
+        $router = new WaaseyaaRouter();
+        new AppServiceProvider()->routes($router);
+
+        foreach (['/programs/member-resources', '/programs/transparency'] as $path) {
+            $controller = $router->match($path)['_controller'] ?? null;
+            $this->assertIsCallable($controller, sprintf('%s should resolve to a controller.', $path));
+            $response = $controller();
+            $this->assertInstanceOf(RedirectResponse::class, $response, sprintf('%s should redirect.', $path));
+            $this->assertSame(301, $response->getStatusCode(), sprintf('%s should be a 301.', $path));
+            $this->assertSame('/programs', $response->getTargetUrl(), sprintf('%s should fold into /programs.', $path));
         }
     }
 }

@@ -183,20 +183,24 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // The Transparency and member resources program was folded into /programs;
+        // its Sagamok/RHT work now lives with the independent Transparency Circle
+        // on rhtcircle.ca. 301 the program path to the programs index.
         $router->addRoute(
             'programs.member-resources',
             RouteBuilder::create('/programs/member-resources')
-                ->controller(fn() => $controller->programMemberResources())
+                ->controller(fn() => new RedirectResponse('/programs', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
         );
 
-        // Renamed from /programs/transparency on 2026-06-14; 301 the old path.
+        // Old /programs/transparency name (renamed 2026-06-14, then folded); 301
+        // straight to the programs index so there is no redirect chain.
         $router->addRoute(
             'programs.transparency',
             RouteBuilder::create('/programs/transparency')
-                ->controller(fn() => new RedirectResponse('/programs/member-resources', 301))
+                ->controller(fn() => new RedirectResponse('/programs', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -342,10 +346,11 @@ final class AppServiceProvider extends ServiceProvider
                 ->build(),
         );
 
+        // The Sagamok members-website disclosure now lives on rhtcircle.ca; 301 there.
         $router->addRoute(
             'disclosure.sagamok-portal',
             RouteBuilder::create('/disclosure/sagamok-portal')
-                ->controller(fn() => $controller->sagamokPortalDisclosure())
+                ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/members-website-issue', 301))
                 ->allowAll()
                 ->methods('GET')
                 ->build(),
@@ -554,6 +559,18 @@ final class AppServiceProvider extends ServiceProvider
                 'news.rss',
                 RouteBuilder::create('/news/rss.xml')
                     ->controller(fn() => $news->rss())
+                    ->allowAll()
+                    ->methods('GET')
+                    ->build(),
+            );
+
+            // The Sagamok members-website disclosure post was retired; its content
+            // lives on rhtcircle.ca. Literal route before /news/{slug} so the param
+            // cannot swallow it.
+            $router->addRoute(
+                'news.sagamok-portal-disclosure.redirect',
+                RouteBuilder::create('/news/sagamok-portal-disclosure')
+                    ->controller(fn() => new RedirectResponse('https://rhtcircle.ca/communities/sagamok/members-website-issue', 301))
                     ->allowAll()
                     ->methods('GET')
                     ->build(),

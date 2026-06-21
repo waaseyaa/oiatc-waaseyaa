@@ -53,7 +53,6 @@ final class IngestDocsCommand
         '/programs' => 'programs/index.html.twig',
         '/programs/anokii' => 'programs/anokii.html.twig',
         '/programs/community-knowledge' => 'programs/community-knowledge.html.twig',
-        '/programs/member-resources' => 'programs/member-resources.html.twig',
     ];
 
     public function __construct(

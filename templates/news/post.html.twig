@@ -32,7 +32,6 @@
   <div class="news-body">{{ post.body|raw }}</div>
 
   {% set positions = ['prescribeit', 'counter-disinformation', 'sovereign-ai'] %}
-  {% set disclosures = ['sagamok-portal'] %}
   {% set anokii_pages = ['anokii'] %}
   {% set project_pages = ['anishinaabemowin'] %}
   {% set rel_title = post.related_explainer|replace({'-': ' '})|title %}
@@ -55,9 +54,6 @@
   {% elseif post.related_explainer in positions %}
     {% set rel_href = '/positions/' ~ post.related_explainer %}
     {% set rel_label = 'Read the OIATC position' %}
-  {% elseif post.related_explainer in disclosures %}
-    {% set rel_href = '/disclosure/' ~ post.related_explainer %}
-    {% set rel_label = 'Read the disclosure' %}
   {% else %}
     {% set rel_href = '/explainers/' ~ post.related_explainer %}
     {% set rel_label = 'Read the full explainer' %}
