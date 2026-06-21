@@ -1,3 +1,21 @@
+> **CURRENT STATE (banner added 2026-06-20).** This file is a dated historical
+> decision log. The entries below are kept verbatim and are not rewritten, because
+> editing dated history would falsify the record. They may reference superseded
+> state. For the current canonical state, see `oiatc-ca-inventory.md`.
+>
+> As of 2026-06-20:
+> - OIATC runs **three** programs (Anishinaabemowin, Anokii, Community knowledge),
+>   plus its council positions.
+> - Small council: Russell Jones, Web Networks, and Oliver Zielke, with Steven
+>   Bennett as Elder and Knowledge Keeper. Trusteeship is being arranged.
+>   27 curated corpus items.
+> - All RHT, Sagamok, Massey, records-request, and portal-disclosure content moved
+>   to rhtcircle.ca. The petition and the transparency / member-resources program
+>   are retired.
+> - Earlier entries below are historical and may reference superseded state (four
+>   programs, council of two, 21,721, the petition). See `oiatc-ca-inventory.md`
+>   for current state.
+
 # Funder-frame restructure: decision log
 
 Started 2026-06-12. Goal: reorganize oiatc.ca around four named programs so a

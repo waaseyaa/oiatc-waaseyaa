@@ -73,7 +73,7 @@ final class NewsPostAccessPolicyTest extends TestCase
             'slug' => 'example',
             'body' => '<p>Example</p>',
             'published_at' => 1,
-            'related_explainer' => 'massey-solar-project',
+            'related_explainer' => 'where-your-data-lives',
             'status' => $published,
         ]);
     }
