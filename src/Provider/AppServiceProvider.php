@@ -4,7 +4,14 @@ declare(strict_types=1);
 
 namespace App\Provider;
 
+use Anokii\Access\AdminRoles;
+use Anokii\Admin\CreateAdminHandler;
+use Anokii\CoIntelligence\SqliteChatQueryLog;
 use Anokii\Config\DistributionConfig;
+use Anokii\Controller\AnokiiAdminController;
+use Anokii\Dashboard\AdminLoginController;
+use Anokii\Dashboard\LoginBrand;
+use App\Admin\AdminController;
 use App\Analytics\AnalyticsRecorder;
 use App\Analytics\AnalyticsReport;
 use App\Analytics\AnalyticsSchema;
@@ -15,13 +22,22 @@ use App\Controller\HomeController;
 use App\Controller\PageStatsController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Waaseyaa\CLI\Command\HandlerArgument;
+use Waaseyaa\CLI\Command\HandlerArgumentMode;
+use Waaseyaa\CLI\Command\HandlerCommand;
+use Waaseyaa\CLI\Command\HandlerOption;
+use Waaseyaa\CLI\Command\HandlerOptionMode;
+use Waaseyaa\CLI\Command\SymfonyCommandIO;
 use Waaseyaa\Database\DatabaseInterface;
 use Waaseyaa\Database\DBALDatabase;
+use Waaseyaa\Entity\EntityTypeManager;
+use Waaseyaa\Foundation\ServiceProvider\Capability\ProvidesConsoleCommandsInterface;
+use Waaseyaa\Foundation\ServiceProvider\Capability\ProvidesRolesInterface;
 use Waaseyaa\Foundation\ServiceProvider\ServiceProvider;
 use Waaseyaa\Routing\RouteBuilder;
 use Waaseyaa\Routing\WaaseyaaRouter;
 
-final class AppServiceProvider extends ServiceProvider
+final class AppServiceProvider extends ServiceProvider implements ProvidesRolesInterface, ProvidesConsoleCommandsInterface
 {
     private ?DatabaseInterface $persistentDatabase = null;
 
@@ -509,19 +525,50 @@ final class AppServiceProvider extends ServiceProvider
                     ->build(),
             );
 
-            $router->addRoute(
-                'admin.analytics',
-                // Public (no Caddy basic_auth currently on /admin/*). priority(10) is
-                // required so this exact route wins over admin-surface's `admin_spa`
-                // catch-all (`/admin/{path}`, priority 0), which otherwise serves its
-                // bundled SPA here and shadows the dashboard.
-                RouteBuilder::create('/admin/analytics')
-                    ->controller(fn(Request $request) => $analytics->index($request))
-                    ->allowAll()
-                    ->methods('GET')
-                    ->priority(10)
-                    ->build(),
+            // Admin surfaces, gated by the framework's own auth via the shared
+            // Anokii package (DashboardGate / Support\Auth / AdminRoles), NOT
+            // public. The login surface comes from the package AdminLoginController;
+            // AdminController wraps the package /admin/anokii (graph counts + no-PII
+            // log) and oiatc's /admin/analytics behind requirePermission().
+            //
+            // priority(200) so the gated /admin/anokii beats the package's own
+            // ungated /admin/anokii (a shared-graph install mounts it at priority
+            // 100; oiatc's provider order registers the package first, so a higher
+            // priority is needed to win deterministically), and so every /admin/*
+            // beats the framework admin SPA catch-all (/admin/{path}, priority 0).
+            $login = new AdminLoginController(
+                $entityTypeManager,
+                '/admin/login',
+                '/admin/anokii',
+                AdminRoles::DEFAULT_PERMISSION,
+                new LoginBrand(
+                    title: 'Admin sign in · OIATC',
+                    subtitle: 'Administrator access for the OIATC site.',
+                    backHref: '/',
+                    backLabel: 'Back to the site',
+                ),
+                '/admin',
             );
+            $admin = new AdminController(
+                $entityTypeManager,
+                new AnokiiAdminController($database, new SqliteChatQueryLog($database)),
+                $analytics,
+            );
+
+            $adminGet = static fn(string $name, string $path, callable $c) => $router->addRoute(
+                $name,
+                RouteBuilder::create($path)->controller($c)->allowAll()->methods('GET')->priority(200)->build(),
+            );
+            $adminPost = static fn(string $name, string $path, callable $c) => $router->addRoute(
+                $name,
+                RouteBuilder::create($path)->controller($c)->allowAll()->methods('POST')->priority(200)->build(),
+            );
+
+            $adminGet('admin.login', '/admin/login', fn(Request $request) => $login->loginForm($request));
+            $adminPost('admin.login.post', '/admin/login', fn(Request $request) => $login->loginSubmit($request));
+            $adminGet('admin.logout', '/admin/logout', fn(Request $request) => $login->logout($request));
+            $adminGet('admin.anokii', '/admin/anokii', fn(Request $request) => $admin->anokii($request));
+            $adminGet('admin.analytics', '/admin/analytics', fn(Request $request) => $admin->analytics($request));
 
             $router->addRoute(
                 'analytics.page-stats',
@@ -627,5 +674,52 @@ final class AppServiceProvider extends ServiceProvider
                     ->build(),
             );
         }
+    }
+
+    /**
+     * Contribute the shared admin roles to the framework RoleRepository so
+     * `user:assign-role` can resolve them and stamp the access permission. The
+     * single admin account is given the framework `administrator` role by
+     * app:create-admin (which short-circuits the permission check).
+     *
+     * @return iterable<\Waaseyaa\User\Role>
+     */
+    public function roles(): iterable
+    {
+        yield from new AdminRoles()->roles();
+    }
+
+    /**
+     * @return iterable<HandlerCommand>
+     */
+    public function consoleCommands(): iterable
+    {
+        yield new HandlerCommand(
+            name: 'app:create-admin',
+            description: 'Create or update the administrator account for the gated /admin dashboards. Password from --password or OIATC_ADMIN_PASSWORD (never hardcoded).',
+            arguments: [
+                new HandlerArgument(name: 'email', mode: HandlerArgumentMode::Required, description: 'Email address of the admin account.'),
+            ],
+            options: [
+                new HandlerOption(name: 'name', mode: HandlerOptionMode::Required, description: 'Display name for the account.'),
+                new HandlerOption(name: 'password', mode: HandlerOptionMode::Required, description: 'Password (else read from OIATC_ADMIN_PASSWORD). At least 12 characters.'),
+            ],
+            handler: function (SymfonyCommandIO $io): int {
+                $etm = null;
+                try {
+                    $resolved = $this->resolve(EntityTypeManager::class);
+                    $etm = $resolved instanceof EntityTypeManager ? $resolved : null;
+                } catch (\Throwable) {
+                    $etm = null;
+                }
+                if ($etm === null) {
+                    $io->error('app:create-admin requires a booted kernel (EntityTypeManager).');
+
+                    return 1;
+                }
+
+                return new CreateAdminHandler($etm, new AdminRoles(), 'OIATC_ADMIN_PASSWORD', AdminRoles::ROLE_ADMIN, '/admin/login')->run($io);
+            },
+        );
     }
 }
