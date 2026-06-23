@@ -9,7 +9,7 @@ use App\Entity\NewsPost;
 use App\Support\ChunkData;
 use App\Support\DocChunker;
 use Twig\Environment;
-use Waaseyaa\CLI\CliIO;
+use Waaseyaa\CLI\Command\SymfonyCommandIO;
 use Waaseyaa\Entity\Repository\EntityRepositoryInterface;
 
 /**
@@ -62,7 +62,7 @@ final class IngestDocsCommand
         private readonly ?EntityRepositoryInterface $news = null,
     ) {}
 
-    public function run(CliIO $io): int
+    public function run(SymfonyCommandIO $io): int
     {
         $dryRun = (bool) $io->option('dry-run');
         $pruneOption = $io->option('prune');
@@ -104,7 +104,7 @@ final class IngestDocsCommand
      *
      * @return array{0: list<ChunkData>, 1: int}
      */
-    private function collectChunks(CliIO $io): array
+    private function collectChunks(SymfonyCommandIO $io): array
     {
         $chunks = [];
         $sources = 0;

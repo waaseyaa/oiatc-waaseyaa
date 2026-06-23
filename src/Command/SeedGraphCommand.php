@@ -13,7 +13,7 @@ use App\Entity\Project;
 use App\Entity\Service;
 use App\Entity\Topic;
 use App\Support\TopicVocabulary;
-use Waaseyaa\CLI\CliIO;
+use Waaseyaa\CLI\Command\SymfonyCommandIO;
 use Waaseyaa\Entity\Repository\EntityRepositoryInterface;
 
 /**
@@ -45,7 +45,7 @@ final class SeedGraphCommand
         private readonly TopicVocabulary $vocabulary = new TopicVocabulary(),
     ) {}
 
-    public function run(CliIO $io): int
+    public function run(SymfonyCommandIO $io): int
     {
         $dryRun = (bool) $io->option('dry-run');
 

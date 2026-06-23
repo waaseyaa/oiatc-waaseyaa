@@ -9,7 +9,9 @@ use App\Entity\DocChunk;
 use App\Entity\GraphEntityBase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
-use Waaseyaa\CLI\CliIO;
+use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Output\NullOutput;
+use Waaseyaa\CLI\Command\SymfonyCommandIO;
 use Waaseyaa\Entity\EntityInterface;
 use Waaseyaa\Entity\Repository\EntityRepositoryInterface;
 
@@ -164,57 +166,11 @@ final class SeedGraphCommandTest extends TestCase
         return $out;
     }
 
-    private function io(): CliIO
+    private function io(): SymfonyCommandIO
     {
-        return new class implements CliIO {
-            public function write(string $text): void {}
-
-            public function writeln(string $text = ''): void {}
-
-            public function error(string $line): void {}
-
-            public function argument(string $name): string|int|float|bool|array|null
-            {
-                return null;
-            }
-
-            public function option(string $name): string|int|float|bool|array|null
-            {
-                return null;
-            }
-
-            /** @return array<string, scalar|array|null> */
-            public function arguments(): array
-            {
-                return [];
-            }
-
-            /** @return array<string, scalar|array|null> */
-            public function options(): array
-            {
-                return [];
-            }
-
-            public function ask(string $question, ?string $default = null): ?string
-            {
-                return $default;
-            }
-
-            public function confirm(string $question, bool $default = false): bool
-            {
-                return $default;
-            }
-
-            public function isVerbose(): bool
-            {
-                return false;
-            }
-
-            public function isInteractive(): bool
-            {
-                return false;
-            }
-        };
+        // No InputDefinition is bound, so option('dry-run') resolves to null
+        // (SymfonyCommandIO catches the lookup error), i.e. a non-dry-run run.
+        return new SymfonyCommandIO(new ArrayInput([]), new NullOutput());
     }
 
     /**
