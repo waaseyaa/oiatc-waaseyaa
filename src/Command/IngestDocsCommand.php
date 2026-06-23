@@ -4,7 +4,7 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\DocChunk;
+use Anokii\Entity\DocChunk;
 use App\Entity\NewsPost;
 use App\Support\ChunkData;
 use App\Support\DocChunker;

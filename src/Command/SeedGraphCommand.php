@@ -4,15 +4,15 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Entity\Community;
-use App\Entity\DocChunk;
-use App\Entity\GraphEntityBase;
-use App\Entity\Organization;
-use App\Entity\Place;
-use App\Entity\Project;
-use App\Entity\Service;
-use App\Entity\Topic;
-use App\Support\TopicVocabulary;
+use Anokii\CoIntelligence\TopicVocabulary;
+use Anokii\Entity\Community;
+use Anokii\Entity\DocChunk;
+use Anokii\Entity\GraphEntityBase;
+use Anokii\Entity\Organization;
+use Anokii\Entity\Place;
+use Anokii\Entity\Project;
+use Anokii\Entity\Service;
+use Anokii\Entity\Topic;
 use Waaseyaa\CLI\Command\SymfonyCommandIO;
 use Waaseyaa\Entity\Repository\EntityRepositoryInterface;
 

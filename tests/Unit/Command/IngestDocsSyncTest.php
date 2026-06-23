@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Command;
 
+use Anokii\Entity\DocChunk;
 use App\Command\IngestDocsCommand;
 use App\Command\SeedGraphCommand;
-use App\Entity\DocChunk;
 use App\Support\ChunkData;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

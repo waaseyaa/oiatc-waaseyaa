@@ -4,9 +4,9 @@ declare(strict_types=1);
 
 namespace App\Tests\Unit\Command;
 
+use Anokii\Entity\DocChunk;
+use Anokii\Entity\GraphEntityBase;
 use App\Command\SeedGraphCommand;
-use App\Entity\DocChunk;
-use App\Entity\GraphEntityBase;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Input\ArrayInput;

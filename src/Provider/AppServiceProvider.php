@@ -8,24 +8,15 @@ use Anokii\Config\DistributionConfig;
 use App\Analytics\AnalyticsRecorder;
 use App\Analytics\AnalyticsReport;
 use App\Analytics\AnalyticsSchema;
-use App\Analytics\SqliteChatQueryLog;
 use App\Controller\AnalyticsDashboardController;
 use App\Controller\AnokiiController;
-use App\Controller\ChatController;
 use App\Controller\CollectController;
 use App\Controller\HomeController;
 use App\Controller\PageStatsController;
-use App\Support\ChatPromptBuilder;
-use App\Support\GraphRetriever;
-use App\Support\SqliteRateLimiter;
-use App\Support\TopicVocabulary;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
-use Waaseyaa\AI\Agent\Provider\AnthropicProvider;
-use Waaseyaa\AI\Agent\Provider\ProviderInterface;
 use Waaseyaa\Database\DatabaseInterface;
 use Waaseyaa\Database\DBALDatabase;
-use Waaseyaa\Foundation\Log\LoggerInterface;
 use Waaseyaa\Foundation\ServiceProvider\ServiceProvider;
 use Waaseyaa\Routing\RouteBuilder;
 use Waaseyaa\Routing\WaaseyaaRouter;
@@ -617,44 +608,10 @@ final class AppServiceProvider extends ServiceProvider
                     ->build(),
             );
 
-            // Grounded RAG chat over the doc_chunk knowledge base (Path B).
-            // JSON request body -> CSRF auto-skipped; rate-limited per client.
-            // Pin the limiter to the persistent SQLite file (shared helper).
-            // resolve(DatabaseInterface) at route-registration time can hand back
-            // an ephemeral connection (the route/controller is built once, not per
-            // request), which would make the rate limit reset every request. See
-            // upstream note #018.
-            // Construct the chat provider directly from the env key rather than
-            // resolve(ProviderInterface): at route-build time the container hands
-            // back the framework's NullLlmProvider default, not our binding (same
-            // build-once/ephemeral issue as the DB — see upstream #018).
-            $anthropicKey = getenv('ANTHROPIC_API_KEY') ?: '';
-            // Web research is opt-in per instance (ANOKII_WEB_RESEARCH=1) and only
-            // takes effect once a real provider is configured. Off by default so
-            // the closed-corpus, refuse-rather-than-reach-out behavior is the
-            // baseline until Russell deliberately turns it on.
-            $webResearch = (getenv('ANOKII_WEB_RESEARCH') ?: '') === '1' && $anthropicKey !== '';
-            $chat = new ChatController(
-                retriever: new GraphRetriever($this->persistentDatabase()),
-                prompts: new ChatPromptBuilder(),
-                provider: $anthropicKey !== ''
-                    ? new AnthropicProvider($anthropicKey, AiServiceProvider::MODEL)
-                    : $this->resolve(ProviderInterface::class),
-                limiter: new SqliteRateLimiter($this->persistentDatabase()),
-                logger: $this->resolve(LoggerInterface::class),
-                queryLog: new SqliteChatQueryLog($this->persistentDatabase()),
-                topics: new TopicVocabulary(),
-                configured: $anthropicKey !== '',
-                webResearch: $webResearch,
-            );
-            $router->addRoute(
-                'chat',
-                RouteBuilder::create('/api/chat')
-                    ->controller(fn(Request $request) => $chat->handle($request))
-                    ->allowAll()
-                    ->methods('POST')
-                    ->build(),
-            );
+            // The grounded RAG chat (POST /api/chat) is now mounted by the shared
+            // Anokii\Provider\CoIntelligenceServiceProvider as the `anokii.chat`
+            // route, reading config/anokii.yaml's chat: block. The forked
+            // ChatController + GraphRetriever + prompt/limiter/log were removed.
         }
 
         // '/about' is a real page (see the 'about' route above), so it is not a

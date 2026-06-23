@@ -35,3 +35,20 @@ modules:
     - docs
     - sheets
     - admin-centre
+
+# Co-Intelligence chat. Consumed by the package CoIntelligenceServiceProvider,
+# which mounts POST /api/chat. OIATC keeps its two vantages (Sagamok default,
+# Massey selectable) and the exact intro + refusal strings the retired
+# App\Support\ChatPromptBuilder carried, so the cited answers and the byte-exact
+# refusals are unchanged. Rate limit (12/60s) and model (claude-sonnet-4-6) are
+# package defaults; web research stays off (no ANOKII_WEB_RESEARCH).
+chat:
+  default_vantage: sagamok
+  vantages:
+    - sagamok
+    - massey
+  voice:
+    intro: "You are the Anokii community assistant on the OIATC site. OIATC (the Ontario Indigenous AI & Technology Council) publishes plain-language, public community resources."
+    refusal: "I don't know from the OIATC site. For this, contact the band directly, and use the official Sagamok directory at sagamokanishnawbek.com."
+    community_refusals:
+      massey: "I don't know that from the Anokii content for Massey yet, which is limited right now. For the Massey Solar Project, see the RHT Members' Transparency Circle at https://rhtcircle.ca/land/massey-solar-project. For other matters, contact your community office directly."

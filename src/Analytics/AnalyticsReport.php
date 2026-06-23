@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Analytics;
 
+use Anokii\CoIntelligence\ChatQueryLogSchema;
 use Waaseyaa\Database\DatabaseInterface;
 
 /**
@@ -127,7 +128,7 @@ final class AnalyticsReport
     {
         $from = $fromDate . ' 00:00:00';
         $to = $toDate . ' 23:59:59';
-        $table = AnalyticsSchema::TABLE_CHAT;
+        $table = ChatQueryLogSchema::TABLE;
         $communities = [];
 
         try {
