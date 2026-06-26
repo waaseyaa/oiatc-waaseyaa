@@ -90,6 +90,11 @@ final class HomeController
         return $this->renderTemplate('explainers/where-your-data-lives.html.twig');
     }
 
+    public function commonGroundStandard(): Response
+    {
+        return $this->renderTemplate('standards/common-ground.html.twig');
+    }
+
     public function redirectToHome(): RedirectResponse
     {
         return new RedirectResponse('/', 301);

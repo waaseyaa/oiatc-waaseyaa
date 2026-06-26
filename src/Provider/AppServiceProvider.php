@@ -412,6 +412,18 @@ final class AppServiceProvider extends ServiceProvider implements ProvidesRolesI
                 ->build(),
         );
 
+        // Common Ground: an open call to participate in a First Nations data
+        // governance standard (the enforce/certify layer above CARE, OCAP,
+        // IEEE 2890). Early open call, convened by OIATC.
+        $router->addRoute(
+            'standards.common-ground',
+            RouteBuilder::create('/standards/common-ground')
+                ->controller(fn() => $controller->commonGroundStandard())
+                ->allowAll()
+                ->methods('GET')
+                ->build(),
+        );
+
         $router->addRoute(
             'explainers.how-sagamok-is-organized',
             RouteBuilder::create('/explainers/how-sagamok-is-organized')
