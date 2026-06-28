@@ -5,7 +5,6 @@ declare(strict_types=1);
 namespace App\Admin;
 
 use Anokii\Access\AdminRoles;
-use Anokii\Controller\AnokiiAdminController;
 use Anokii\Dashboard\DashboardGate;
 use App\Controller\AnalyticsDashboardController;
 use Symfony\Component\HttpFoundation\Request;
@@ -29,7 +28,6 @@ final class AdminController extends DashboardGate
 {
     public function __construct(
         ?EntityTypeManager $entityTypeManager,
-        private readonly AnokiiAdminController $anokiiAdmin,
         private readonly AnalyticsDashboardController $analyticsDashboard,
     ) {
         parent::__construct($entityTypeManager);
@@ -38,13 +36,6 @@ final class AdminController extends DashboardGate
     protected function loginPath(): string
     {
         return '/admin/login';
-    }
-
-    /** The package lean admin (graph counts + content-gap log), gated. */
-    public function anokii(Request $request): Response
-    {
-        return $this->requirePermission($request, AdminRoles::DEFAULT_PERMISSION)
-            ?? $this->anokiiAdmin->index($request);
     }
 
     /** The first-party analytics dashboard, gated. */

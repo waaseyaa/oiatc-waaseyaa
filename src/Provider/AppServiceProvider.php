@@ -6,9 +6,7 @@ namespace App\Provider;
 
 use Anokii\Access\AdminRoles;
 use Anokii\Admin\CreateAdminHandler;
-use Anokii\CoIntelligence\SqliteChatQueryLog;
 use Anokii\Config\DistributionConfig;
-use Anokii\Controller\AnokiiAdminController;
 use Anokii\Dashboard\AdminLoginController;
 use Anokii\Dashboard\LoginBrand;
 use App\Admin\AdminController;
@@ -551,7 +549,7 @@ final class AppServiceProvider extends ServiceProvider implements ProvidesRolesI
             $login = new AdminLoginController(
                 $entityTypeManager,
                 '/admin/login',
-                '/admin/anokii',
+                '/admin/analytics',
                 AdminRoles::DEFAULT_PERMISSION,
                 new LoginBrand(
                     title: 'Admin sign in · OIATC',
@@ -563,7 +561,6 @@ final class AppServiceProvider extends ServiceProvider implements ProvidesRolesI
             );
             $admin = new AdminController(
                 $entityTypeManager,
-                new AnokiiAdminController($database, new SqliteChatQueryLog($database)),
                 $analytics,
             );
 
@@ -579,7 +576,10 @@ final class AppServiceProvider extends ServiceProvider implements ProvidesRolesI
             $adminGet('admin.login', '/admin/login', fn(Request $request) => $login->loginForm($request));
             $adminPost('admin.login.post', '/admin/login', fn(Request $request) => $login->loginSubmit($request));
             $adminGet('admin.logout', '/admin/logout', fn(Request $request) => $login->logout($request));
-            $adminGet('admin.anokii', '/admin/anokii', fn(Request $request) => $admin->anokii($request));
+            // The lean graph-counts + chat-log admin retired with the public chat
+            // (alpha.11 removed AnokiiAdminController). One-hop redirect for any
+            // bookmarks; the live admin surface is /admin/analytics.
+            $adminGet('admin.anokii', '/admin/anokii', fn() => new RedirectResponse('/admin/analytics', 301));
             $adminGet('admin.analytics', '/admin/analytics', fn(Request $request) => $admin->analytics($request));
 
             $router->addRoute(

@@ -20,12 +20,11 @@ data_residency:
   default_classification: public
   cross_tenant_reads: true
 
-# Module surface gate. OIATC's live public surfaces are the Co-Intelligence
-# chat and the Resources surface. The sovereign-workspace WP04 surfaces are not
-# part of this public install, so they are flagged preview (not production).
+# Module surface gate. The public Co-Intelligence chat was retired (moved to
+# rhtcircle); OIATC's remaining public surface is Resources. The sovereign-
+# workspace surfaces are not part of this install (preview, not production).
 modules:
   enabled:
-    - cointelligence
     - resources
   preview:
     - governed-drive
